@@ -12,7 +12,9 @@ const CustomConfirmAlert = ({
 }: ICustomConfirmAlertProps) => {
     return (
         <div className="bg-base-100 p-4 rounded-lg absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-11/12 max-w-lg">
-            {svg && <div className="w-full flex justify-center py-2">{svg}</div>}
+            {svg && (
+                <div className="w-full flex justify-center py-2">{svg}</div>
+            )}
             <h3 className="font-bold text-lg">{title}</h3>
             {img && <img src={img} />}
             <p className="py-2">{content}</p>
@@ -21,7 +23,9 @@ const CustomConfirmAlert = ({
                 <button
                     className="btn btn-primary"
                     onClick={() => {
-                        confirmCallback();
+                        if (confirmCallback) {
+                            confirmCallback();
+                        }
                         onClose();
                     }}
                 >

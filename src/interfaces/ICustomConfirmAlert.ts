@@ -7,6 +7,6 @@ export interface ICustomConfirmAlertProps {
     img?: string;
     svg?: ReactElement;
     confirmText: string;
-    confirmCallback: () => unknown;
+    confirmCallback?: () => unknown;
     hideCancelButton?: boolean;
 }

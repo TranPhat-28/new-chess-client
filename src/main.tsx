@@ -10,18 +10,24 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store.ts";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
-axios.defaults.baseURL = "https://noob-chess-server.onrender.com";
+// axios.defaults.baseURL = "https://noob-chess-server.onrender.com";
+axios.defaults.baseURL = "http://localhost:5275/";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
         <Provider store={store}>
-            <BrowserRouter>
-                <App />
-                <Loading />
-                <ToastContainer />
-            </BrowserRouter>
+            <GoogleOAuthProvider
+                clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
+            >
+                <BrowserRouter>
+                    <App />
+                    <Loading />
+                    <ToastContainer />
+                </BrowserRouter>
+            </GoogleOAuthProvider>
         </Provider>
     </React.StrictMode>
 );
