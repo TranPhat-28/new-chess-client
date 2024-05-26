@@ -29,15 +29,15 @@ const LoginPage = () => {
     };
 
     // Show error on login
-    const showLoginError = (provider: string) => {
+    const showLoginError = (title: string, content: string) => {
         confirmAlert({
             overlayClassName: "bg-overlay-important",
             customUI: ({ onClose }) => {
                 return (
                     <CustomConfirmAlert
                         onClose={onClose}
-                        title={`${provider} login error`}
-                        content={"Oops! We could not connect to the provider."}
+                        title={title}
+                        content={content}
                         svg={<FaRegCircleXmark size={"5rem"} color={"red"} />}
                         confirmText={"OK"}
                         hideCancelButton={true}
@@ -61,11 +61,21 @@ const LoginPage = () => {
                 token: token,
             })
             .then(function (response) {
-                console.log(response);
+                if (response.data.isSuccess === false) {
+                    showLoginError(
+                        "Login error",
+                        "Oops! We encountered an error on the server."
+                    );
+                } else {
+                    console.log(response.data);
+                }
             })
             .catch(function (error) {
                 console.log(error);
-                showLoginError("Google");
+                showLoginError(
+                    "Google login error",
+                    "Oops! We could not connect to the provider."
+                );
             });
     };
 
@@ -114,7 +124,10 @@ const LoginPage = () => {
                                 }
                             }}
                             onError={() => {
-                                showLoginError("Google");
+                                showLoginError(
+                                    "Google login error",
+                                    "Oops! We could not connect to the provider."
+                                );
                             }}
                         />
                         <button
