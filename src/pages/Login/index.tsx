@@ -4,9 +4,57 @@ import CustomConfirmAlert from "../../components/CustomConfirmAlert";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
+import { useEffect } from "react";
 
 const LoginPage = () => {
     const navigate = useNavigate();
+
+    // Show Initial modal
+    useEffect(() => {
+        const initModal = document.getElementById(
+            "initial_alert"
+        ) as HTMLDialogElement;
+        initModal.showModal();
+
+        axios
+            .get("/api/Initialize/Ready")
+            .then(function (response) {
+                // handle success
+                if (response.data.isSuccess) {
+                    initModal.close();
+                } else {
+                    showErrorInitializingGame();
+                }
+            })
+            .catch(function (error) {
+                // Handle error
+                console.log(error);
+                initModal.close();
+                showErrorInitializingGame();
+            });
+    }, []);
+
+    // Show Error Initializing game
+    const showErrorInitializingGame = () => {
+        confirmAlert({
+            overlayClassName: "bg-overlay-important",
+            customUI: ({ onClose }) => {
+                return (
+                    <CustomConfirmAlert
+                        onClose={onClose}
+                        title={"Error initializing game"}
+                        content={
+                            "Sorry our server is having some issues at the moment."
+                        }
+                        svg={<FaRegCircleXmark size={"5rem"} color={"red"} />}
+                        confirmText={"Home"}
+                        confirmCallback={() => navigate("/")}
+                        hideCancelButton={true}
+                    />
+                );
+            },
+        });
+    };
 
     // Show confirm alert
     const handleOnClick = () => {
