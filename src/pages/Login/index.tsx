@@ -81,12 +81,17 @@ const LoginPage = () => {
     }) => {
         axios
             .post("/api/Authentication/Google", {
-                // provider: provider,
+                provider: provider,
                 token: token,
             })
             .then(function (response) {
                 // Response 200
-                // In here we also check for any error
+                // In here we also check for 'isSuccess' in the data
+                if (response.data.isSuccess) {
+                    alert("Login success");
+                } else {
+                    showLoginError("Login failed", response.data.message);
+                }
             })
             .catch(function (error) {
                 // Response Error code
@@ -95,26 +100,6 @@ const LoginPage = () => {
                     `Oops! We cannot log you in right now. (Error code: ${error.code})`
                 );
             });
-    };
-
-    // Handle Facebook login click
-    const facebookLoginHandler = () => {
-        confirmAlert({
-            overlayClassName: "bg-overlay-important",
-            customUI: ({ onClose }) => {
-                return (
-                    <CustomConfirmAlert
-                        onClose={onClose}
-                        title={`Facebook login`}
-                        content={
-                            "This feature is being developed. Please check back later."
-                        }
-                        confirmText={"OK"}
-                        hideCancelButton={true}
-                    />
-                );
-            },
-        });
     };
 
     return (
@@ -142,7 +127,6 @@ const LoginPage = () => {
                                         "Google login error",
                                         "Oops! We could not connect to the provider."
                                     );
-                                    console.log("Missing Google credential");
                                 }
                             }}
                             onError={() => {
@@ -154,7 +138,7 @@ const LoginPage = () => {
                         />
                         <button
                             className="btn-login"
-                            onClick={facebookLoginHandler}
+                            onClick={() => alert("Facebook login")}
                         >
                             <FaFacebookF color="blue" />
                         </button>

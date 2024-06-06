@@ -13,6 +13,7 @@ export const showCustomAlert = (
 ) => {
     confirmAlert({
         overlayClassName: "bg-overlay-important",
+        closeOnClickOutside: false,
         customUI: ({ onClose }) => {
             return (
                 <CustomConfirmAlert
