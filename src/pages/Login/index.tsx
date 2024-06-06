@@ -1,10 +1,8 @@
-import { confirmAlert } from "react-confirm-alert";
-import { FaChessKing, FaFacebookF, FaRegCircleXmark } from "react-icons/fa6";
-import CustomConfirmAlert from "../../components/CustomConfirmAlert";
-import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { useEffect } from "react";
+import { FaChessKing, FaFacebookF, FaRegCircleXmark } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 import { showCustomAlert } from "../../utilities";
 
 const LoginPage = () => {
