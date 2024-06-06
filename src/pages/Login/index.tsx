@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { useEffect } from "react";
+import { showCustomAlert } from "../../utilities";
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -36,63 +37,38 @@ const LoginPage = () => {
 
     // Show Error Initializing game
     const showErrorInitializingGame = () => {
-        confirmAlert({
-            overlayClassName: "bg-overlay-important",
-            customUI: ({ onClose }) => {
-                return (
-                    <CustomConfirmAlert
-                        onClose={onClose}
-                        title={"Error initializing game"}
-                        content={
-                            "Sorry our server is having some issues at the moment."
-                        }
-                        svg={<FaRegCircleXmark size={"5rem"} color={"red"} />}
-                        confirmText={"Home"}
-                        confirmCallback={() => navigate("/")}
-                        hideCancelButton={true}
-                    />
-                );
-            },
-        });
+        showCustomAlert(
+            "Error initializing game",
+            "Sorry our server is having some issues at the moment.",
+            "OK",
+            undefined,
+            undefined,
+            <FaRegCircleXmark size={"5rem"} color={"red"} />,
+            true
+        );
     };
 
     // Show confirm alert
-    const handleOnClick = () => {
-        confirmAlert({
-            overlayClassName: "bg-overlay-important",
-            customUI: ({ onClose }) => {
-                return (
-                    <CustomConfirmAlert
-                        onClose={onClose}
-                        title={"You are not logged in"}
-                        content={
-                            "Quickplay progress will not be saved. Continue?"
-                        }
-                        confirmText={"Play"}
-                        confirmCallback={() => navigate("/quickplay")}
-                    />
-                );
-            },
-        });
+    const handleOnClickQuickplay = () => {
+        showCustomAlert(
+            "You are not logged in",
+            "Quickplay progress will not be saved. Continue?",
+            "Play",
+            () => navigate("/quickplay")
+        );
     };
 
     // Show error on login
     const showLoginError = (title: string, content: string) => {
-        confirmAlert({
-            overlayClassName: "bg-overlay-important",
-            customUI: ({ onClose }) => {
-                return (
-                    <CustomConfirmAlert
-                        onClose={onClose}
-                        title={title}
-                        content={content}
-                        svg={<FaRegCircleXmark size={"5rem"} color={"red"} />}
-                        confirmText={"OK"}
-                        hideCancelButton={true}
-                    />
-                );
-            },
-        });
+        showCustomAlert(
+            title,
+            content,
+            "OK",
+            undefined,
+            undefined,
+            <FaRegCircleXmark size={"5rem"} color={"red"} />,
+            true
+        );
     };
 
     // Send token to the backend
@@ -105,24 +81,18 @@ const LoginPage = () => {
     }) => {
         axios
             .post("/api/Authentication/Google", {
-                provider: provider,
+                // provider: provider,
                 token: token,
             })
             .then(function (response) {
-                if (response.data.isSuccess === false) {
-                    showLoginError(
-                        "Login error",
-                        "Oops! We encountered an error on the server."
-                    );
-                } else {
-                    console.log(response.data);
-                }
+                // Response 200
+                // In here we also check for any error
             })
             .catch(function (error) {
-                console.log(error);
+                // Response Error code
                 showLoginError(
-                    "Google login error",
-                    "Oops! We could not connect to the provider."
+                    "Login error",
+                    `Oops! We cannot log you in right now. (Error code: ${error.code})`
                 );
             });
     };
@@ -168,6 +138,10 @@ const LoginPage = () => {
                                         token: credentialResponse.credential,
                                     });
                                 } else {
+                                    showLoginError(
+                                        "Google login error",
+                                        "Oops! We could not connect to the provider."
+                                    );
                                     console.log("Missing Google credential");
                                 }
                             }}
@@ -190,7 +164,7 @@ const LoginPage = () => {
 
                     <button
                         className="btn btn-primary h-20"
-                        onClick={handleOnClick}
+                        onClick={handleOnClickQuickplay}
                     >
                         <FaChessKing />
                         Play a quick game

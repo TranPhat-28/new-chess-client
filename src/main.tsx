@@ -13,8 +13,9 @@ import { ToastContainer } from "react-toastify";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import InitialAlert from "./components/InitialAlert/index.tsx";
 
-axios.defaults.baseURL = "https://new-chess-server.onrender.com";
-// axios.defaults.baseURL = "http://localhost:5275/";
+// axios.defaults.baseURL = "https://new-chess-server.onrender.com";
+axios.defaults.baseURL = "http://localhost:5275/";
+
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(

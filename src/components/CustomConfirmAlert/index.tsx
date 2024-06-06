@@ -29,7 +29,7 @@ const CustomConfirmAlert = ({
                         onClose();
                     }}
                 >
-                    {confirmText}
+                    {confirmText ? confirmText : "OK"}
                 </button>
                 {!hideCancelButton && (
                     <button
