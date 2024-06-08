@@ -2,14 +2,13 @@ import { minidenticon } from "minidenticons";
 import { useMemo } from "react";
 import { FaCircleInfo } from "react-icons/fa6";
 
-const PlayerInfoCard = () => {
-    // Later on this should be fetch from backend also
-    const randomSeed = "69420";
+const PlayerInfoCard = ({ randomId }: { randomId: number }) => {
+    // Random Identicon
     const svgURI = useMemo(
         () =>
             "data:image/svg+xml;utf8," +
-            encodeURIComponent(minidenticon(randomSeed, 100, 50)),
-        [randomSeed]
+            encodeURIComponent(minidenticon(randomId.toString(), 100, 50)),
+        [randomId]
     );
 
     return (
@@ -24,7 +23,7 @@ const PlayerInfoCard = () => {
 
             <div className="flex-1">
                 <>
-                    <p className="font-bold md:text-3xl">Player#69</p>
+                    <p className="font-bold md:text-3xl">Player#{randomId % 1000}</p>
                     <p className="text-sm md:text-2xl">Ranking N/A</p>
                 </>
             </div>

@@ -2,14 +2,13 @@ import axios from "axios";
 import { Chess, Square } from "chess.js";
 import { useState } from "react";
 import { PromotionPieceOption } from "react-chessboard/dist/chessboard/types";
-import { useDispatch } from "react-redux";
-import { setHistory } from "../redux/features/quickplaySlice";
-import { IOptionSquares } from "../interfaces";
-import { toast } from "react-toastify";
-import { confirmAlert } from "react-confirm-alert";
-import CustomConfirmAlert from "../components/CustomConfirmAlert";
-import { useNavigate } from "react-router-dom";
 import { FaRegCircleXmark } from "react-icons/fa6";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { IOptionSquares } from "../interfaces";
+import { setHistory } from "../redux/features/quickplaySlice";
+import { showCustomAlert } from "../utilities";
 
 const useQuickplayHandler = () => {
     const navigate = useNavigate();
@@ -66,8 +65,8 @@ const useQuickplayHandler = () => {
     async function fetchAiResponseMove() {
         try {
             const aiMoveResponse = await toast.promise(
-                axios.post("/api/Singleplayer/Guess", {
-                    guessModeInputFEN: game.fen(),
+                axios.post("/api/QuickPlay/Move", {
+                    fen: game.fen(),
                 }),
                 {
                     pending: "AI is thinking...",
@@ -78,29 +77,38 @@ const useQuickplayHandler = () => {
             // Some error happened
             if (!aiMoveResponse.data.isSuccess) {
                 // Show alert
-                confirmAlert({
-                    overlayClassName: "bg-overlay-important",
-                    customUI: ({ onClose }) => {
-                        return (
-                            <CustomConfirmAlert
-                                onClose={onClose}
-                                title={"Error"}
-                                content={
-                                    "Oops! Something went wrong on the server."
-                                }
-                                svg={
-                                    <FaRegCircleXmark
-                                        size={"5rem"}
-                                        color={"red"}
-                                    />
-                                }
-                                confirmText={"Home"}
-                                confirmCallback={() => navigate("/")}
-                                hideCancelButton={true}
-                            />
-                        );
-                    },
-                });
+                // confirmAlert({
+                //     overlayClassName: "bg-overlay-important",
+                //     customUI: ({ onClose }) => {
+                //         return (
+                //             <CustomConfirmAlert
+                //                 onClose={onClose}
+                //                 title={"Error"}
+                //                 content={
+                //                     "Oops! Something went wrong on the server."
+                //                 }
+                //                 svg={
+                //                     <FaRegCircleXmark
+                //                         size={"5rem"}
+                //                         color={"red"}
+                //                     />
+                //                 }
+                //                 confirmText={"Okkkk"}
+                //                 confirmCallback={() => navigate("/")}
+                //                 hideCancelButton={true}
+                //             />
+                //         );
+                //     },
+                // });
+                showCustomAlert(
+                    "Error",
+                    "Oops! Something went wrong on the server",
+                    "Home",
+                    () => navigate("/"),
+                    undefined,
+                    <FaRegCircleXmark size={"5rem"} color={"red"} />,
+                    true
+                );
                 console.log(aiMoveResponse.data.message);
             }
             // If gameover
@@ -127,20 +135,28 @@ const useQuickplayHandler = () => {
                     setOptionSquares({});
                 }
 
-                confirmAlert({
-                    overlayClassName: "bg-overlay-important",
-                    customUI: ({ onClose }) => {
-                        return (
-                            <CustomConfirmAlert
-                                onClose={onClose}
-                                title={"Game Over"}
-                                content={`${aiMoveResponse.data.data.wonSide} won with a ${aiMoveResponse.data.data.endgameType}`}
-                                confirmText={"Home"}
-                                confirmCallback={() => navigate("/")}
-                            />
-                        );
-                    },
-                });
+                // confirmAlert({
+                //     overlayClassName: "bg-overlay-important",
+                //     customUI: ({ onClose }) => {
+                //         return (
+                //             <CustomConfirmAlert
+                //                 onClose={onClose}
+                //                 title={"Game Over"}
+                //                 content={`${aiMoveResponse.data.data.wonSide} won with a ${aiMoveResponse.data.data.endgameType}`}
+                //                 confirmText={"Home"}
+                //                 confirmCallback={() => navigate("/")}
+                //             />
+                //         );
+                //     },
+                // });
+                showCustomAlert(
+                    "Game Over",
+                    `${aiMoveResponse.data.data.wonSide} won with a ${aiMoveResponse.data.data.endgameType}`,
+                    "Home",
+                    () => navigate("/"),
+                    undefined,
+                    undefined
+                );
             } else {
                 const gameCopy = game;
                 const move = gameCopy.move({
@@ -162,26 +178,35 @@ const useQuickplayHandler = () => {
                 setOptionSquares({});
             }
         } catch (err) {
-            confirmAlert({
-                overlayClassName: "bg-overlay-important",
-                customUI: ({ onClose }) => {
-                    return (
-                        <CustomConfirmAlert
-                            onClose={onClose}
-                            title={"Error"}
-                            content={
-                                "Oops! Something went wrong on the server."
-                            }
-                            svg={
-                                <FaRegCircleXmark size={"5rem"} color={"red"} />
-                            }
-                            confirmText={"Home"}
-                            confirmCallback={() => navigate("/")}
-                            hideCancelButton={true}
-                        />
-                    );
-                },
-            });
+            // confirmAlert({
+            //     overlayClassName: "bg-overlay-important",
+            //     customUI: ({ onClose }) => {
+            //         return (
+            //             <CustomConfirmAlert
+            //                 onClose={onClose}
+            //                 title={"Error"}
+            //                 content={
+            //                     "Oops! Something went wrong on the server."
+            //                 }
+            //                 svg={
+            //                     <FaRegCircleXmark size={"5rem"} color={"red"} />
+            //                 }
+            //                 confirmText={"Home"}
+            //                 confirmCallback={() => navigate("/")}
+            //                 hideCancelButton={true}
+            //             />
+            //         );
+            //     },
+            // });
+            showCustomAlert(
+                "Error",
+                "Oops! Something went wrong on the server",
+                "Home",
+                () => navigate("/"),
+                undefined,
+                <FaRegCircleXmark size={"5rem"} color={"red"} />,
+                true
+            );
         }
     }
 

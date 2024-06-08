@@ -4,33 +4,47 @@ import { useEffect } from "react";
 import { FaChessKing, FaFacebookF, FaRegCircleXmark } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
 import { showCustomAlert } from "../../utilities";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { setGameIsInitialized } from "../../redux/features/initGameSlice";
 
 const LoginPage = () => {
     const navigate = useNavigate();
 
+    // Redux
+    const dispatch = useDispatch();
+    const isInitialized = useSelector(
+        (state: RootState) => state.initGame.isInitialized
+    );
+
     // Show Initial modal
     useEffect(() => {
-        const initModal = document.getElementById(
-            "initial_alert"
-        ) as HTMLDialogElement;
-        initModal.showModal();
+        // Only fetch once
+        if (!isInitialized) {
+            const initModal = document.getElementById(
+                "initial_alert"
+            ) as HTMLDialogElement;
+            initModal.showModal();
 
-        axios
-            .get("/api/Initialize/Ready")
-            .then(function (response) {
-                // handle success
-                if (response.data.isSuccess) {
+            axios
+                .get("/api/Initialize/Ready")
+                .then(function (response) {
+                    // handle success
+                    if (response.data.isSuccess) {
+                        initModal.close();
+                    } else {
+                        showErrorInitializingGame();
+                    }
+                })
+                .catch(function (error) {
+                    // Handle error
+                    console.log(error);
                     initModal.close();
-                } else {
                     showErrorInitializingGame();
-                }
-            })
-            .catch(function (error) {
-                // Handle error
-                console.log(error);
-                initModal.close();
-                showErrorInitializingGame();
-            });
+                });
+
+            dispatch(setGameIsInitialized());
+        }
     }, []);
 
     // Show Error Initializing game

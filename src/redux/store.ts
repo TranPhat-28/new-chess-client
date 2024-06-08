@@ -2,11 +2,13 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import quickplayReducer from "./features/quickplaySlice";
 import loadingReducer from "./features/loadingSlice";
+import initGameReducer from "./features/initGameSlice";
 
 export const store = configureStore({
     reducer: {
         quickplay: quickplayReducer,
         loading: loadingReducer,
+        initGame: initGameReducer,
     },
 });
 
