@@ -117,7 +117,11 @@ const LoginPage = () => {
     return (
         <div className="bg-custom-svg h-full w-full object-fill flex items-center justify-center p-6">
             <div className="bg-base-100 p-4 flex flex-col items-center rounded-lg w-full max-w-lg shadow-md">
-                <img src="/icon512.png" alt="logo" className="w-28 mt-4" />
+                <img
+                    src="/icon_square_512.png"
+                    alt="logo"
+                    className="w-28 mt-4"
+                />
                 <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-0">
                     Welcome to New Chess
                 </h1>

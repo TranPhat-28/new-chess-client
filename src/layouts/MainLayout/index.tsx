@@ -18,6 +18,11 @@ const MainLayout = () => {
                 ></label>
                 <ul className="menu p-4 w-5/6 lg:w-80 xl:w-96 min-h-full bg-base-100 text-base-content gap-1">
                     {/* Sidebar content here */}
+                    <img
+                        src="/icon_rectangle_512.png"
+                        alt="logo"
+                        className="max-w-32"
+                    />
                     <li>
                         <NavLink to={"/main/lobby"}>Lobby</NavLink>
                     </li>
