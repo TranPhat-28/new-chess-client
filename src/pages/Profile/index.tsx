@@ -1,9 +1,6 @@
-import { useState } from "react";
 import ProviderBadge from "../../components/ProviderBadge";
 
 const ProfilePage = () => {
-    const [showDetail, setShowDetail] = useState<boolean>(false);
-
     return (
         <div className="bg-base-200 h-full w-full p-2 lg:flex lg:flex-row lg:justify-center overflow-y-scroll lg:overflow-hidden lg:pt-4">
             {/* Profile container */}
