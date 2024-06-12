@@ -18,17 +18,24 @@ const MainLayout = () => {
                 ></label>
                 <ul className="menu p-4 w-5/6 lg:w-80 xl:w-96 min-h-full bg-base-100 text-base-content gap-1">
                     {/* Sidebar content here */}
-                    <img
-                        src="/icon_rectangle_512.png"
-                        alt="logo"
-                        className="max-w-32"
-                    />
+                    <li className="bg-logo rounded-xl p-2">
+                        <p className="font-logo text-white text-6xl">Chess</p>
+                    </li>
                     <li>
                         <NavLink to={"/main/lobby"}>Lobby</NavLink>
                     </li>
                     <li>
                         <NavLink to={"/main/social"}>Social</NavLink>
                     </li>
+                    <li>
+                        <NavLink to={"/main/profile"}>Profile</NavLink>
+                    </li>
+
+                    <div className="flex-1 flex flex-col-reverse">
+                        <button className="btn btn-primary btn-outline">
+                            Logout
+                        </button>
+                    </div>
                 </ul>
             </div>
         </div>
