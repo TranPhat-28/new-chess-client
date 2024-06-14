@@ -2,7 +2,7 @@ import ProviderBadge from "../../components/ProviderBadge";
 
 const ProfilePage = () => {
     return (
-        <div className="bg-base-200 h-full w-full p-2 lg:flex lg:flex-row lg:justify-center overflow-y-scroll lg:overflow-hidden lg:pt-4">
+        <div className="bg-base-200 h-full w-full pt-4 pb-6 lg:flex lg:flex-row lg:justify-center overflow-y-scroll lg:overflow-hidden lg:pt-4">
             {/* Profile container */}
             <div className="p-4 flex flex-col items-center lg:flex-1 lg:max-w-lg">
                 <div className="avatar">
@@ -23,83 +23,86 @@ const ProfilePage = () => {
             <div className="flex flex-col lg:flex-1 lg:max-w-lg">
                 <h1 className="text-center font-bold">Game statistics</h1>
                 <div className="max-w-xl self-center">
-                    <table className="table table-sm lg:table-md">
-                        <tbody className="collapse collapse-arrow">
-                            <input type="checkbox" />
-                            <div className="collapse-title text-xl font-medium">
-                                Click to show details
-                            </div>
-
-                            <tr className="hover flex justify-between">
-                                <th>Ranking:</th>
-                                <td>0000</td>
+                    <table className="table">
+                        <tbody>
+                            <tr className="hover">
+                                <td className="font-bold">Ranking</td>
+                                <td>Value</td>
                             </tr>
-
-                            <tr className="hover flex justify-between">
-                                <th>Single game played (total):</th>
-                                <td>0000</td>
+                            <tr className="hover">
+                                <td className="font-bold">
+                                    Practice mode game played:
+                                </td>
+                                <td>Value</td>
                             </tr>
-
-                            <tr className="hover flex justify-between">
-                                <th>Single game victory (total):</th>
-                                <td>0000</td>
+                            <tr className="hover">
+                                <td className="font-bold">
+                                    Practice mode game victory:
+                                </td>
+                                <td>Value</td>
                             </tr>
-
-                            <div className="collapse-content">
-                                <tr className="hover">
-                                    <th className="font-normal">
-                                        Single game played (Easy):
-                                    </th>
-                                    <td>0000</td>
-                                </tr>
-
-                                <tr className="hover">
-                                    <th className="font-normal">
-                                        Single game victory (Easy):
-                                    </th>
-                                    <td>0000</td>
-                                </tr>
-
-                                <tr className="hover">
-                                    <th className="font-normal">
-                                        Single game played (Medium):
-                                    </th>
-                                    <td>0000</td>
-                                </tr>
-
-                                <tr className="hover">
-                                    <th className="font-normal">
-                                        Single game victory (Medium):
-                                    </th>
-                                    <td>0000</td>
-                                </tr>
-
-                                <tr className="hover">
-                                    <th className="font-normal">
-                                        Single game played (Hard):
-                                    </th>
-                                    <td>0000</td>
-                                </tr>
-
-                                <tr className="hover">
-                                    <th className="font-normal">
-                                        Single game victory (Hard):
-                                    </th>
-                                    <td>0000</td>
-                                </tr>
-                            </div>
-
-                            <tr className="hover flex justify-between">
-                                <th>Versus game played:</th>
-                                <td>0000</td>
+                            <tr className="hover">
+                                <td className="font-bold">
+                                    Online mode game played:
+                                </td>
+                                <td>Value</td>
                             </tr>
-
-                            <tr className="hover flex justify-between">
-                                <th>Versus game victory:</th>
-                                <td>0000</td>
+                            <tr className="hover">
+                                <td className="font-bold">
+                                    Online mode game victory:
+                                </td>
+                                <td>Value</td>
                             </tr>
                         </tbody>
                     </table>
+
+                    <div className="collapse collapse-arrow">
+                        <input type="checkbox" />
+                        <div className="collapse-title text-xl font-medium w-full max-w-xl">
+                            Show detail game statistics
+                        </div>
+
+                        <table className="table collapse-content">
+                            <tbody>
+                                <tr className="hover">
+                                    <td className="font-bold">
+                                        Practice mode game played (Easy)
+                                    </td>
+                                    <td>Value</td>
+                                </tr>
+                                <tr className="hover">
+                                    <td className="font-bold">
+                                        Practice mode game victory (Easy)
+                                    </td>
+                                    <td>Value</td>
+                                </tr>
+                                <tr className="hover">
+                                    <td className="font-bold">
+                                        Practice mode game played (Medium)
+                                    </td>
+                                    <td>Value</td>
+                                </tr>
+                                <tr className="hover">
+                                    <td className="font-bold">
+                                        Practice mode game victory (Medium)
+                                    </td>
+                                    <td>Value</td>
+                                </tr>
+                                <tr className="hover">
+                                    <td className="font-bold">
+                                        Practice mode game played (Hard)
+                                    </td>
+                                    <td>Value</td>
+                                </tr>
+                                <tr className="hover">
+                                    <td className="font-bold">
+                                        Practice mode game victory (Hard)
+                                    </td>
+                                    <td>Value</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
