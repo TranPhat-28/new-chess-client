@@ -1,7 +1,35 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
+import { useDispatch } from "react-redux";
+import { removeAuth } from "../../redux/features/authSlice";
+import { showCustomAlert } from "../../utilities";
+import { PiWarningCircleBold } from "react-icons/pi";
+import { toast } from "react-toastify";
 
 const MainLayout = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    // Logout Function
+    const performLogout = () => {
+        dispatch(removeAuth());
+        navigate("/");
+        toast.success("Logout successful");
+    };
+
+    // Logout Alert
+    const handleLogout = () => {
+        showCustomAlert(
+            "Logout",
+            "Do you want to logout?",
+            "OK",
+            performLogout,
+            undefined,
+            <PiWarningCircleBold size={"5rem"} color={"gold"} />,
+            false
+        );
+    };
+
     return (
         <div className="drawer lg:drawer-open">
             <input id="main-drawer" type="checkbox" className="drawer-toggle" />
@@ -32,7 +60,10 @@ const MainLayout = () => {
                     </li>
 
                     <div className="flex-1 flex flex-col-reverse">
-                        <button className="btn btn-primary btn-outline">
+                        <button
+                            className="btn btn-primary btn-outline"
+                            onClick={handleLogout}
+                        >
                             Logout
                         </button>
                     </div>
