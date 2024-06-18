@@ -3,10 +3,13 @@ import axios from "axios";
 import { useEffect } from "react";
 import { FaChessKing, FaFacebookF, FaRegCircleXmark } from "react-icons/fa6";
 import { useNavigate } from "react-router-dom";
-import { showCustomAlert } from "../../utilities";
+import { hideLoading, showCustomAlert, showLoading } from "../../utilities";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { setGameIsInitialized } from "../../redux/features/initGameSlice";
+import { jwtDecode } from "jwt-decode";
+import { ITokenData } from "../../interfaces";
+import { setAuth } from "../../redux/features/authSlice";
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -91,6 +94,8 @@ const LoginPage = () => {
         provider: string;
         token: string;
     }) => {
+        // Show the loading modal
+        showLoading(dispatch, "Login in progress");
         axios
             .post("/api/Authentication/Google", {
                 provider: provider,
@@ -98,14 +103,24 @@ const LoginPage = () => {
             })
             .then(function (response) {
                 // Response 200
+                hideLoading();
                 // In here we also check for 'isSuccess' in the data
                 if (response.data.isSuccess) {
-                    alert("Login success");
+                    // Decode the JWT for data
+                    const data: ITokenData = jwtDecode(response.data.data);
+                    // Set data to Redux
+                    dispatch(
+                        setAuth({
+                            email: data.email,
+                            token: response.data.data,
+                        })
+                    );
                 } else {
                     showLoginError("Login failed", response.data.message);
                 }
             })
             .catch(function (error) {
+                hideLoading();
                 // Response Error code
                 showLoginError(
                     "Login error",
