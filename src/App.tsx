@@ -11,6 +11,7 @@ import SocialPage from "./pages/Social";
 import ProfilePage from "./pages/Profile";
 import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
+import NotFound from "./pages/NotFound";
 
 function App() {
     const user = useSelector((state: RootState) => state.auth.email);
@@ -43,7 +44,7 @@ function App() {
                         <Route path="profile" element={<ProfilePage />} />
                     </Route>
                 )}
-                <Route path="*" element={<div>Not found</div>} />
+                <Route path="*" element={<NotFound />} />
             </Routes>
         </>
     );
