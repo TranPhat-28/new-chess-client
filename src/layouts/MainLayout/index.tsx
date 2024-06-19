@@ -1,21 +1,12 @@
-import { NavLink, Outlet, useNavigate } from "react-router-dom";
-import Navbar from "../../components/Navbar";
-import { useDispatch } from "react-redux";
-import { removeAuth } from "../../redux/features/authSlice";
-import { showCustomAlert } from "../../utilities";
 import { PiWarningCircleBold } from "react-icons/pi";
-import { toast } from "react-toastify";
+import { NavLink, Outlet } from "react-router-dom";
+import Navbar from "../../components/Navbar";
+import useUserAuth from "../../hooks/UserAuthHandler";
+import { showCustomAlert } from "../../utilities";
 
 const MainLayout = () => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-
     // Logout Function
-    const performLogout = () => {
-        dispatch(removeAuth());
-        navigate("/");
-        toast.success("Logout successful");
-    };
+    const { HandleLogout } = useUserAuth();
 
     // Logout Alert
     const handleLogout = () => {
@@ -23,7 +14,7 @@ const MainLayout = () => {
             "Logout",
             "Do you want to logout?",
             "OK",
-            performLogout,
+            HandleLogout,
             undefined,
             <PiWarningCircleBold size={"5rem"} color={"gold"} />,
             false

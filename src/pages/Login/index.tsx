@@ -10,6 +10,7 @@ import { setGameIsInitialized } from "../../redux/features/initGameSlice";
 import { jwtDecode } from "jwt-decode";
 import { ITokenData } from "../../interfaces";
 import { setAuth } from "../../redux/features/authSlice";
+import { toast } from "react-toastify";
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -115,6 +116,7 @@ const LoginPage = () => {
                             token: response.data.data,
                         })
                     );
+                    toast.success("Login successfull");
                 } else {
                     showLoginError("Login failed", response.data.message);
                 }
