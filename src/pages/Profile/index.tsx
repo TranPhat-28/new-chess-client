@@ -2,11 +2,16 @@ import { useEffect, useState } from "react";
 import ProviderBadge from "../../components/ProviderBadge";
 import axios from "axios";
 import useUserAuth from "../../hooks/UserAuthHandler";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 import { toast } from "react-toastify";
+import { PulseLoader } from "react-spinners";
+import { setUserData } from "../../redux/features/userDataSlice";
+import { IGameStatisticData } from "../../interfaces";
 
 const ProfilePage = () => {
+    const dispatch = useDispatch();
+
     // Logout
     const { LogoutWithError } = useUserAuth();
 
@@ -14,27 +19,45 @@ const ProfilePage = () => {
     const token = useSelector((state: RootState) => state.auth.token);
 
     // Data
-    const [name, setName] = useState<string | null>(null);
-    const [img, setImg] = useState<string | null>(null);
-    const [email, setEmail] = useState<string | null>(null);
-    const [dateJoined, setDateJoined] = useState<string | null>(null);
-    const [provider, setProvider] = useState<string | null>(null);
+    const userData = useSelector((state: RootState) => state.userData.userData);
+
+    const [gameStatisticData, setGameStatisticData] =
+        useState<IGameStatisticData | null>(null);
 
     // Fetch data
     useEffect(() => {
+        // Only fetch userProfile if no data is presented
+        if (userData === null) {
+            axios
+                .get("/api/Profile/GetProfile", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+                .then((response) => {
+                    const information = response.data.data;
+                    dispatch(setUserData(information));
+                })
+                .catch((error) => {
+                    console.log(error.message);
+                    if (error.response.status === 401) {
+                        LogoutWithError();
+                    } else {
+                        toast.error("Oops! Something went wrong");
+                    }
+                });
+        }
+
+        // Always fetch gameStatistic because this change frequently
         axios
-            .get("/api/Profile/GetProfile", {
+            .get("/api/Profile/GetStatistic", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             })
             .then((response) => {
                 const information = response.data.data;
-                setName(information.name);
-                setImg(information.picture.replace("s96-c", "s192-c"));
-                setEmail(information.email);
-                setDateJoined(information.dateJoined);
-                setProvider(information.provider);
+                setGameStatisticData(information);
             })
             .catch((error) => {
                 console.log(error.message);
@@ -47,112 +70,155 @@ const ProfilePage = () => {
     }, []);
 
     return (
-        <div className="bg-base-200 h-full w-full pt-4 pb-6 lg:flex lg:flex-row lg:justify-center overflow-y-scroll lg:overflow-hidden lg:pt-4">
+        <div className="bg-base-200 h-full w-full pt-4 pb-6 lg:flex lg:flex-row lg:justify-center overflow-y-scroll lg:overflow-hidden">
             {/* Profile container */}
             <div className="p-4 flex flex-col items-center lg:flex-1 lg:max-w-lg">
-                {name && (
+                {!userData && (
+                    <h1 className="text-center font-bold">Profile</h1>
+                )}
+                {!userData && <PulseLoader />}
+                {userData && (
                     <>
                         <div className="avatar">
                             <div className="w-40 sm:w-52 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-                                <img src={img!} />
+                                <img src={userData.picture} />
                             </div>
                         </div>
 
                         <div className="text-center">
-                            <h1>{name}</h1>
-                            <p>{email}</p>
-                            <p className="mt-2">Joined {dateJoined}</p>
+                            <h1>{userData.name}</h1>
+                            <p>{userData.email}</p>
+                            <p className="mt-2">Joined {userData.dateJoined}</p>
 
-                            <ProviderBadge provider={provider!} />
+                            <ProviderBadge provider={userData.provider} />
                         </div>
                     </>
                 )}
             </div>
             {/* Game statistic container */}
-            <div className="flex flex-col lg:flex-1 lg:max-w-lg">
+            <div className="p-4 flex flex-col lg:flex-1 lg:max-w-lg">
                 <h1 className="text-center font-bold">Game statistics</h1>
-                <div className="max-w-xl self-center">
-                    <table className="table">
-                        <tbody>
-                            <tr className="hover">
-                                <td className="font-bold">Ranking</td>
-                                <td>Value</td>
-                            </tr>
-                            <tr className="hover">
-                                <td className="font-bold">
-                                    Practice mode game played:
-                                </td>
-                                <td>Value</td>
-                            </tr>
-                            <tr className="hover">
-                                <td className="font-bold">
-                                    Practice mode game victory:
-                                </td>
-                                <td>Value</td>
-                            </tr>
-                            <tr className="hover">
-                                <td className="font-bold">
-                                    Online mode game played:
-                                </td>
-                                <td>Value</td>
-                            </tr>
-                            <tr className="hover">
-                                <td className="font-bold">
-                                    Online mode game victory:
-                                </td>
-                                <td>Value</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <div className="collapse collapse-arrow">
-                        <input type="checkbox" />
-                        <div className="collapse-title text-xl font-medium w-full max-w-xl">
-                            Show detail game statistics
-                        </div>
-
-                        <table className="table collapse-content">
+                {!gameStatisticData && (
+                    <div className="w-full flex justify-center">
+                        <PulseLoader />
+                    </div>
+                )}
+                {gameStatisticData && (
+                    <div className="max-w-xl self-center">
+                        <table className="table">
                             <tbody>
                                 <tr className="hover">
-                                    <td className="font-bold">
-                                        Practice mode game played (Easy)
-                                    </td>
-                                    <td>Value</td>
+                                    <td className="font-bold">Ranking</td>
+                                    <td>{gameStatisticData.ranking}</td>
                                 </tr>
                                 <tr className="hover">
                                     <td className="font-bold">
-                                        Practice mode game victory (Easy)
+                                        Practice mode played:
                                     </td>
-                                    <td>Value</td>
+                                    <td>
+                                        {gameStatisticData.practicePlayedEasy +
+                                            gameStatisticData.practicePlayedMedium +
+                                            gameStatisticData.practicePlayedHard}
+                                    </td>
                                 </tr>
                                 <tr className="hover">
                                     <td className="font-bold">
-                                        Practice mode game played (Medium)
+                                        Practice mode victory:
                                     </td>
-                                    <td>Value</td>
+                                    <td>
+                                        {gameStatisticData.practiceVictoryEasy +
+                                            gameStatisticData.practiceVictoryMedium +
+                                            gameStatisticData.practiceVictoryHard}
+                                    </td>
                                 </tr>
                                 <tr className="hover">
                                     <td className="font-bold">
-                                        Practice mode game victory (Medium)
+                                        Online mode played:
                                     </td>
-                                    <td>Value</td>
+                                    <td>{gameStatisticData.onlinePlayed}</td>
                                 </tr>
                                 <tr className="hover">
                                     <td className="font-bold">
-                                        Practice mode game played (Hard)
+                                        Online mode victory:
                                     </td>
-                                    <td>Value</td>
-                                </tr>
-                                <tr className="hover">
-                                    <td className="font-bold">
-                                        Practice mode game victory (Hard)
-                                    </td>
-                                    <td>Value</td>
+                                    <td>{gameStatisticData.onlineVictory}</td>
                                 </tr>
                             </tbody>
                         </table>
+
+                        <div className="collapse collapse-arrow">
+                            <input type="checkbox" />
+                            <div className="collapse-title text-xl font-medium w-full max-w-xl">
+                                Show detail game statistics
+                            </div>
+
+                            <table className="table collapse-content">
+                                <tbody>
+                                    <tr className="hover">
+                                        <td className="font-bold">
+                                            Practice mode played (Easy)
+                                        </td>
+                                        <td>
+                                            {
+                                                gameStatisticData.practicePlayedEasy
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr className="hover">
+                                        <td className="font-bold">
+                                            Practice mode victory (Easy)
+                                        </td>
+                                        <td>
+                                            {
+                                                gameStatisticData.practiceVictoryEasy
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr className="hover">
+                                        <td className="font-bold">
+                                            Practice mode played (Medium)
+                                        </td>
+                                        <td>
+                                            {
+                                                gameStatisticData.practicePlayedMedium
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr className="hover">
+                                        <td className="font-bold">
+                                            Practice mode victory (Medium)
+                                        </td>
+                                        <td>
+                                            {
+                                                gameStatisticData.practiceVictoryMedium
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr className="hover">
+                                        <td className="font-bold">
+                                            Practice mode played (Hard)
+                                        </td>
+                                        <td>
+                                            {
+                                                gameStatisticData.practicePlayedHard
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr className="hover">
+                                        <td className="font-bold">
+                                            Practice mode victory (Hard)
+                                        </td>
+                                        <td>
+                                            {
+                                                gameStatisticData.practiceVictoryHard
+                                            }
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
+                )}
             </div>
         </div>
     );

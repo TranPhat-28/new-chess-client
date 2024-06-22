@@ -4,6 +4,7 @@ import quickplayReducer from "./features/quickplaySlice";
 import loadingReducer from "./features/loadingSlice";
 import initGameReducer from "./features/initGameSlice";
 import authReducer from "./features/authSlice";
+import userDataReducer from "./features/userDataSlice";
 
 export const store = configureStore({
     reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
         loading: loadingReducer,
         initGame: initGameReducer,
         auth: authReducer,
+        userData: userDataReducer,
     },
 });
 
