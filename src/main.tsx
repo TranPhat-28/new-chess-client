@@ -13,7 +13,7 @@ import { ToastContainer } from "react-toastify";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import InitialAlert from "./components/InitialAlert/index.tsx";
 
-axios.defaults.baseURL = "https://new-chess-server.onrender.com";
+axios.defaults.baseURL = "https://famous-jacquenette-my-personal-project-c6376a3e.koyeb.app/";
 // axios.defaults.baseURL = "http://localhost:5275/";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
