@@ -1,6 +1,7 @@
 import { PiWarningCircleBold } from "react-icons/pi";
 import { NavLink, Outlet } from "react-router-dom";
 import Navbar from "../../components/Navbar";
+import ThemeSwapButton from "../../components/ThemeSwapButton";
 import useUserAuth from "../../hooks/UserAuthHandler";
 import { showCustomAlert } from "../../utilities";
 
@@ -24,7 +25,7 @@ const MainLayout = () => {
     return (
         <div className="drawer lg:drawer-open">
             <input id="main-drawer" type="checkbox" className="drawer-toggle" />
-            <div className="drawer-content bg-base-300 flex flex-col h-screen w-full">
+            <div className="drawer-content bg-subtle flex flex-col h-screen w-full">
                 {/* Page content here */}
                 <Navbar />
                 <Outlet />
@@ -50,13 +51,15 @@ const MainLayout = () => {
                         <NavLink to={"/main/profile"}>Profile</NavLink>
                     </li>
 
-                    <div className="flex-1 flex flex-col-reverse">
+                    <div className="flex-1 flex flex-col-reverse gap-4">
                         <button
                             className="btn btn-primary btn-outline"
                             onClick={handleLogout}
                         >
                             Logout
                         </button>
+
+                        <ThemeSwapButton />
                     </div>
                 </ul>
             </div>

@@ -3,7 +3,16 @@ import FriendListItem from "../../components/FriendListItem";
 
 const SocialPage = () => {
     // Dummy data
-    const friendList: number[] = [1, 2, 3];
+    interface IDummyFriend {
+        name: string;
+        id: number;
+    }
+
+    const friendList: IDummyFriend[] = [
+        { name: "John", id: 1 },
+        { name: "Kate", id: 2 },
+        { name: "Pete", id: 3 },
+    ];
 
     return (
         <div className="h-full w-full p-2 md:p-4 gap-2 md:gap-4 flex flex-col overflow-hidden max-w-lg md:max-w-xl lg:max-w-5xl self-center justify-center">
@@ -32,7 +41,9 @@ const SocialPage = () => {
             <div className="bg-gray-300 p-2 rounded-lg w-full flex flex-col flex-grow gap-2 overflow-y-scroll lg:max-h-[60rem]">
                 {/* Display the list of friends */}
                 {friendList.length > 0 &&
-                    friendList.map((friend) => <FriendListItem key={friend} />)}
+                    friendList.map((friend) => (
+                        <FriendListItem key={friend.id} data={friend} />
+                    ))}
 
                 {/* No friend */}
                 {friendList.length === 0 && (
