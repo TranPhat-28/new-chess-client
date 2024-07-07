@@ -12,6 +12,12 @@ const SocialPage = () => {
         { name: "John", id: 1 },
         { name: "Kate", id: 2 },
         { name: "Pete", id: 3 },
+        { name: "John", id: 4 },
+        { name: "Kate", id: 5 },
+        { name: "Pete", id: 6 },
+        { name: "John", id: 7 },
+        { name: "Kate", id: 8 },
+        { name: "Pete", id: 9 },
     ];
 
     return (

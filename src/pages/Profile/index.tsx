@@ -70,9 +70,9 @@ const ProfilePage = () => {
     }, []);
 
     return (
-        <div className="h-full w-full pt-4 pb-6 lg:flex lg:flex-row lg:justify-center overflow-y-scroll lg:overflow-hidden">
+        <div className="h-full w-full p-4 lg:p-6 lg:flex lg:flex-row lg:gap-4 lg:justify-center overflow-y-scroll lg:overflow-hidden">
             {/* Profile container */}
-            <div className="p-4 flex flex-col items-center lg:flex-1 lg:max-w-lg">
+            <div className="bg-base-300 rounded-lg shadow-lg max-w-md mx-auto lg:mr-0 p-4 flex flex-col items-center lg:flex-1 lg:max-w-lg mb-4 lg:mb-0 lg:h-full lg:max-h-[46rem] self-center lg:justify-center">
                 {!userData && (
                     <h1 className="text-center font-bold">Profile</h1>
                 )}
@@ -86,7 +86,7 @@ const ProfilePage = () => {
                         </div>
 
                         <div className="text-center">
-                            <h1>{userData.name}</h1>
+                            <h1 className="font-bold">{userData.name}</h1>
                             <p>{userData.email}</p>
                             <p className="mt-2">Joined {userData.dateJoined}</p>
 
@@ -96,7 +96,7 @@ const ProfilePage = () => {
                 )}
             </div>
             {/* Game statistic container */}
-            <div className="p-4 flex flex-col lg:flex-1 lg:max-w-lg">
+            <div className="bg-base-300 rounded-lg shadow-lg max-w-md mx-auto lg:ml-0 p-4 flex flex-col lg:flex-1 lg:max-w-lg lg:h-full lg:max-h-[46rem] self-center">
                 <h1 className="text-center font-bold">Game statistics</h1>
                 {!gameStatisticData && (
                     <div className="w-full flex justify-center">
