@@ -43,6 +43,8 @@
 
 .bg-subtle {
     background-image: url('./bg_main.png');
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .bg-overlay-important {

@@ -70,7 +70,7 @@ const ProfilePage = () => {
     }, []);
 
     return (
-        <div className="bg-base-200 h-full w-full pt-4 pb-6 lg:flex lg:flex-row lg:justify-center overflow-y-scroll lg:overflow-hidden">
+        <div className="h-full w-full pt-4 pb-6 lg:flex lg:flex-row lg:justify-center overflow-y-scroll lg:overflow-hidden">
             {/* Profile container */}
             <div className="p-4 flex flex-col items-center lg:flex-1 lg:max-w-lg">
                 {!userData && (

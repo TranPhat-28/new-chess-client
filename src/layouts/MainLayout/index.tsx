@@ -24,7 +24,7 @@ const MainLayout = () => {
     return (
         <div className="drawer lg:drawer-open">
             <input id="main-drawer" type="checkbox" className="drawer-toggle" />
-            <div className="drawer-content bg-base-200 flex flex-col h-screen w-full">
+            <div className="drawer-content bg-base-300 flex flex-col h-screen w-full">
                 {/* Page content here */}
                 <Navbar />
                 <Outlet />
