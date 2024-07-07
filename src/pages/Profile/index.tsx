@@ -86,7 +86,7 @@ const ProfilePage = () => {
                         </div>
 
                         <div className="text-center">
-                            <h1 className="font-bold text-2xl mt-2">{userData.name}</h1>
+                            <h1 className="font-bold text-2xl lg:text-4xl mt-2">{userData.name}</h1>
                             <p className="m-0 lg:mb-2">{userData.email}</p>
                             <p className="m-0">Joined {userData.dateJoined}</p>
 
