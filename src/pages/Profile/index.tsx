@@ -86,9 +86,9 @@ const ProfilePage = () => {
                         </div>
 
                         <div className="text-center">
-                            <h1 className="font-bold">{userData.name}</h1>
-                            <p>{userData.email}</p>
-                            <p className="mt-2">Joined {userData.dateJoined}</p>
+                            <h1 className="font-bold text-lg">{userData.name}</h1>
+                            <p className="m-0">{userData.email}</p>
+                            <p className="m-0">Joined {userData.dateJoined}</p>
 
                             <ProviderBadge provider={userData.provider} />
                         </div>
