@@ -37,13 +37,13 @@ function App() {
                 />
 
                 {/* Authentication required */}
-                {user && (
+                {/* {user && ( */}
                     <Route path="/main" element={<MainLayout />}>
                         <Route path="lobby" element={<LobbyPage />} />
                         <Route path="social" element={<SocialPage />} />
                         <Route path="profile" element={<ProfilePage />} />
                     </Route>
-                )}
+                {/* )} */}
                 <Route path="*" element={<NotFound />} />
             </Routes>
         </>

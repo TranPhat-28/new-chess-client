@@ -83,7 +83,7 @@ const QuickPlayPage = () => {
     }, []);
 
     return (
-        <div className="h-full w-full bg-base-300 flex flex-col justify-center items-center">
+        <div className="h-full w-full flex flex-col justify-center items-center bg-subtle object-contain">
             <div className="w-full p-2 max-w-md md:max-w-6xl flex flex-col items-center gap-2 md:grid md:grid-cols-2">
                 <div className="w-full md:h-full md:col-start-2 flex md:flex-col gap-2">
                     {playerId && (
