@@ -8,6 +8,9 @@ import { toast } from "react-toastify";
 import { PulseLoader } from "react-spinners";
 import { setUserData } from "../../redux/features/userDataSlice";
 import { IGameStatisticData } from "../../interfaces";
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import { FaRegCopy } from "react-icons/fa6";
+import { FaCheck } from "react-icons/fa";
 
 const ProfilePage = () => {
     const dispatch = useDispatch();
@@ -23,6 +26,8 @@ const ProfilePage = () => {
 
     const [gameStatisticData, setGameStatisticData] =
         useState<IGameStatisticData | null>(null);
+
+    const [copyToClipboard, setCopyToClipboard] = useState<boolean>(false);
 
     // Fetch data
     useEffect(() => {
@@ -72,7 +77,7 @@ const ProfilePage = () => {
     return (
         <div className="h-full w-full p-4 lg:p-6 lg:flex lg:flex-row lg:gap-4 lg:justify-center overflow-y-scroll lg:overflow-hidden">
             {/* Profile container */}
-            <div className="bg-base-300 rounded-lg shadow-lg max-w-md mx-auto lg:mr-0 p-4 flex flex-col items-center lg:flex-1 lg:max-w-lg mb-4 lg:mb-0 lg:h-full lg:max-h-[46rem] self-center lg:justify-center">
+            <div className="bg-base-300 rounded-lg shadow-lg max-w-md mx-auto lg:mr-0 p-4 flex flex-col items-center lg:flex-1 lg:max-w-lg mb-4 lg:mb-0 lg:h-full lg:max-h-[46rem] self-center lg:justify-center gap-4">
                 {!userData && (
                     <h1 className="text-center font-bold">Profile</h1>
                 )}
@@ -85,10 +90,34 @@ const ProfilePage = () => {
                             </div>
                         </div>
 
-                        <div className="text-center">
-                            <h1 className="font-bold text-2xl lg:text-4xl mt-2">{userData.name}</h1>
-                            <p className="m-0 lg:mb-2">{userData.email}</p>
-                            <p className="m-0">Joined {userData.dateJoined}</p>
+                        <div className="text-center flex flex-col gap-2">
+                            <h2 className="font-bold text-2xl lg:text-4xl">
+                                {userData.name}
+                            </h2>
+                            <p>{userData.email}</p>
+                            <p>Joined {userData.dateJoined}</p>
+
+                            <div className="join">
+                                <label className="input input-sm rounded-r-none">
+                                    SocialID
+                                </label>
+                                <input
+                                    className="input input-sm join-item w-fit"
+                                    value={userData.socialId}
+                                    disabled
+                                />
+                                <CopyToClipboard text={userData.socialId}>
+                                    <button
+                                        className="btn join-item btn-sm"
+                                        onClick={() => {
+                                            setCopyToClipboard(true);
+                                        }}
+                                    >
+                                        {!copyToClipboard && <FaRegCopy />}
+                                        {copyToClipboard && <FaCheck />}
+                                    </button>
+                                </CopyToClipboard>
+                            </div>
 
                             <ProviderBadge provider={userData.provider} />
                         </div>

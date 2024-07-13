@@ -62,26 +62,17 @@ const SocialPage = () => {
                         friendList.map((friend) => (
                             <FriendListItem key={friend.id} data={friend} />
                         ))}
+
+                    {friendList.length === 0 && (
+                        <div className="flex flex-col items-center justify-center gap-8 pt-6">
+                            <FaSadTear size={"8rem"} color={"whitesmoke"} />
+                            <p className="text-base-100 font-bold">
+                                You have no friend. Go invite some now!
+                            </p>
+                        </div>
+                    )}
                 </div>
             </div>
-            {/* <div className="bg-base-300 p-4 rounded-lg w-full flex flex-col flex-grow gap-2 overflow-y-scroll lg:max-h-[60rem]">
-                <p className="font-bold text-2xl sticky top-0 -translate-y-2 z-10 bg-base-300">Your Friends</p>
-                
-                {friendList.length > 0 &&
-                    friendList.map((friend) => (
-                        <FriendListItem key={friend.id} data={friend} />
-                    ))}
-
-                
-                {friendList.length === 0 && (
-                    <div className="flex flex-col items-center justify-center gap-8 pt-6">
-                        <FaSadTear size={"8rem"} color={"whitesmoke"} />
-                        <p className="text-base-100 font-bold">
-                            You have no friend. Go invite some now!
-                        </p>
-                    </div>
-                )}
-            </div> */}
         </div>
     );
 };

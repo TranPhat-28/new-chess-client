@@ -7,6 +7,7 @@ interface IUserData {
     dateJoined: string;
     picture: string;
     provider: string;
+    socialId: string;
 }
 
 const initialState: { userData: IUserData | null } = {
