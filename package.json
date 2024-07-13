@@ -29,7 +29,8 @@
         "react-router-dom": "^6.23.1",
         "react-spinners": "^0.13.8",
         "react-toastify": "^10.0.5",
-        "sort-by": "^1.2.0"
+        "sort-by": "^1.2.0",
+        "use-debounce": "^10.0.1"
     },
     "devDependencies": {
         "@types/react": "^18.2.66",

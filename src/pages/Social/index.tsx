@@ -1,7 +1,8 @@
-import { FaSadTear } from "react-icons/fa";
+import { FaRegFaceSadCry } from "react-icons/fa6";
 import FriendListItem from "../../components/FriendListItem";
 import SearchResultItem from "../../components/SearchResultItem";
-import { useState } from "react";
+import useDebouncedSearch from "../../hooks/SocialSearchHandler";
+import { BeatLoader } from "react-spinners";
 
 const SocialPage = () => {
     // Dummy data
@@ -28,12 +29,9 @@ const SocialPage = () => {
         { name: "Pete", id: 15 },
     ];
 
-    // Dummy state for searching
-    const [search, setSearch] = useState<string>("");
-
-    const searchHandler = (input: string) => {
-        setSearch(input);
-    };
+    // Debounce search
+    const { searchValue, setSearchValue, searchResult, loading } =
+        useDebouncedSearch(); // Adjust delay as needed
 
     return (
         <div className="h-full w-full p-2 md:p-4 gap-2 md:gap-4 flex flex-col max-w-lg md:max-w-xl lg:max-w-5xl self-center justify-center overflow-hidden">
@@ -43,14 +41,22 @@ const SocialPage = () => {
 
                 <input
                     type="text"
-                    placeholder="Friend social id here"
+                    placeholder="Social ID"
                     className="input input-bordered w-full"
-                    onChange={(e) => searchHandler(e.target.value)}
-                    value={search}
+                    onChange={(e) => setSearchValue(e.target.value)}
+                    value={searchValue}
                 />
 
                 {/* Result will be shown here */}
-                {search !== "" && <SearchResultItem result={search} />}
+                {searchResult !== "" && loading !== true && (
+                    <SearchResultItem result={searchResult} />
+                )}
+                {/* Loading */}
+                {loading && (
+                    <div className="w-full flex justify-center">
+                        <BeatLoader />
+                    </div>
+                )}
             </div>
 
             {/* The friend list */}
@@ -65,8 +71,8 @@ const SocialPage = () => {
 
                     {friendList.length === 0 && (
                         <div className="flex flex-col items-center justify-center gap-8 pt-6">
-                            <FaSadTear size={"8rem"} color={"whitesmoke"} />
-                            <p className="text-base-100 font-bold">
+                            <FaRegFaceSadCry size={"6rem"} />
+                            <p className="font-bold">
                                 You have no friend. Go invite some now!
                             </p>
                         </div>

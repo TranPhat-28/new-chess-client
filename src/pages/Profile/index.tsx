@@ -90,25 +90,23 @@ const ProfilePage = () => {
                             </div>
                         </div>
 
-                        <div className="text-center flex flex-col gap-2">
+                        <div className="w-full text-center flex flex-col gap-2">
                             <h2 className="font-bold text-2xl lg:text-4xl">
                                 {userData.name}
                             </h2>
                             <p>{userData.email}</p>
                             <p>Joined {userData.dateJoined}</p>
 
-                            <div className="join">
+                            <div className="flex w-full">
                                 <label className="input input-sm rounded-r-none">
-                                    SocialID
+                                    Social ID
                                 </label>
-                                <input
-                                    className="input input-sm join-item w-fit"
-                                    value={userData.socialId}
-                                    disabled
-                                />
+                                <div className="flex-1 flex items-center justify-center bg-base-200">
+                                    {userData.socialId}
+                                </div>
                                 <CopyToClipboard text={userData.socialId}>
                                     <button
-                                        className="btn join-item btn-sm"
+                                        className="btn join-item btn-sm rounded-l-none"
                                         onClick={() => {
                                             setCopyToClipboard(true);
                                         }}
@@ -119,6 +117,7 @@ const ProfilePage = () => {
                                 </CopyToClipboard>
                             </div>
 
+                            <div className="w-full"></div>
                             <ProviderBadge provider={userData.provider} />
                         </div>
                     </>

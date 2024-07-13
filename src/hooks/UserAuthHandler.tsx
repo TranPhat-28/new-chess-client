@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { removeAuth } from "../redux/features/authSlice";
 import { showCustomAlert } from "../utilities";
 import { FaRegCircleXmark } from "react-icons/fa6";
+import { removeUserData } from "../redux/features/userDataSlice";
 
 const useUserAuth = () => {
     const dispatch = useDispatch();
@@ -11,6 +12,7 @@ const useUserAuth = () => {
 
     const HandleLogout = () => {
         dispatch(removeAuth());
+        dispatch(removeUserData());
         navigate("/");
         toast.success("Logout successful");
     };
