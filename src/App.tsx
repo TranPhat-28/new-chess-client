@@ -8,6 +8,8 @@ import NotFound from "./pages/NotFound";
 import ProfilePage from "./pages/Profile";
 import SocialPage from "./pages/Social";
 import FriendPage from "./pages/Friend";
+import EventPage from "./pages/Event";
+import ShopPage from "./pages/Shop";
 
 // Layouts
 import MainLayout from "./layouts/MainLayout";
@@ -44,6 +46,8 @@ function App() {
                     <Route path="lobby" element={<LobbyPage />} />
                     <Route path="social" element={<SocialPage />} />
                     <Route path="profile" element={<ProfilePage />} />
+                    <Route path="event" element={<EventPage />} />
+                    <Route path="shop" element={<ShopPage />} />
                     <Route path="friend/:id" element={<FriendPage />} />
                 </Route>
                 {/* )} */}

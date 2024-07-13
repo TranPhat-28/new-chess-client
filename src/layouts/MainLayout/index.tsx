@@ -50,6 +50,12 @@ const MainLayout = () => {
                     <li>
                         <NavLink to={"/main/profile"}>Profile</NavLink>
                     </li>
+                    <li>
+                        <NavLink to={"/main/event"}>Event</NavLink>
+                    </li>
+                    <li>
+                        <NavLink to={"/main/shop"}>Shop</NavLink>
+                    </li>
 
                     <div className="flex-1 flex flex-col-reverse gap-4">
                         <button
