@@ -4,3 +4,4 @@ export * from "./ICustomConfirmAlert";
 export * from "./ITokenData";
 export * from "./IGameStatisticData";
 export * from "./ISearchProfileResult";
+export * from "./ILobbyData";

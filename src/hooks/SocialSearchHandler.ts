@@ -36,7 +36,7 @@ const useDebouncedSearch = (initialValue = "", delay = 500) => {
                     setSearchResult(response.data.data);
                 })
                 .catch(function (error) {
-                    toast.error(error.response.statusText);
+                    toast.error(error.message);
                 })
                 .finally(() => {
                     setLoading(false);
