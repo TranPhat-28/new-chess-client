@@ -4,7 +4,9 @@ const Navbar = () => {
     return (
         <div className="navbar bg-base-100 lg:hidden">
             <div className="flex-1">
-                <a className="btn btn-ghost text-2xl font-bold font-logo">NewChess</a>
+                <a className="btn btn-ghost text-2xl font-bold font-logo">
+                    NewChess
+                </a>
             </div>
             <div className="flex-none">
                 <label

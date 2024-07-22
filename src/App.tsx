@@ -10,10 +10,12 @@ import SocialPage from "./pages/Social";
 import FriendPage from "./pages/Friend";
 import EventPage from "./pages/Event";
 import ShopPage from "./pages/Shop";
+import NotificationPage from "./pages/Notification";
 
 // Layouts
 import MainLayout from "./layouts/MainLayout";
 
+// Redux
 import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 
@@ -47,6 +49,7 @@ function App() {
                     <Route path="social" element={<SocialPage />} />
                     <Route path="profile" element={<ProfilePage />} />
                     <Route path="event" element={<EventPage />} />
+                    <Route path="notification" element={<NotificationPage />} />
                     <Route path="shop" element={<ShopPage />} />
                     <Route path="friend/:id" element={<FriendPage />} />
                 </Route>

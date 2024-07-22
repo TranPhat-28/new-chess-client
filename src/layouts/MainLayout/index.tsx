@@ -51,6 +51,11 @@ const MainLayout = () => {
                         <NavLink to={"/main/profile"}>Profile</NavLink>
                     </li>
                     <li>
+                        <NavLink to={"/main/notification"}>
+                            Notification <span className="badge badge-primary">new</span>
+                        </NavLink>
+                    </li>
+                    <li>
                         <NavLink to={"/main/event"}>Event</NavLink>
                     </li>
                     <li>
