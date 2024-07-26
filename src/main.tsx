@@ -12,6 +12,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import InitialAlert from "./components/InitialAlert/index.tsx";
+import MoveHistoryModal from "./components/MoveHistoryModal/index.tsx";
 
 axios.defaults.baseURL = "https://famous-jacquenette-my-personal-project-c6376a3e.koyeb.app/";
 // axios.defaults.baseURL = "http://localhost:5275/";
@@ -29,6 +30,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                     <Loading />
                     <InitialAlert />
                     <ToastContainer />
+                    <MoveHistoryModal />
                 </BrowserRouter>
             </GoogleOAuthProvider>
         </Provider>
