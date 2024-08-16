@@ -1,15 +1,11 @@
-import { IoPersonAdd } from "react-icons/io5";
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import { useEffect, useState } from "react";
-import { ISearchProfileResult, ITokenData } from "../../interfaces";
 import { jwtDecode } from "jwt-decode";
+import { useEffect, useState } from "react";
+import { FaSearch } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { ISearchProfileResult, ITokenData } from "../../interfaces";
+import { RootState } from "../../redux/store";
 
-const SearchResultItem = ({
-    result,
-}: {
-    result: ISearchProfileResult | null;
-}) => {
+const SearchResultItem = ({ result }: { result: ISearchProfileResult }) => {
     // Token
     const token = useSelector((state: RootState) => state.auth.token);
 
@@ -30,31 +26,24 @@ const SearchResultItem = ({
     }, [result]);
 
     return (
-        <div className="bg-base-200 rounded-lg shadow-md p-3 flex justify-between">
-            {result && (
-                <div className="flex items-center">
-                    <div className="avatar">
-                        <div className="w-10 rounded-full">
-                            <img src={result.picture} />
-                        </div>
+        <div className="bg-base-200 flex-shrink-0 flex justify-between p-4">
+            <div className="flex items-center">
+                <div className="avatar">
+                    <div className="w-10 rounded-full">
+                        <img src={result.picture} />
                     </div>
-
-                    <p className="text-xl font-medium ml-2">
-                        {result.name}
-                        {isYou && <span className="text-xs ps-1">(You)</span>}
-                    </p>
                 </div>
-            )}
 
-            {/* Only show the "Add Friend" button if not yourself */}
-            {result && !isYou && (
-                <button className="btn btn-square btn-primary btn-outline">
-                    <IoPersonAdd />
+                <p className="text-xl font-medium ml-2">
+                    {result.name}
+                    {isYou && <span className="text-xs ps-1">(You)</span>}
+                </p>
+            </div>
+            <div className="flex items-center">
+                <button className={"btn btn-primary btn-outline h-fit"}>
+                    <FaSearch />
                 </button>
-            )}
-            {result === null && (
-                <p className="text-red-500">No profile found</p>
-            )}
+            </div>
         </div>
     );
 };

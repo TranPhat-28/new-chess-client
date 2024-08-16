@@ -73,4 +73,13 @@
     html:has(.drawer-toggle:checked) {
         scrollbar-gutter: auto;
     }
+
+    /* Pre-defined css rule for page structure */
+    .page-content-wrapper {
+        @apply w-full h-full lg:max-h-[40rem] xl:max-w-[80rem] overflow-hidden
+    }
+
+    .page-preset {
+        @apply w-full h-full p-6 md:p-10 gap-6
+    }
 }

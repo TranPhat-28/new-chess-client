@@ -25,7 +25,8 @@ const MainLayout = () => {
     return (
         <div className="drawer lg:drawer-open">
             <input id="main-drawer" type="checkbox" className="drawer-toggle" />
-            <div className="drawer-content bg-subtle flex flex-col h-screen w-full">
+            {/* This is the space for our content */}
+            <div className="drawer-content bg-subtle flex flex-col h-screen w-full items-center justify-center">
                 {/* Page content here */}
                 <Navbar />
                 <Outlet />
@@ -36,7 +37,7 @@ const MainLayout = () => {
                     aria-label="close sidebar"
                     className="drawer-overlay"
                 ></label>
-                <ul className="menu p-4 w-5/6 lg:w-80 xl:w-96 min-h-full bg-base-100 text-base-content gap-1">
+                <ul className="menu p-4 w-5/6 lg:w-72 xl:w-96 min-h-full bg-base-100 text-base-content gap-1">
                     {/* Sidebar content here */}
                     <li className="bg-logo rounded-xl p-2">
                         <p className="font-logo text-white text-6xl">Chess</p>

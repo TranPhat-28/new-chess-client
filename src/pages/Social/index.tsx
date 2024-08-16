@@ -1,82 +1,66 @@
-import { FaRegFaceSadCry } from "react-icons/fa6";
-import FriendListItem from "../../components/FriendListItem";
+import { MdPersonSearch } from "react-icons/md";
+import { HashLoader } from "react-spinners";
 import SearchResultItem from "../../components/SearchResultItem";
 import useDebouncedSearch from "../../hooks/SocialSearchHandler";
-import { BeatLoader } from "react-spinners";
 
 const SocialPage = () => {
-    // Dummy data
-    interface IDummyFriend {
-        name: string;
-        id: number;
-    }
-
-    const friendList: IDummyFriend[] = [
-        { name: "John", id: 1 },
-        { name: "Kate", id: 2 },
-        { name: "Pete", id: 3 },
-        { name: "John", id: 4 },
-        { name: "Kate", id: 5 },
-        { name: "Pete", id: 6 },
-        { name: "John", id: 7 },
-        { name: "Kate", id: 8 },
-        { name: "Pete", id: 9 },
-        { name: "John", id: 10 },
-        { name: "Kate", id: 11 },
-        { name: "Pete", id: 12 },
-        { name: "John", id: 13 },
-        { name: "Kate", id: 14 },
-        { name: "Pete", id: 15 },
-    ];
-
     // Debounce search
     const { searchValue, setSearchValue, searchResult, loading } =
         useDebouncedSearch(); // Adjust delay as needed
 
     return (
-        <div className="h-full w-full p-2 md:p-4 gap-2 md:gap-4 flex flex-col max-w-lg md:max-w-xl lg:max-w-5xl self-center justify-center overflow-hidden">
-            {/* Search container */}
-            <div className="w-full bg-base-300 p-2 md:p-4 rounded-lg flex flex-col gap-2">
-                <p className="font-bold text-2xl">Search a friend</p>
+        <div className="page-content-wrapper">
+            <div className="page-preset flex flex-col lg:flex-row justify-center items-center overflow-hidden">
+                {/* Search result list */}
+                <div className="h-3/5 lg:h-full w-full bg-base-100 rounded-lg flex flex-col overflow-hidden">
+                    <p className="text-2xl p-4 border-gray-300 border-b-2">
+                        Search for players
+                    </p>
 
-                <input
-                    type="text"
-                    placeholder="Social ID"
-                    className="input input-bordered w-full"
-                    onChange={(e) => setSearchValue(e.target.value)}
-                    value={searchValue}
-                />
+                    <div className="bg-base-300 w-full h-full flex flex-col overflow-y-scroll">
+                        {/* {roomList.length > 0 &&
+                            roomList.map((room) => (
+                                <LobbyRoomItem key={room.id} roomInfo={room} />
+                            ))} */}
 
-                {/* Result will be shown here */}
-                {searchResult !== "" && loading !== true && (
-                    <SearchResultItem result={searchResult} />
-                )}
-                {/* Loading */}
-                {loading && (
-                    <div className="w-full flex justify-center">
-                        <BeatLoader />
+                        {/* Loading */}
+                        {loading && (
+                            <div className="w-full h-full flex justify-center items-center">
+                                <HashLoader />
+                            </div>
+                        )}
+
+                        {/* No result */}
+                        {searchResult === null && loading !== true && (
+                            <div className="w-full h-full flex justify-center items-center text-red-400">
+                                Cannot found player
+                            </div>
+                        )}
+
+                        {/* Result */}
+                        {searchResult !== "" && searchResult !== null && loading !== true && (
+                            <SearchResultItem result={searchResult} />
+                        )}
                     </div>
-                )}
-            </div>
 
-            {/* The friend list */}
-            <div className="w-full bg-base-300 p-2 md:p-4 rounded-lg flex-1 lg:max-h-[52rem] flex flex-col gap-2 overflow-hidden">
-                <p className="font-bold text-2xl">Your friends</p>
+                    <div className="join w-full rounded-t-none">
+                        <input
+                            className="input input-bordered join-item w-full"
+                            placeholder="Social Id or Name"
+                            onChange={(e) => setSearchValue(e.target.value)}
+                            value={searchValue}
+                        />
+                        <select className="select select-bordered join-item">
+                            <option>Social ID</option>
+                            <option disabled>Name</option>
+                        </select>
+                    </div>
+                </div>
 
-                <div className="bg-gray-300 p-2 rounded-lg w-full h-full flex flex-col gap-2 overflow-y-scroll">
-                    {friendList.length > 0 &&
-                        friendList.map((friend) => (
-                            <FriendListItem key={friend.id} data={friend} />
-                        ))}
-
-                    {friendList.length === 0 && (
-                        <div className="flex flex-col items-center justify-center gap-8 pt-6">
-                            <FaRegFaceSadCry size={"6rem"} />
-                            <p className="font-bold">
-                                You have no friend. Go invite some now!
-                            </p>
-                        </div>
-                    )}
+                {/* Profile */}
+                <div className="h-2/5 lg:h-full w-full bg-base-100 rounded-lg flex flex-col items-center justify-center">
+                    <MdPersonSearch size={"6rem"} color={"#9ca3af"} />
+                    <p className="text-gray-400">Profile details</p>
                 </div>
             </div>
         </div>

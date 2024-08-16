@@ -1,9 +1,11 @@
-import { confirmAlert } from "react-confirm-alert";
+// import { confirmAlert } from "react-confirm-alert";
 import { FaChess } from "react-icons/fa6";
 import LobbyRoomItem from "../../components/LobbyRoomItem";
 import { IOnlineRoomInfo } from "../../interfaces";
 import { showCustomAlert } from "../../utilities";
-import JoinOnlineRoomAlert from "../../components/JoinOnlineRoomAlert";
+// import JoinOnlineRoomAlert from "../../components/JoinOnlineRoomAlert";
+import { RiRobot2Fill } from "react-icons/ri";
+import { HiUsers } from "react-icons/hi";
 
 const LobbyPage = () => {
     const roomList: IOnlineRoomInfo[] = [
@@ -34,62 +36,75 @@ const LobbyPage = () => {
         );
     };
 
-    const showInputRoomId = () => {
-        confirmAlert({
-            overlayClassName: "bg-overlay-important",
-            closeOnClickOutside: false,
-            customUI: ({ onClose }) => {
-                return <JoinOnlineRoomAlert onClose={onClose} />;
-            },
-        });
-    };
+    // const showInputRoomId = () => {
+    //     confirmAlert({
+    //         overlayClassName: "bg-overlay-important",
+    //         closeOnClickOutside: false,
+    //         customUI: ({ onClose }) => {
+    //             return <JoinOnlineRoomAlert onClose={onClose} />;
+    //         },
+    //     });
+    // };
 
     return (
-        <div className="h-full w-full p-2 md:p-4 gap-2 md:gap-4 flex flex-col max-w-lg md:max-w-xl lg:max-w-5xl self-center justify-center overflow-hidden">
-            {/* The Online room list */}
-            <div className="w-full bg-base-300 p-2 md:p-4 rounded-lg flex-1 lg:max-h-[52rem] flex flex-col gap-2 overflow-hidden">
-                <p className="font-bold text-2xl">Multiplayer lobby</p>
+        <div className="page-content-wrapper">
+            <div className="page-preset flex flex-col justify-center items-center overflow-hidden">
+                {/* The Online room list */}
+                <div className="w-full bg-base-100 rounded-lg flex-1 flex flex-col overflow-hidden">
+                    <p className="text-2xl p-4 border-gray-300 border-b-2">
+                        Multiplayer lobby
+                    </p>
 
-                <div className="bg-gray-300 p-2 rounded-lg w-full h-full flex flex-col gap-2 overflow-y-scroll">
-                    {roomList.length > 0 &&
-                        roomList.map((room) => (
-                            <LobbyRoomItem key={room.id} roomInfo={room} />
-                        ))}
+                    <div className="bg-base-300 w-full h-full flex flex-col overflow-y-scroll">
+                        {roomList.length > 0 &&
+                            roomList.map((room) => (
+                                <LobbyRoomItem key={room.id} roomInfo={room} />
+                            ))}
+                    </div>
+
+                    <div className="join w-full rounded-t-none">
+                        <input
+                            className="input input-bordered join-item w-full"
+                            placeholder="Room ID"
+                        />
+                        <button className="btn btn-primary join-item">
+                            Join
+                        </button>
+                    </div>
                 </div>
-            </div>
 
-            {/* Actions */}
-            <div className="w-full bg-base-300 p-2 md:p-4 rounded-lg flex flex-col gap-2">
-                <p className="font-bold text-2xl">Start a game now</p>
-                <button
-                    className="btn btn-primary"
-                    onClick={() =>
-                        showTutorial(
-                            "Practice mode",
-                            "Practice your chess skill with the Stockfish chess bot"
-                        )
-                    }
-                >
-                    Practice mode
-                </button>
-                <div className="w-full flex gap-2">
-                    <button
-                        className="btn btn-primary flex-1"
-                        onClick={() =>
-                            showTutorial(
-                                "Host a room",
-                                "Host an online room for to play with your friend"
-                            )
-                        }
-                    >
-                        Online mode
-                    </button>
-                    <button
-                        className="btn btn-primary btn-outline flex-1"
-                        onClick={showInputRoomId}
-                    >
-                        Join room with ID
-                    </button>
+                {/* Actions */}
+                <div className="w-full bg-base-100 rounded-lg flex flex-col overflow-hidden">
+                    <p className="text-2xl p-4">
+                        Start a game
+                    </p>
+
+                    <div className="w-full flex p-4 pt-0 gap-4">
+                        <button
+                            className="btn btn-primary btn-outline flex-1 flex flex-col md:flex-row-reverse h-24"
+                            onClick={() =>
+                                showTutorial(
+                                    "Practice mode",
+                                    "Practice your chess skill with the Stockfish chess bot"
+                                )
+                            }
+                        >
+                            Practice mode
+                            <RiRobot2Fill size={"3rem"} />
+                        </button>
+                        <button
+                            className="btn btn-primary btn-outline flex-1 flex flex-col md:flex-row-reverse h-24"
+                            onClick={() =>
+                                showTutorial(
+                                    "Host a room",
+                                    "Host an online room for to play with your friend"
+                                )
+                            }
+                        >
+                            Online mode
+                            <HiUsers size={"3rem"} />
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
