@@ -1,9 +1,9 @@
-import { MdPersonSearch } from "react-icons/md";
+import { Outlet } from "react-router-dom";
 import { HashLoader } from "react-spinners";
 import SearchResultItem from "../../components/SearchResultItem";
 import useDebouncedSearch from "../../hooks/SocialSearchHandler";
 
-const SocialPage = () => {
+const SocialLayout = () => {
     // Debounce search
     const { searchValue, setSearchValue, searchResult, loading } =
         useDebouncedSearch(); // Adjust delay as needed
@@ -18,11 +18,6 @@ const SocialPage = () => {
                     </p>
 
                     <div className="bg-base-300 w-full h-full flex flex-col overflow-y-scroll">
-                        {/* {roomList.length > 0 &&
-                            roomList.map((room) => (
-                                <LobbyRoomItem key={room.id} roomInfo={room} />
-                            ))} */}
-
                         {/* Loading */}
                         {loading && (
                             <div className="w-full h-full flex justify-center items-center">
@@ -50,7 +45,7 @@ const SocialPage = () => {
                             onChange={(e) => setSearchValue(e.target.value)}
                             value={searchValue}
                         />
-                        <select className="select select-bordered join-item">
+                        <select className="select select-bordered join-item rounded-t-none">
                             <option>Social ID</option>
                             <option disabled>Name</option>
                         </select>
@@ -58,13 +53,10 @@ const SocialPage = () => {
                 </div>
 
                 {/* Profile */}
-                <div className="h-2/5 lg:h-full w-full bg-base-100 rounded-lg flex flex-col items-center justify-center">
-                    <MdPersonSearch size={"6rem"} color={"#9ca3af"} />
-                    <p className="text-gray-400">Profile details</p>
-                </div>
+                <Outlet />
             </div>
         </div>
     );
 };
 
-export default SocialPage;
+export default SocialLayout;

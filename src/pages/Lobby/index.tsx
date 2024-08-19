@@ -81,7 +81,7 @@ const LobbyPage = () => {
 
                     <div className="w-full flex p-4 pt-0 gap-4">
                         <button
-                            className="btn btn-primary btn-outline flex-1 flex flex-col md:flex-row-reverse h-24"
+                            className="btn glass bg-primary btn-outline flex-1 flex flex-col md:flex-row-reverse h-24"
                             onClick={() =>
                                 showTutorial(
                                     "Practice mode",
@@ -93,7 +93,7 @@ const LobbyPage = () => {
                             <RiRobot2Fill size={"3rem"} />
                         </button>
                         <button
-                            className="btn btn-primary btn-outline flex-1 flex flex-col md:flex-row-reverse h-24"
+                            className="btn glass bg-primary btn-outline flex-1 flex flex-col md:flex-row-reverse h-24"
                             onClick={() =>
                                 showTutorial(
                                     "Host a room",
