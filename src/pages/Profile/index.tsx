@@ -1,16 +1,16 @@
-import { useEffect, useState } from "react";
-import ProviderBadge from "../../components/ProviderBadge";
 import axios from "axios";
-import useUserAuth from "../../hooks/UserAuthHandler";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import { toast } from "react-toastify";
-import { PulseLoader } from "react-spinners";
-import { setUserData } from "../../redux/features/userDataSlice";
-import { IGameStatisticData } from "../../interfaces";
+import { useEffect, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import { FaRegCopy } from "react-icons/fa6";
 import { FaCheck } from "react-icons/fa";
+import { FaRegCopy } from "react-icons/fa6";
+import { useDispatch, useSelector } from "react-redux";
+import { HashLoader } from "react-spinners";
+import { toast } from "react-toastify";
+import ProviderBadge from "../../components/ProviderBadge";
+import useUserAuth from "../../hooks/UserAuthHandler";
+import { IGameStatisticData } from "../../interfaces";
+import { setUserData } from "../../redux/features/userDataSlice";
+import { RootState } from "../../redux/store";
 
 const ProfilePage = () => {
     const dispatch = useDispatch();
@@ -81,7 +81,7 @@ const ProfilePage = () => {
                 {!userData && (
                     <h1 className="text-center font-bold">Profile</h1>
                 )}
-                {!userData && <PulseLoader />}
+                {!userData && <HashLoader />}
                 {userData && (
                     <>
                         <div className="avatar">
@@ -128,7 +128,7 @@ const ProfilePage = () => {
                 <h1 className="text-center font-bold">Game statistics</h1>
                 {!gameStatisticData && (
                     <div className="w-full flex justify-center">
-                        <PulseLoader />
+                        <HashLoader />
                     </div>
                 )}
                 {gameStatisticData && (

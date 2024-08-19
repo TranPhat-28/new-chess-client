@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { BeatLoader } from "react-spinners";
+import { HashLoader } from "react-spinners";
 import { RootState } from "../../redux/store";
 
 const Loading = () => {
@@ -14,7 +14,7 @@ const Loading = () => {
                     {loadingMessage}
                 </h3>
                 <div className="flex justify-center pt-4">
-                    <BeatLoader />
+                    <HashLoader />
                 </div>
             </div>
         </dialog>

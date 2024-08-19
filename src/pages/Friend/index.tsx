@@ -1,6 +1,6 @@
-import { PulseLoader } from "react-spinners";
-import ChatItem from "../../components/ChatItem";
 import { IoSend } from "react-icons/io5";
+import { HashLoader } from "react-spinners";
+import ChatItem from "../../components/ChatItem";
 
 const FriendPage = () => {
     const userData = {
@@ -18,7 +18,7 @@ const FriendPage = () => {
                 {!userData && (
                     <h1 className="text-center font-bold">Profile</h1>
                 )}
-                {!userData && <PulseLoader />}
+                {!userData && <HashLoader />}
                 {userData && (
                     <>
                         <div className="avatar">
