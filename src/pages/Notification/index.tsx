@@ -1,3 +1,6 @@
+import { BsInbox } from "react-icons/bs";
+import FriendRequestItem from "../../components/FriendRequestItem";
+
 const NotificationPage = () => {
     interface IDummyNotification {
         id: number;
@@ -28,24 +31,33 @@ const NotificationPage = () => {
     ];
 
     return (
-        <div className="h-full w-full p-2 md:p-4 gap-2 md:gap-4 flex flex-col lg:flex-row max-w-lg md:max-w-xl lg:max-w-5xl self-center justify-center overflow-hidden lg:items-center">
-            <div className="h-full w-full lg:max-h-[60rem] flex flex-col lg:flex-row gap-2 md:gap-3 lg:gap-4">
-                <div className="flex-1 bg-base-300 p-2 md:p-4 rounded-lg flex flex-col overflow-hidden">
-                    <p className="font-bold text-2xl">Friend requests</p>
-                    <div className="bg-gray-300 p-2 rounded-lg w-full h-full flex flex-col gap-2 overflow-y-scroll">
+        <div className="page-content-wrapper">
+            <div className="page-preset flex flex-col lg:flex-row justify-center items-center overflow-hidden">
+                {/* Friend Requests */}
+                <div className="w-full lg:h-full bg-base-100 rounded-lg flex-1 flex flex-col overflow-hidden">
+                    <p className="text-2xl p-4 border-gray-300 border-b-2">
+                        Friend Requests
+                    </p>
+
+                    {/* <div className="bg-base-300 w-full h-full flex flex-col overflow-y-scroll">
                         {dummyData.length > 0 &&
-                            dummyData.map((item) => (
-                                <NotificationItem key={item.id} id={item.id} title={item.title} />
-                            ))}
+                            dummyData.map(() => <FriendRequestItem />)}
+                    </div> */}
+                    <div className="h-full w-full bg-base-100 rounded-lg flex flex-col items-center justify-center">
+                        <BsInbox size={"6rem"} color={"#9ca3af"} />
+                        <p className="text-gray-400">No new requests</p>
                     </div>
                 </div>
-                <div className="flex-1 bg-base-300 p-2 md:p-4 rounded-lg flex flex-col overflow-hidden">
-                    <p className="font-bold text-2xl">Notifications</p>
-                    <div className="bg-gray-300 p-2 rounded-lg w-full h-full flex flex-col gap-2 overflow-y-scroll">
+
+                {/* Notification */}
+                <div className="w-full lg:h-full bg-base-100 rounded-lg flex-1 flex flex-col overflow-hidden">
+                    <p className="text-2xl p-4 border-gray-300 border-b-2">
+                        Notifications
+                    </p>
+
+                    <div className="bg-base-300 w-full h-full flex flex-col overflow-y-scroll">
                         {dummyData.length > 0 &&
-                            dummyData.map((item) => (
-                                <NotificationItem key={item.id} id={item.id} title={item.title} />
-                            ))}
+                            dummyData.map(() => <FriendRequestItem />)}
                     </div>
                 </div>
             </div>
@@ -54,17 +66,3 @@ const NotificationPage = () => {
 };
 
 export default NotificationPage;
-
-const NotificationItem = ({ id, title }: { id: number; title: string }) => {
-    return (
-        <div className="bg-base-200 p-2 flex justify-between rounded-lg shadow-lg">
-            <div className="flex flex-col justify-center">
-                <p className="font-bold text-xl">{title}</p>
-                <p>Request id: {id}</p>
-            </div>
-            <button className="btn btn-primary btn-outline">
-                Action
-            </button>
-        </div>
-    );
-};
