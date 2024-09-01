@@ -20,6 +20,7 @@ import { RootState } from "./redux/store";
 import SocialLayout from "./layouts/SocialLayout";
 import PlaceholderCard from "./components/ProfileDetail/PlaceholderCard";
 import ProfileDetailCard from "./components/ProfileDetail/ProfileDetailCard";
+import ErrorCard from "./components/ProfileDetail/ErrorCard";
 
 function App() {
     const user = useSelector((state: RootState) => state.auth.email);
@@ -51,6 +52,7 @@ function App() {
                     <Route path="social" element={<SocialLayout />}>
                         <Route index element={<PlaceholderCard />} />
                         <Route path=":id" element={<ProfileDetailCard />} />
+                        <Route path="error" element={<ErrorCard />} />
                     </Route>
                     <Route path="profile" element={<ProfilePage />} />
                     <Route path="event" element={<EventPage />} />

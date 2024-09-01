@@ -44,12 +44,16 @@ const SearchResultItem = ({ result }: { result: ISearchProfileResult }) => {
                 </p>
             </div>
             <div className="flex items-center">
-                <button
-                    className={"btn btn-primary btn-outline h-fit"}
-                    onClick={() => navigate(`/main/social/${result.socialId}`)}
-                >
-                    <FaSearch />
-                </button>
+                {!isYou && (
+                    <button
+                        className={"btn btn-primary btn-outline h-fit"}
+                        onClick={() =>
+                            navigate(`/main/social/${result.socialId}`)
+                        }
+                    >
+                        <FaSearch />
+                    </button>
+                )}
             </div>
         </div>
     );

@@ -3,3 +3,10 @@ export interface ISearchProfileResult {
     picture: string;
     socialId: string;
 }
+
+export interface IDetailProfileSearchResult {
+    name: string;
+    picture: string;
+    rank: string;
+    isFriend: boolean;
+}
