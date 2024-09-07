@@ -4,8 +4,14 @@ import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { HashLoader } from "react-spinners";
 import { toast } from "react-toastify";
-import { IDetailProfileSearchResult } from "../../../interfaces";
+import {
+    IDetailProfileSearchResult,
+    IRelationshipStatus,
+} from "../../../interfaces";
 import { RootState } from "../../../redux/store";
+import RelationshipStatusBadge from "../../RelationshipStatusBadge";
+import SocialActions from "../../SocialActions";
+import { IoMdInformationCircleOutline } from "react-icons/io";
 
 const ProfileDetailCard = () => {
     // Token
@@ -14,36 +20,53 @@ const ProfileDetailCard = () => {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const [data, setData] = useState<IDetailProfileSearchResult | null>(null);
+    const [dataA, setDataA] = useState<IDetailProfileSearchResult | null>(null);
+    const [dataB, setDataB] = useState<IRelationshipStatus | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
     // Fetch data
     useEffect(() => {
         setLoading(true);
 
-        axios
-            .post(
-                "/api/Social/Detail",
-                {
-                    socialId: id,
+        // Request: Detail information - For displaying detail information of search target
+        const requestA = axios.post(
+            "/api/Social/Detail",
+            {
+                socialId: id,
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
                 },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
+            }
+        );
+        // Request: Relationship status with target - For displaying corresponding action buttons
+        const requestB = axios.get(`/api/Social/Relationship/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        // Make the requests
+        axios
+            .all([requestA, requestB])
+            .then(
+                axios.spread((responseA, responseB) => {
+                    // HANDLE RESPONSES ACCORDINGLY
+
+                    // Response A: Detail information
+                    // Check for success status in here as well
+                    if (responseA.data.isSuccess) {
+                        setDataA(responseA.data.data);
+                    } else {
+                        navigate("/main/social/error");
+                        toast.error(responseA.data.message);
+                    }
+
+                    // Response B: Relationship status
+                    setDataB(responseB.data.data);
+                })
             )
-            .then(function (response) {
-                // Response 200
-                // Check for success status in here as well
-                if (response.data.isSuccess) {
-                    console.log(response.data.data);
-                    setData(response.data.data);
-                } else {
-                    navigate("/main/social/error");
-                    toast.error(response.data.message);
-                }
-            })
             .catch(function (error) {
                 navigate("/main/social/error");
                 toast.error(error.message);
@@ -51,10 +74,10 @@ const ProfileDetailCard = () => {
             .finally(() => {
                 setLoading(false);
             });
-    }, []);
+    }, [id]);
 
     return (
-        <div className="h-2/5 lg:h-full w-full bg-base-100 rounded-lg flex flex-col gap-4 p-4 items-center justify-center">
+        <div className="h-2/5 lg:h-full w-full bg-base-100 rounded-lg flex flex-col gap-2 lg:gap-4 p-4 items-center justify-center">
             {loading && (
                 <>
                     <HashLoader />
@@ -62,38 +85,44 @@ const ProfileDetailCard = () => {
                 </>
             )}
 
-            {data && (
+            {dataA && (
                 <>
                     <div className="flex w-full bg-base-200 rounded-lg">
                         <div className="avatar p-4">
                             <div className="ring-primary ring-offset-base-100 w-24 rounded-full ring ring-offset-2">
-                                <img src={data.picture} />
+                                <img src={dataA.picture} />
                             </div>
                         </div>
 
                         <div className="flex flex-col justify-center">
-                            <p className="font-bold md:text-xl lg:text-2xl">
-                                {data.name}
+                            <p className="font-bold md:text-xl lg:text-2xl ps-1">
+                                {dataA.name}
                             </p>
-                            <p>Rank {data.rank}</p>
-                            <p>You are {data.isFriend ? "" : "NOT"} friend</p>
+                            <p className="ps-1">Rank {dataA.rank}</p>
+                            {dataB && (
+                                <RelationshipStatusBadge
+                                    isFriend={dataB.isFriend}
+                                />
+                            )}
                         </div>
                     </div>
-                    <div className="flex w-full gap-4">
-                        <button className="btn btn-primary btn-outline flex-1">
-                            Go to chat
-                        </button>
-                        {data.isFriend === false && (
-                            <button className="btn btn-primary btn-outline flex-1">
-                                Add friend
-                            </button>
-                        )}
-                        {data.isFriend === true && (
-                            <button className="btn btn-error btn-outline flex-1">
-                                Remove friend
-                            </button>
-                        )}
-                    </div>
+                    {dataB && dataB.isRequestSender && (
+                        <div className="w-full bg-base-200 rounded-lg flex p-2">
+                            <IoMdInformationCircleOutline />
+                            <span className="text-xs ml-4">
+                                Friend request sent to this player
+                            </span>
+                        </div>
+                    )}
+                    {dataB && dataB.isRequestReceiver && (
+                        <div className="w-full bg-base-200 rounded-lg flex p-2">
+                            <IoMdInformationCircleOutline />
+                            <span className="text-xs ml-4">
+                                New friend request from this player
+                            </span>
+                        </div>
+                    )}
+                    {dataB && <SocialActions data={dataB} />}
                 </>
             )}
         </div>
