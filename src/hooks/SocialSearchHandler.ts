@@ -12,25 +12,20 @@ const useDebouncedSearch = (initialValue = "", delay = 500) => {
 
     const [searchValue, setSearchValue] = useState<string>(initialValue);
     const [debouncedSearch] = useDebounce(searchValue, delay);
-    const [searchResult, setSearchResult] =
-        useState<ISearchProfileResult | "" | null>("");
+    const [searchResult, setSearchResult] = useState<
+        ISearchProfileResult | "" | null
+    >("");
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
         if (debouncedSearch !== "") {
             setLoading(true);
             axios
-                .post(
-                    "/api/Social/Search",
-                    {
-                        socialId: debouncedSearch,
+                .get(`/api/Social/Search/${debouncedSearch}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
                     },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    }
-                )
+                })
                 .then(function (response) {
                     // Response 200
                     setSearchResult(response.data.data);

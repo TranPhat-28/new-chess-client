@@ -40,7 +40,7 @@ const SocialActions = ({ data }: { data: IRelationshipStatus }) => {
 
         axios
             .post(
-                "/api/Social/Request/Send",
+                "/api/Social/Request",
                 { socialId: id },
                 {
                     headers: {

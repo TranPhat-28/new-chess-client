@@ -28,17 +28,11 @@ const ProfileDetailCard = () => {
         setLoading(true);
 
         // Request: Detail information - For displaying detail information of search target
-        const requestA = axios.post(
-            "/api/Social/Detail",
-            {
-                socialId: id,
+        const requestA = axios.get(`/api/Social/Detail/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
             },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
+        });
         // Request: Relationship status with target - For displaying corresponding action buttons
         const requestB = axios.get(`/api/Social/Relationship/${id}`, {
             headers: {
