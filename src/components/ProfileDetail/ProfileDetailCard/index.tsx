@@ -11,7 +11,6 @@ import {
 import { RootState } from "../../../redux/store";
 import RelationshipStatusBadge from "../../RelationshipStatusBadge";
 import SocialActions from "../../SocialActions";
-import { IoMdInformationCircleOutline } from "react-icons/io";
 
 const ProfileDetailCard = () => {
     // Token
@@ -106,22 +105,6 @@ const ProfileDetailCard = () => {
                             )}
                         </div>
                     </div>
-                    {dataB && dataB.isRequestSender && (
-                        <div className="w-full bg-base-200 rounded-lg flex p-2">
-                            <IoMdInformationCircleOutline />
-                            <span className="text-xs ml-4">
-                                Friend request sent to this player
-                            </span>
-                        </div>
-                    )}
-                    {dataB && dataB.isRequestReceiver && (
-                        <div className="w-full bg-base-200 rounded-lg flex p-2">
-                            <IoMdInformationCircleOutline />
-                            <span className="text-xs ml-4">
-                                New friend request from this player
-                            </span>
-                        </div>
-                    )}
                     {dataB && <SocialActions data={dataB} />}
                 </>
             )}
