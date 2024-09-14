@@ -35,7 +35,7 @@ const ProfilePage = () => {
         // Only fetch userProfile if no data is presented
         if (userData === null) {
             axios
-                .get("/api/Profile/GetProfile", {
+                .get("/api/Profile/Profile", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
@@ -56,7 +56,7 @@ const ProfilePage = () => {
 
         // Always fetch gameStatistic because this change frequently
         axios
-            .get("/api/Profile/GetStatistic", {
+            .get("/api/Profile/Statistic", {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
