@@ -53,7 +53,10 @@ const SocialActions = ({ data }: { data: IRelationshipStatus }) => {
                     toast.success(response.data.message);
                     // Set new internal state
                     const currentState = internalState;
+
                     currentState.isRequestSender = true;
+                    currentState.friendRequestId = response.data.data.id;
+
                     setInternalState(currentState);
                 } else {
                     toast.error(response.data.message);
@@ -80,13 +83,34 @@ const SocialActions = ({ data }: { data: IRelationshipStatus }) => {
     };
 
     const cancelRequestAction = () => {
+        setLoading(true);
+
         axios
-            .post("/api/Social/Request/Cancel")
-            .then((response) => {
-                toast.success(response.data.data);
+            .delete(`/api/Social/Request/${internalState.friendRequestId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
             })
-            .catch((err) => {
-                console.log(err);
+            .then((response) => {
+                if (response.data.isSuccess) {
+                    toast.success(response.data.message);
+                    // Set new internal state
+                    const currentState = internalState;
+
+                    currentState.isRequestSender = false;
+                    currentState.friendRequestId = null;
+
+                    setInternalState(currentState);
+                } else {
+                    toast.error(response.data.message);
+                }
+            })
+            .catch((error) => {
+                toast.error(error.message);
+                console.log(error);
+            })
+            .finally(() => {
+                setLoading(false);
             });
     };
 
@@ -141,7 +165,10 @@ const SocialActions = ({ data }: { data: IRelationshipStatus }) => {
                         className="btn btn-error btn-outline flex-1"
                         onClick={cancelRequestAction}
                     >
-                        Cancel request
+                        {loading && (
+                            <span className="loading loading-spinner"></span>
+                        )}
+                        {loading ? "" : "Cancel request"}
                     </button>
                 )}
 
@@ -164,7 +191,7 @@ const SocialActions = ({ data }: { data: IRelationshipStatus }) => {
                             {loading && (
                                 <span className="loading loading-spinner"></span>
                             )}
-                            Add friend
+                            {loading ? "" : "Add friend"}
                         </button>
                     )}
             </div>
