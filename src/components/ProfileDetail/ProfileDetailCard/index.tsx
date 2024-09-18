@@ -23,6 +23,8 @@ const ProfileDetailCard = () => {
     const [dataB, setDataB] = useState<IRelationshipStatus | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
 
+    const [isFriend, setIsFriend] = useState<boolean | null>(null);
+
     // Fetch data
     useEffect(() => {
         setLoading(true);
@@ -58,6 +60,7 @@ const ProfileDetailCard = () => {
 
                     // Response B: Relationship status
                     setDataB(responseB.data.data);
+                    setIsFriend(responseB.data.data.isFriend);
                 })
             )
             .catch(function (error) {
@@ -92,14 +95,17 @@ const ProfileDetailCard = () => {
                                 {dataA.name}
                             </p>
                             <p className="ps-1">Rank {dataA.rank}</p>
-                            {dataB && (
-                                <RelationshipStatusBadge
-                                    isFriend={dataB.isFriend}
-                                />
+                            {isFriend !== null && (
+                                <RelationshipStatusBadge isFriend={isFriend} />
                             )}
                         </div>
                     </div>
-                    {dataB && <SocialActions data={dataB} />}
+                    {dataB && (
+                        <SocialActions
+                            data={dataB}
+                            setIsFriendBadgeState={setIsFriend}
+                        />
+                    )}
                 </>
             )}
         </div>

@@ -5,9 +5,15 @@ import { useParams } from "react-router-dom";
 import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
 import { IoMdInformationCircleOutline } from "react-icons/io";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
-const SocialActions = ({ data }: { data: IRelationshipStatus }) => {
+const SocialActions = ({
+    data,
+    setIsFriendBadgeState,
+}: {
+    data: IRelationshipStatus;
+    setIsFriendBadgeState: Dispatch<SetStateAction<boolean | null>>;
+}) => {
     // Manage buttons using this state instead
     const [internalState, setInternalState] =
         useState<IRelationshipStatus>(data);
@@ -35,6 +41,7 @@ const SocialActions = ({ data }: { data: IRelationshipStatus }) => {
             });
     };
 
+    // DONE
     const addFriendAction = () => {
         setLoading(true);
 
@@ -71,17 +78,42 @@ const SocialActions = ({ data }: { data: IRelationshipStatus }) => {
             });
     };
 
+    // DONE
     const acceptRequestAction = () => {
+        setLoading(true);
+
         axios
-            .post("/api/Social/Request/Accept")
+            .put(
+                `/api/Social/Request/${data.friendRequestId}/Accept`,
+                undefined,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            )
             .then((response) => {
-                toast.success(response.data.data);
+                toast.success(response.data.message);
+
+                const currentState = internalState;
+
+                currentState.friendRequestId = null;
+                currentState.isRequestReceiver = false;
+                currentState.isRequestSender = false;
+
+                currentState.isFriend = true;
+                setIsFriendBadgeState(true);
             })
             .catch((err) => {
+                toast.error("Something went wrong");
                 console.log(err);
+            })
+            .finally(() => {
+                setLoading(false);
             });
     };
 
+    // DONE
     const cancelRequestAction = () => {
         setLoading(true);
 
@@ -177,7 +209,10 @@ const SocialActions = ({ data }: { data: IRelationshipStatus }) => {
                         className="btn btn-primary btn-outline flex-1"
                         onClick={acceptRequestAction}
                     >
-                        Accept request
+                        {loading && (
+                            <span className="loading loading-spinner"></span>
+                        )}
+                        {loading ? "" : "Accept request"}
                     </button>
                 )}
 
