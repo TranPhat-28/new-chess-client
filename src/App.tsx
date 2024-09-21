@@ -13,11 +13,13 @@ import NotificationPage from "./pages/Notification";
 
 // Layouts
 import MainLayout from "./layouts/MainLayout";
+import SocialLayout from "./layouts/SocialLayout";
+import FriendsLayout from "./layouts/FriendsLayout";
 
 // Redux
 import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
-import SocialLayout from "./layouts/SocialLayout";
+
 import PlaceholderCard from "./components/ProfileDetail/PlaceholderCard";
 import ProfileDetailCard from "./components/ProfileDetail/ProfileDetailCard";
 import ErrorCard from "./components/ProfileDetail/ErrorCard";
@@ -50,7 +52,14 @@ function App() {
                 <Route path="/main" element={<MainLayout />}>
                     <Route path="lobby" element={<LobbyPage />} />
                     <Route path="social" element={<SocialLayout />}>
-                        <Route index element={<PlaceholderCard />} />
+                        <Route
+                            index
+                            element={
+                                <PlaceholderCard
+                                    placeholderText={"Profile details"}
+                                />
+                            }
+                        />
                         <Route path=":id" element={<ProfileDetailCard />} />
                         <Route path="error" element={<ErrorCard />} />
                     </Route>
@@ -58,7 +67,17 @@ function App() {
                     <Route path="event" element={<EventPage />} />
                     <Route path="notification" element={<NotificationPage />} />
                     <Route path="shop" element={<ShopPage />} />
-                    <Route path="friend/:id" element={<FriendPage />} />
+                    <Route path="friends" element={<FriendsLayout />}>
+                        <Route
+                            index
+                            element={
+                                <PlaceholderCard
+                                    placeholderText={"Friend details"}
+                                />
+                            }
+                        />
+                        <Route path=":id" element={<div>B</div>} />
+                    </Route>
                 </Route>
                 {/* )} */}
                 <Route path="*" element={<NotFound />} />
