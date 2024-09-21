@@ -6,7 +6,7 @@ import QuickPlayPage from "./pages/Quickplay";
 import LobbyPage from "./pages/Lobby";
 import NotFound from "./pages/NotFound";
 import ProfilePage from "./pages/Profile";
-import FriendPage from "./pages/Friend";
+// import FriendPage from "./pages/Friend";
 import EventPage from "./pages/Event";
 import ShopPage from "./pages/Shop";
 import NotificationPage from "./pages/Notification";
