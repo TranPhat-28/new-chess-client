@@ -30,14 +30,33 @@ const SocialActions = ({
         toast.success("Go to chat");
     };
 
+    // DONE
     const removeFriendAction = () => {
+        setLoading(true);
         axios
-            .delete("/api/Social/Friend")
-            .then((response) => {
-                toast.success(response.data.data);
+            .delete(`/api/Social/Friend/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
             })
-            .catch((err) => {
-                console.log(err);
+            .then((response) => {
+                toast.success(response.data.message);
+
+                const currentState = internalState;
+                currentState.friendRequestId = null;
+                currentState.isFriend = false;
+                currentState.isRequestReceiver = false;
+                currentState.isRequestSender = false;
+
+                setInternalState(currentState);
+                setIsFriendBadgeState(false);
+            })
+            .catch((error) => {
+                toast.error(error.message);
+                console.log(error);
+            })
+            .finally(() => {
+                setLoading(false);
             });
     };
 
@@ -102,6 +121,7 @@ const SocialActions = ({
                 currentState.isRequestSender = false;
 
                 currentState.isFriend = true;
+                setInternalState(currentState);
                 setIsFriendBadgeState(true);
             })
             .catch((err) => {
@@ -181,7 +201,10 @@ const SocialActions = ({
                             className="btn btn-primary btn-error flex-1"
                             onClick={removeFriendAction}
                         >
-                            Remove friend
+                            {loading && (
+                                <span className="loading loading-spinner"></span>
+                            )}
+                            {loading ? "" : "Remove friend"}
                         </button>
                     </>
                 )}
