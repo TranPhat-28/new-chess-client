@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import { RootState } from "../../redux/store";
 import { useSelector } from "react-redux";
 import { IoMdInformationCircleOutline } from "react-icons/io";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 const SocialActions = ({
     data,
@@ -24,6 +24,10 @@ const SocialActions = ({
     // Token
     const token = useSelector((state: RootState) => state.auth.token);
     const { id } = useParams();
+
+    useEffect(() => {
+        setInternalState(data);
+    }, [data])
 
     // Action handlers for each button
     const goToChatAction = () => {
