@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { HashLoader } from "react-spinners";
 import { RootState } from "../../redux/store";
 import { IFriendDetailShort } from "../../interfaces";
@@ -77,6 +77,11 @@ const FriendsLayout = () => {
 export default FriendsLayout;
 
 const ResultItem = ({ data }: { data: IFriendDetailShort }) => {
+    const navigate = useNavigate();
+    const handleViewDetailClick = () => {
+        navigate(`/main/friends/${data.id}`);
+    };
+
     return (
         <div className="bg-base-200 flex-shrink-0 flex justify-between p-4">
             <div className="flex items-center">
@@ -89,7 +94,10 @@ const ResultItem = ({ data }: { data: IFriendDetailShort }) => {
                 <p className="text-xl font-medium ml-2">{data.name}</p>
             </div>
             <div className="flex items-center">
-                <button className={"btn btn-primary btn-outline h-fit"}>
+                <button
+                    className={"btn btn-primary btn-outline h-fit"}
+                    onClick={handleViewDetailClick}
+                >
                     <FaSearch />
                 </button>
             </div>

@@ -23,6 +23,7 @@ import { RootState } from "./redux/store";
 import PlaceholderCard from "./components/ProfileDetail/PlaceholderCard";
 import ProfileDetailCard from "./components/ProfileDetail/ProfileDetailCard";
 import ErrorCard from "./components/ProfileDetail/ErrorCard";
+import FriendDetail from "./components/FriendDetail";
 
 function App() {
     const user = useSelector((state: RootState) => state.auth.email);
@@ -76,7 +77,7 @@ function App() {
                                 />
                             }
                         />
-                        <Route path=":id" element={<div>B</div>} />
+                        <Route path=":id" element={<FriendDetail />} />
                     </Route>
                 </Route>
                 {/* )} */}
