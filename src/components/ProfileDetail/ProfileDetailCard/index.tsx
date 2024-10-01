@@ -83,7 +83,7 @@ const ProfileDetailCard = () => {
 
             {dataA && (
                 <>
-                    <div className="flex w-full bg-base-200 rounded-lg">
+                    <div className="flex w-full bg-base-300 rounded-lg">
                         <div className="avatar p-4">
                             <div className="ring-primary ring-offset-base-100 w-24 rounded-full ring ring-offset-2">
                                 <img src={dataA.picture} />

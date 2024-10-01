@@ -1,17 +1,19 @@
 import { jwtDecode } from "jwt-decode";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { ISearchProfileResult, ITokenData } from "../../interfaces";
 import { RootState } from "../../redux/store";
-import { useNavigate } from "react-router-dom";
 
-const SearchResultItem = ({ result }: { result: ISearchProfileResult }) => {
+const SearchResultItem = ({
+    result,
+    setKeyword,
+}: {
+    result: ISearchProfileResult;
+    setKeyword: Dispatch<SetStateAction<string | null>>;
+}) => {
     // Token
     const token = useSelector((state: RootState) => state.auth.token);
-
-    // Navigate
-    const navigate = useNavigate();
 
     // Is you
     const [isYou, setIsYou] = useState<boolean>(true);
@@ -47,9 +49,7 @@ const SearchResultItem = ({ result }: { result: ISearchProfileResult }) => {
                 {!isYou && (
                     <button
                         className={"btn btn-primary btn-outline h-fit"}
-                        onClick={() =>
-                            navigate(`/main/social/${result.socialId}`)
-                        }
+                        onClick={() => setKeyword(result.socialId)}
                     >
                         <FaSearch />
                     </button>

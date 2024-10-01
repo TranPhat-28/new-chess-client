@@ -5,5 +5,5 @@ export * from "./ITokenData";
 export * from "./IGameStatisticData";
 export * from "./ISearchProfileResult";
 export * from "./ILobbyData";
-export * from "./IRelationshipStatus";
 export * from "./IFriendDetailShort";
+export * from "./IFriendRequestAction";

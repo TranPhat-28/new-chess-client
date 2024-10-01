@@ -24,6 +24,7 @@ import PlaceholderCard from "./components/ProfileDetail/PlaceholderCard";
 import ProfileDetailCard from "./components/ProfileDetail/ProfileDetailCard";
 import ErrorCard from "./components/ProfileDetail/ErrorCard";
 import FriendDetail from "./components/FriendDetail";
+import SocialPage from "./pages/Social";
 
 function App() {
     const user = useSelector((state: RootState) => state.auth.email);
@@ -52,7 +53,8 @@ function App() {
                 {/* {user && ( */}
                 <Route path="/main" element={<MainLayout />}>
                     <Route path="lobby" element={<LobbyPage />} />
-                    <Route path="social" element={<SocialLayout />}>
+                    <Route path="social" element={<SocialPage />} />
+                    {/* <Route path="social" element={<SocialLayout />}>
                         <Route
                             index
                             element={
@@ -63,7 +65,8 @@ function App() {
                         />
                         <Route path=":id" element={<ProfileDetailCard />} />
                         <Route path="error" element={<ErrorCard />} />
-                    </Route>
+                    </Route> */}
+
                     <Route path="profile" element={<ProfilePage />} />
                     <Route path="event" element={<EventPage />} />
                     <Route path="notification" element={<NotificationPage />} />
