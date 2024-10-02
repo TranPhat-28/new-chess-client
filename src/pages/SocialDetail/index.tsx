@@ -1,17 +1,14 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaRegSadCry } from "react-icons/fa";
 import { MdPersonSearch } from "react-icons/md";
-import { HashLoader } from "react-spinners";
-import {
-    IDetailProfileSearchResult,
-    IRelationshipStatus,
-} from "../../interfaces";
 import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import axios from "axios";
-import { toast } from "react-toastify";
+import { HashLoader } from "react-spinners";
 import RelationshipStatusBadge from "../../components/RelationshipStatusBadge";
 import SocialActions from "../../components/SocialActions";
+import { IDetailProfileSearchResult } from "../../interfaces";
+import { RootState } from "../../redux/store";
+import { toast } from "react-toastify";
 
 const SocialDetailPage = ({ keyword }: { keyword: string | null }) => {
     // Token
@@ -37,10 +34,20 @@ const SocialDetailPage = ({ keyword }: { keyword: string | null }) => {
                     },
                 })
                 .then((response) => {
-                    setData(response.data.data);
+                    if (response.data.isSuccess) {
+                        setData(response.data.data);
+                    } else {
+                        toast.error(response.data.message);
+                        setError(true);
+                    }
                 })
                 .catch((error) => {
-                    console.log(error);
+                    if (error.response.status === 500) {
+                        toast.error("Something went wrong on the server");
+                    } else {
+                        toast.error(error.message);
+                    }
+
                     setError(true);
                 })
                 .finally(() => {
