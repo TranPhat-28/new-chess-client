@@ -11,6 +11,7 @@ import { RootState } from "../../redux/store";
 import axios from "axios";
 import { toast } from "react-toastify";
 import RelationshipStatusBadge from "../../components/RelationshipStatusBadge";
+import SocialActions from "../../components/SocialActions";
 
 const SocialDetailPage = ({ keyword }: { keyword: string | null }) => {
     // Token
@@ -36,7 +37,6 @@ const SocialDetailPage = ({ keyword }: { keyword: string | null }) => {
                     },
                 })
                 .then((response) => {
-                    console.log(response.data);
                     setData(response.data.data);
                 })
                 .catch((error) => {
@@ -96,10 +96,10 @@ const SocialDetailPage = ({ keyword }: { keyword: string | null }) => {
                         </div>
                     </div>
 
-                    {/* <SocialActions
-                        data={dataB}
-                        setIsFriendBadgeState={setIsFriend}
-                    /> */}
+                    <SocialActions
+                        isFriend={data.isFriend}
+                        data={data.friendRequestAction}
+                    />
                 </>
             )}
         </div>
