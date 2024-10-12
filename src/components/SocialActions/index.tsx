@@ -1,19 +1,33 @@
 import axios from "axios";
 import { useState } from "react";
+import { IoMdInformationCircleOutline } from "react-icons/io";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { IRelationshipStatus } from "../../interfaces";
+import { IFriendRequestAction } from "../../interfaces";
 import { RootState } from "../../redux/store";
+import { GetAuthIdFromToken } from "../../utilities";
+
+interface IInteralState {
+    isFriend: boolean;
+    data: IFriendRequestAction | null;
+}
 
 const SocialActions = ({
+    target,
     isFriend,
     data,
 }: {
+    target: number;
     isFriend: boolean;
-    data: IRelationshipStatus | null;
+    data: IFriendRequestAction | null;
 }) => {
     // Manage buttons loading state
     const [loading, setLoading] = useState<boolean>(false);
+    // Internal State
+    const [internalState, setInternalState] = useState<IInteralState>({
+        data: data,
+        isFriend: isFriend,
+    });
 
     // Token
     const token = useSelector((state: RootState) => state.auth.token);
@@ -53,14 +67,14 @@ const SocialActions = ({
             });
     };
 
-    // DONE
+    // Re-worked
     const addFriendAction = () => {
         setLoading(true);
 
         axios
             .post(
                 "/api/Social/Request",
-                { socialId: id },
+                { id: target },
                 {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -70,11 +84,21 @@ const SocialActions = ({
             .then((response) => {
                 if (response.data.isSuccess) {
                     toast.success(response.data.message);
-                    // Set new internal state
-                    const currentState = internalState;
 
-                    currentState.isRequestSender = true;
-                    currentState.friendRequestId = response.data.data.id;
+                    const userId = GetAuthIdFromToken(token!);
+
+                    const newData = {
+                        friendRequestId: response.data.data.id,
+                        isReceiver:
+                            response.data.data.receiverId.toString().trim() ===
+                            userId.toString().trim(),
+                        isSender:
+                            response.data.data.senderId.toString().trim() ===
+                            userId.toString().trim(),
+                    };
+
+                    const currentState = internalState;
+                    currentState.data = newData;
 
                     setInternalState(currentState);
                 } else {
@@ -162,26 +186,26 @@ const SocialActions = ({
     return (
         <div className="flex flex-col w-full gap-4">
             {/* Notification Badge */}
-            {/* {internalState && internalState.isRequestSender && (
+            {internalState && internalState.data?.isSender && (
                 <div className="w-full bg-base-200 rounded-lg flex p-2">
                     <IoMdInformationCircleOutline />
                     <span className="text-xs ml-4">
                         Friend request sent to this player
                     </span>
                 </div>
-            )} */}
-            {/* {internalState && internalState.isRequestReceiver && (
+            )}
+            {internalState && internalState.data?.isReceiver && (
                 <div className="w-full bg-base-200 rounded-lg flex p-2">
                     <IoMdInformationCircleOutline />
                     <span className="text-xs ml-4">
                         New friend request from this player
                     </span>
                 </div>
-            )} */}
+            )}
 
             {/* Action buttons container */}
             <div className="w-full flex gap-4">
-                {isFriend === true && (
+                {internalState?.isFriend === true && (
                     <>
                         <button
                             className="btn btn-primary btn-outline flex-1"
@@ -202,13 +226,13 @@ const SocialActions = ({
                     </>
                 )}
 
-                {isFriend === false && (
+                {internalState?.isFriend === false && (
                     <button className="btn btn-primary btn-disabled flex-1">
                         Add friend to chat
                     </button>
                 )}
 
-                {data && data.isRequestSender === true && (
+                {internalState?.data?.isSender === true && (
                     <button
                         className="btn btn-error btn-outline flex-1"
                         onClick={cancelRequestAction}
@@ -220,7 +244,7 @@ const SocialActions = ({
                     </button>
                 )}
 
-                {data && data.isRequestReceiver === true && (
+                {internalState?.data?.isReceiver === true && (
                     <button
                         className="btn btn-primary btn-outline flex-1"
                         onClick={acceptRequestAction}
@@ -232,7 +256,7 @@ const SocialActions = ({
                     </button>
                 )}
 
-                {data === null && isFriend === false && (
+                {internalState?.data === null && isFriend === false && (
                     <button
                         className="btn btn-primary btn-outline flex-1"
                         onClick={addFriendAction}

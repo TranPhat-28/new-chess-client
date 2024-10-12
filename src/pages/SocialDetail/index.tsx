@@ -104,6 +104,7 @@ const SocialDetailPage = ({ keyword }: { keyword: string | null }) => {
                     </div>
 
                     <SocialActions
+                        target={data.id}
                         isFriend={data.isFriend}
                         data={data.friendRequestAction}
                     />

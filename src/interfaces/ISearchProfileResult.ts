@@ -7,6 +7,7 @@ export interface ISearchProfileResult {
 }
 
 export interface IDetailProfileSearchResult {
+    id: number;
     name: string;
     picture: string;
     rank: string;
