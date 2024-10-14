@@ -150,12 +150,17 @@ const SocialActions = ({
             });
     };
 
-    // DONE
+    // Re-checked
     const cancelRequestAction = () => {
-        setLoading(true);
+        if (!internalState.data) {
+            toast.error("Cannot perform this action");
+            console.log("Friend request ID is missing");
+            return;
+        }
 
+        setLoading(true);
         axios
-            .delete(`/api/Social/Request/${internalState.friendRequestId}`, {
+            .delete(`/api/Social/Request/${internalState.data.friendRequestId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -165,9 +170,7 @@ const SocialActions = ({
                     toast.success(response.data.message);
                     // Set new internal state
                     const currentState = internalState;
-
-                    currentState.isRequestSender = false;
-                    currentState.friendRequestId = null;
+                    currentState.data = null;
 
                     setInternalState(currentState);
                 } else {
