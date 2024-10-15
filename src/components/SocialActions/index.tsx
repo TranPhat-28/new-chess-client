@@ -16,10 +16,12 @@ const SocialActions = ({
     target,
     isFriend,
     data,
+    setBadge
 }: {
     target: number;
     isFriend: boolean;
     data: IFriendRequestAction | null;
+    setBadge: (value: boolean) => void
 }) => {
     // Manage buttons loading state
     const [loading, setLoading] = useState<boolean>(false);
@@ -37,11 +39,11 @@ const SocialActions = ({
         toast.success("Go to chat");
     };
 
-    // DONE
+    // Re-checked
     const removeFriendAction = () => {
         setLoading(true);
         axios
-            .delete(`/api/Social/Friend/${id}`, {
+            .delete(`/api/Social/Friend/${target}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -50,13 +52,11 @@ const SocialActions = ({
                 toast.success(response.data.message);
 
                 const currentState = internalState;
-                currentState.friendRequestId = null;
+                currentState.data = null;
                 currentState.isFriend = false;
-                currentState.isRequestReceiver = false;
-                currentState.isRequestSender = false;
 
                 setInternalState(currentState);
-                setIsFriendBadgeState(false);
+                setBadge(false);
             })
             .catch((error) => {
                 toast.error(error.message);
@@ -114,13 +114,18 @@ const SocialActions = ({
             });
     };
 
-    // DONE
+    // Re-checked
     const acceptRequestAction = () => {
+        if (!internalState.data) {
+            toast.error("Cannot perform the action");
+            console.log("Friend Request ID is missing");
+            return;
+        }
         setLoading(true);
 
         axios
             .put(
-                `/api/Social/Request/${data.friendRequestId}/Accept`,
+                `/api/Social/Request/${internalState.data.friendRequestId}/Accept`,
                 undefined,
                 {
                     headers: {
@@ -133,13 +138,10 @@ const SocialActions = ({
 
                 const currentState = internalState;
 
-                currentState.friendRequestId = null;
-                currentState.isRequestReceiver = false;
-                currentState.isRequestSender = false;
-
+                currentState.data = null;
                 currentState.isFriend = true;
                 setInternalState(currentState);
-                setIsFriendBadgeState(true);
+                setBadge(true);
             })
             .catch((err) => {
                 toast.error("Something went wrong");
@@ -259,7 +261,7 @@ const SocialActions = ({
                     </button>
                 )}
 
-                {internalState?.data === null && isFriend === false && (
+                {internalState?.data === null && internalState?.isFriend === false && (
                     <button
                         className="btn btn-primary btn-outline flex-1"
                         onClick={addFriendAction}

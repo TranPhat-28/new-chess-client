@@ -18,6 +18,14 @@ const SocialDetailPage = ({ keyword }: { keyword: string | null }) => {
     const [error, setError] = useState<boolean>(false);
     // Data for displaying
     const [data, setData] = useState<IDetailProfileSearchResult | null>(null);
+    // IsFriend Badge
+    const [isFriend, setisFriend] = useState<boolean | null>(null);
+    
+    // Toggle friend badge
+    const setIsFriendBadge = (value: boolean) => {
+        if (isFriend === null) return;
+        setisFriend(value);
+    }
 
     useEffect(() => {
         // Only fetch with keyword
@@ -36,6 +44,7 @@ const SocialDetailPage = ({ keyword }: { keyword: string | null }) => {
                 .then((response) => {
                     if (response.data.isSuccess) {
                         setData(response.data.data);
+                        setisFriend(response.data.data.isFriend);
                     } else {
                         toast.error(response.data.message);
                         setError(true);
@@ -95,9 +104,9 @@ const SocialDetailPage = ({ keyword }: { keyword: string | null }) => {
                                 {data.name}
                             </p>
                             <p className="ps-1">Rank {data.rank}</p>
-                            {data.isFriend !== null && (
+                            {isFriend !== null && (
                                 <RelationshipStatusBadge
-                                    isFriend={data.isFriend}
+                                    isFriend={isFriend}
                                 />
                             )}
                         </div>
@@ -107,6 +116,7 @@ const SocialDetailPage = ({ keyword }: { keyword: string | null }) => {
                         target={data.id}
                         isFriend={data.isFriend}
                         data={data.friendRequestAction}
+                        setBadge={setIsFriendBadge}
                     />
                 </>
             )}
