@@ -6,6 +6,7 @@ const FriendDetail = () => {
     const [data, setData] = useState<any | null>(null);
 
     useEffect(() => {
+        console.log("Perform fetch data");
         setData({
             picture: "https://picsum.photos/200",
             rank: "N/A",

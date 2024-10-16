@@ -21,6 +21,7 @@ import { RootState } from "./redux/store";
 
 import FriendDetail from "./components/FriendDetail";
 import SocialPage from "./pages/Social";
+import FriendDetailsPlaceholder from "./components/FriendDetailsPlaceholder";
 
 function App() {
     const user = useSelector((state: RootState) => state.auth.email);
@@ -55,14 +56,7 @@ function App() {
                     <Route path="notification" element={<NotificationPage />} />
                     <Route path="shop" element={<ShopPage />} />
                     <Route path="friends" element={<FriendsLayout />}>
-                        {/* <Route
-                            index
-                            element={
-                                <PlaceholderCard
-                                    placeholderText={"Friend details"}
-                                />
-                            }
-                        /> */}
+                        <Route index element={<FriendDetailsPlaceholder />} />
                         <Route path=":id" element={<FriendDetail />} />
                     </Route>
                 </Route>

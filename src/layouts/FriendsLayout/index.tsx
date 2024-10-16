@@ -22,6 +22,7 @@ const FriendsLayout = () => {
                 },
             })
             .then((response) => {
+                console.log(response.data.data);
                 setFriendList(response.data.data);
             })
             .catch((error) => {
