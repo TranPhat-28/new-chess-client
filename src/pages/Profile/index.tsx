@@ -85,9 +85,9 @@ const ProfilePage = () => {
 
     return (
         <div className="page-content-wrapper">
-            <div className="page-preset flex flex-col lg:flex-row justify-center items-center overflow-hidden">
+            <div className="page-preset flex flex-col lg:flex-row justify-center items-center overflow-hidden max-[376px]:gap-2">
                 {/* Profile */}
-                <div className="w-full h-full bg-base-100 rounded-lg flex flex-col p-6">
+                <div className="w-full h-full bg-base-100 rounded-lg flex flex-col p-6 max-[376px]:p-4">
                     {!userData && (
                         <div className="w-full flex flex-col items-center justify-center my-auto">
                             <HashLoader />
@@ -98,12 +98,12 @@ const ProfilePage = () => {
                     {userData && (
                         <>
                             <div className="avatar m-auto">
-                                <div className="w-40 sm:w-52 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+                                <div className="max-[376px]:w-24 w-40 sm:w-52 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
                                     <img src={userData.picture} />
                                 </div>
                             </div>
 
-                            <div className="w-full text-center flex flex-col gap-2  mt-4">
+                            <div className="w-full text-center flex flex-col gap-2 max-[376px]:gap-1 max-[376px]:text-sm mt-4">
                                 <h2 className="font-bold text-2xl lg:text-4xl">
                                     {userData.name}
                                 </h2>
@@ -138,7 +138,7 @@ const ProfilePage = () => {
                 </div>
 
                 {/* Game Statistics */}
-                <div className="w-full h-full bg-base-100 rounded-lg flex flex-col p-6">
+                <div className="w-full h-full bg-base-100 rounded-lg flex flex-col p-6 max-[376px]:p-4">
                     {!gameStatisticData && (
                         <div className="w-full flex flex-col items-center justify-center my-auto">
                             <HashLoader />
@@ -148,7 +148,7 @@ const ProfilePage = () => {
 
                     {gameStatisticData && (
                         <>
-                            <table className="table">
+                            <table className="table max-[376px]:leading-none">
                                 <tbody>
                                     <tr className="hover">
                                         <td className="font-bold">Ranking</td>
