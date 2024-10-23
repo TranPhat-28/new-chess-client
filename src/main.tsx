@@ -14,8 +14,8 @@ import MoveHistoryModal from "./components/MoveHistoryModal/index.tsx";
 import "./index.css";
 import { store } from "./redux/store.ts";
 
-axios.defaults.baseURL = "https://famous-jacquenette-my-personal-project-c6376a3e.koyeb.app/";
-// axios.defaults.baseURL = "http://localhost:5275/";
+// axios.defaults.baseURL = "https://famous-jacquenette-my-personal-project-c6376a3e.koyeb.app/";
+axios.defaults.baseURL = "http://localhost:5275/";
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 

@@ -14,6 +14,8 @@ const FriendsLayout = () => {
         null
     );
 
+    const [navigateId, setNavigateId] = useState<number>(0);
+
     useEffect(() => {
         axios
             .get("/api/Friends", {
@@ -30,7 +32,7 @@ const FriendsLayout = () => {
             .finally(() => {
                 setLoading(false);
             });
-    }, []);
+    }, [navigateId]);
 
     return (
         <div className="page-content-wrapper">
@@ -68,7 +70,7 @@ const FriendsLayout = () => {
                 </div>
 
                 {/* Profile */}
-                <Outlet />
+                <Outlet context={{navigateId, setNavigateId}} />
             </div>
         </div>
     );

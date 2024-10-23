@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { HashLoader } from "react-spinners";
 import { RootState } from "../../redux/store";
 import { toast } from "react-toastify";
@@ -9,10 +9,17 @@ import { IFriendDetailFull } from "../../interfaces";
 import { FaRegSadCry } from "react-icons/fa";
 
 const FriendDetail = () => {
+    interface IOutletContext {
+        navigateId: number;
+        setNavigateId: React.Dispatch<React.SetStateAction<number>>;
+    }
+    const { navigateId, setNavigateId } = useOutletContext<IOutletContext>();
     const { id } = useParams();
     const token = useSelector((state: RootState) => state.auth.token);
+    const navigate = useNavigate();
 
     const [loading, setLoading] = useState<boolean>(false);
+    const [btnLoading, setBtnLoading] = useState<boolean>(false);
     const [data, setData] = useState<IFriendDetailFull | null>(null);
     const [error, setError] = useState<boolean>(false);
 
@@ -40,6 +47,33 @@ const FriendDetail = () => {
                 setLoading(false);
             });
     }, [id]);
+
+    const goToChatHandler = () => {
+        alert("Go to chat");
+    };
+
+    const removeFriendHandler = () => {
+        setBtnLoading(true);
+        axios
+            .delete(`/api/Social/Friend/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .then((response) => {
+                toast.success(response.data.message);
+
+                setNavigateId(navigateId + 1);
+                navigate("/main/friends");
+            })
+            .catch((error) => {
+                toast.error("Cannot perform this action now");
+                console.log(error);
+            })
+            .finally(() => {
+                setBtnLoading(false);
+            });
+    };
 
     return (
         <div className="h-2/5 lg:h-full w-full bg-base-100 rounded-lg flex flex-col gap-2 lg:gap-4 p-4 items-center justify-center">
@@ -80,12 +114,23 @@ const FriendDetail = () => {
 
                     <div className="flex flex-col w-full gap-4">
                         <div className="w-full flex gap-4">
-                            <button className="btn btn-primary btn-outline flex-1">
+                            <button
+                                className="btn btn-primary btn-outline flex-1"
+                                onClick={goToChatHandler}
+                            >
                                 Go to chat
                             </button>
 
-                            <button className="btn btn-error btn-outline flex-1">
-                                Remove friend
+                            <button
+                                className={`btn ${
+                                    btnLoading ? "btn-disabled" : ""
+                                } btn-error btn-outline flex-1`}
+                                onClick={removeFriendHandler}
+                            >
+                                {btnLoading && (
+                                    <span className="loading loading-spinner"></span>
+                                )}
+                                {btnLoading ? "" : "Remove friend"}
                             </button>
                         </div>
                     </div>
