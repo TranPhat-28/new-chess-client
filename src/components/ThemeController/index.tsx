@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
-
-enum THEMES {
-    LIGHT = "light",
-    DARK = "dark",
-    CUPCAKE = "cupcake",
-    BUMBLEBEE = "bumblebee",
-}
+import { THEMES } from "../../enums";
 
 const ThemeController = () => {
-    const [theme, setTheme] = useState<THEMES>(THEMES.LIGHT);
+    // No validation is applied yet
+    // Not associated with Email yet
+    const [theme, setTheme] = useState<THEMES>(() => {
+        const localData = localStorage.getItem("preferredTheme");
+        return localData ? (localData as THEMES) : THEMES.LIGHT;
+    });
 
     const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
         // This state is used to control the Select element
@@ -19,6 +18,8 @@ const ThemeController = () => {
         // Then manually change the HTML theme
         const myHtml = document.documentElement;
         myHtml.setAttribute("data-theme", theme as string);
+        // Set localstorage
+        localStorage.setItem("preferredTheme", theme as string);
     }, [theme]);
 
     return (
