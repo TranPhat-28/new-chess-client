@@ -1,7 +1,7 @@
 import { PiWarningCircleBold } from "react-icons/pi";
 import { NavLink, Outlet } from "react-router-dom";
 import Navbar from "../../components/Navbar";
-import ThemeSwapButton from "../../components/ThemeSwapButton";
+import ThemeController from "../../components/ThemeController";
 import useUserAuth from "../../hooks/UserAuthHandler";
 import { showCustomAlert } from "../../utilities";
 
@@ -75,7 +75,7 @@ const MainLayout = () => {
                             Logout
                         </button>
 
-                        <ThemeSwapButton />
+                        <ThemeController />
                     </div>
                 </ul>
             </div>
