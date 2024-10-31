@@ -1,4 +1,5 @@
 import { RiCalendarEventFill } from "react-icons/ri";
+import { Outlet } from "react-router-dom";
 
 enum EVENT_STATUS {
     ON_GOING = "ON GOING",
@@ -13,56 +14,63 @@ interface IEventItem {
     status: EVENT_STATUS;
 }
 
-const EventPage = () => {
-    const dummyDataA: IEventItem[] = [
-        {
-            title: "Championship 43",
-            content: "Weekly championship week 43 of 2024",
-            image: "https://picsum.photos/id/237/200/300",
-            status: EVENT_STATUS.ON_GOING,
-        },
-        {
-            title: "Chess Master S3",
-            content: "Chess Master season 3 of 2024",
-            image: "https://picsum.photos/id/237/200/300",
-            status: EVENT_STATUS.ON_GOING,
-        },
-        {
-            title: "Championship 44",
-            content: "Weekly championship week 44 of 2024",
-            image: "https://picsum.photos/id/237/200/300",
-            status: EVENT_STATUS.UP_COMING,
-        },
-        {
-            title: "Championship 42",
-            content: "Weekly championship week 42 of 2024",
-            image: "https://picsum.photos/id/237/200/300",
-            status: EVENT_STATUS.CLOSED,
-        },
-        {
-            title: "Example Event",
-            content: "Description for Example Event",
-            image: "https://picsum.photos/id/237/200/300",
-            status: EVENT_STATUS.CLOSED,
-        },
-        {
-            title: "Example Event",
-            content: "Description for Example Event",
-            image: "https://picsum.photos/id/237/200/300",
-            status: EVENT_STATUS.CLOSED,
-        },
-    ];
+const dummyDataA: IEventItem[] = [
+    {
+        title: "Championship 43",
+        content: "Weekly championship week 43 of 2024",
+        image: "https://picsum.photos/id/237/200/300",
+        status: EVENT_STATUS.ON_GOING,
+    },
+    {
+        title: "Chess Master S3",
+        content: "Chess Master season 3 of 2024",
+        image: "https://picsum.photos/id/237/200/300",
+        status: EVENT_STATUS.ON_GOING,
+    },
+    {
+        title: "Championship 44",
+        content: "Weekly championship week 44 of 2024",
+        image: "https://picsum.photos/id/237/200/300",
+        status: EVENT_STATUS.UP_COMING,
+    },
+    {
+        title: "Championship 42",
+        content: "Weekly championship week 42 of 2024",
+        image: "https://picsum.photos/id/237/200/300",
+        status: EVENT_STATUS.CLOSED,
+    },
+    {
+        title: "Example Event",
+        content: "Description for Example Event",
+        image: "https://picsum.photos/id/237/200/300",
+        status: EVENT_STATUS.CLOSED,
+    },
+    {
+        title: "Example Event",
+        content: "Description for Example Event",
+        image: "https://picsum.photos/id/237/200/300",
+        status: EVENT_STATUS.CLOSED,
+    },
+];
 
+const EventsLayout = () => {
     return (
         <div className="page-content-wrapper">
             <div className="page-preset flex flex-col lg:flex-row justify-center items-center overflow-hidden">
-                {/* Events list */}
-                <div className="w-full lg:h-full bg-base-100 rounded-lg flex-1 flex flex-col overflow-hidden">
+                {/* Search result list */}
+                <div className="h-3/5 lg:h-full w-full bg-base-100 rounded-lg flex flex-col overflow-hidden">
                     <p className="text-2xl p-4 border-gray-300 border-b-2">
                         Events
                     </p>
 
                     <div className="bg-base-300 w-full h-full flex flex-col overflow-y-scroll">
+                        {/* Loading */}
+                        {/* {loading && (
+                            <div className="w-full h-full flex justify-center items-center">
+                                <HashLoader />
+                            </div>
+                        )} */}
+
                         {/* No events */}
                         {dummyDataA && dummyDataA.length === 0 && (
                             <div className="w-full h-full flex flex-col justify-center items-center">
@@ -83,23 +91,14 @@ const EventPage = () => {
                     </div>
                 </div>
 
-                {/* Notification */}
-                <div className="w-full lg:h-full bg-base-100 rounded-lg flex-1 flex flex-col overflow-hidden">
-                    <p className="text-2xl p-4 border-gray-300 border-b-2">
-                        Details
-                    </p>
-
-                    {/* <div className="bg-base-300 w-full h-full flex flex-col overflow-y-scroll">
-                        {dummyData.length > 0 &&
-                            dummyData.map(() => <FriendRequestItem />)}
-                    </div> */}
-                </div>
+                {/* Profile */}
+                <Outlet />
             </div>
         </div>
     );
 };
 
-export default EventPage;
+export default EventsLayout;
 
 const EventItem = ({ event }: { event: IEventItem }) => {
     return (

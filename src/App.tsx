@@ -6,22 +6,23 @@ import QuickPlayPage from "./pages/Quickplay";
 import LobbyPage from "./pages/Lobby";
 import NotFound from "./pages/NotFound";
 import ProfilePage from "./pages/Profile";
-// import FriendPage from "./pages/Friend";
-import EventPage from "./pages/Event";
 import ShopPage from "./pages/Shop";
 import NotificationPage from "./pages/Notification";
+import SocialPage from "./pages/Social";
 
 // Layouts
 import MainLayout from "./layouts/MainLayout";
 import FriendsLayout from "./layouts/FriendsLayout";
+import EventsLayout from "./layouts/EventsLayout";
 
 // Redux
 import { useSelector } from "react-redux";
 import { RootState } from "./redux/store";
 
+// Components
 import FriendDetail from "./components/FriendDetail";
-import SocialPage from "./pages/Social";
 import FriendDetailsPlaceholder from "./components/FriendDetailsPlaceholder";
+import EventDetailsPlaceholder from "./components/EventDetailsPlaceholder";
 
 function App() {
     const user = useSelector((state: RootState) => state.auth.email);
@@ -52,7 +53,10 @@ function App() {
                     <Route path="lobby" element={<LobbyPage />} />
                     <Route path="social" element={<SocialPage />} />
                     <Route path="profile" element={<ProfilePage />} />
-                    <Route path="event" element={<EventPage />} />
+                    <Route path="event" element={<EventsLayout />}>
+                        <Route index element={<EventDetailsPlaceholder />} />
+                        <Route path=":id" element={<div>Event Detail</div>} />
+                    </Route>
                     <Route path="notification" element={<NotificationPage />} />
                     <Route path="shop" element={<ShopPage />} />
                     <Route path="friends" element={<FriendsLayout />}>
