@@ -111,14 +111,20 @@ const EventItem = ({ event }: { event: IEventItem }) => {
         >
             {/* Overlay */}
             {event.status !== EVENT_STATUS.ON_GOING && (
-                <div className="absolute w-full h-full z-10 bg-black opacity-80 top-0 left-0 grid place-content-center">
+                <div className="absolute w-full h-full bg-black opacity-80 top-0 left-0 grid place-content-center">
                     <p className="text-white font-bold text-xl">
                         {event.status as string}
                     </p>
                 </div>
             )}
             <div className="flex items-center w-full">
-                <div className="avatar">
+                <div
+                    className={`avatar ${
+                        event.status !== EVENT_STATUS.ON_GOING
+                            ? "opacity-20"
+                            : ""
+                    }`}
+                >
                     <div className="h-24 rounded">
                         <img src={event.image} />
                     </div>
