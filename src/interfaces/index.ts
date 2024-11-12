@@ -7,3 +7,4 @@ export * from "./ISearchProfileResult";
 export * from "./ILobbyData";
 export * from "./IFriendDetail";
 export * from "./IFriendRequestAction";
+export * from "./IPurchasableItem";

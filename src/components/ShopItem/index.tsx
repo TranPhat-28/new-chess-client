@@ -1,30 +1,50 @@
-const ShopItem = ({ data }: { data: any }) => {
+import { IPurchasableItem } from "../../interfaces";
+
+const ShopItem = ({ data }: { data: IPurchasableItem }) => {
+    const onClickHanlder = () => {
+        const modal = document.getElementById(
+            "shopItemDetails"
+        ) as HTMLDialogElement;
+        modal.show();
+    };
+
     return (
         <div className="w-full h-fit bg-base-200 p-3 rounded-lg flex gap-2">
             <img src="https://picsum.photos/200" alt="item" className="w-36" />
-            <div className="w-full flex flex-col justify-between">
-                <div>
-                    <p className="font-bold text-lg">Title</p>
-                    {data === 1 && (
+            <div className="w-full flex flex-col justify-between overflow-hidden">
+                <div className="w-full">
+                    <p className="font-bold text-lg">{data.name}</p>
+                    <p className="truncate mb-2">{data.detail}</p>
+                    {data.type === "theme" && (
                         <div className="badge badge-primary badge-outline">
                             Theme
                         </div>
                     )}
 
-                    {data === 2 && (
+                    {data.type === "skin" && (
                         <div className="badge badge-secondary badge-outline">
                             Skin
                         </div>
                     )}
 
-                    {data === 3 && (
+                    {data.type === "other" && (
                         <div className="badge badge-info badge-outline">
-                            Others
+                            Other
                         </div>
                     )}
                 </div>
 
-                <button className="btn btn-primary self-end">View</button>
+                <div className="w-full flex justify-between items-center">
+                    <p className="text-2xl">{data.price}
+                        <span className="text-xs">VND</span>
+                    </p>
+                    <button
+                        className="btn btn-primary"
+                        onClick={onClickHanlder}
+                    >
+                        View
+                    </button>
+                </div>
             </div>
         </div>
     );
