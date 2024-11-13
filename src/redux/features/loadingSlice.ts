@@ -1,11 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 
-export interface ILoading {
-    message: string;
-}
-
-const initialState: ILoading = {
+const initialState = {
     message: "Loading",
 };
 

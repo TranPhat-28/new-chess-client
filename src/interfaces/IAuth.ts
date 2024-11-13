@@ -6,3 +6,8 @@ export interface ITokenData {
     nbf: number;
     unique_name: string;
 }
+
+export interface IAuthData {
+    email: string | null;
+    token: string | null;
+}

@@ -1,4 +1,4 @@
-import { IFriendRequestAction } from "./IFriendRequestAction";
+import { IFriendRequestAction } from "./ISocialActions";
 
 export interface ISearchProfileResult {
     name: string;

@@ -1,11 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { IMove } from "../../interfaces";
-
-interface IQuickplayDataState {
-    history: IMove[];
-    winner: "black" | "white" | null;
-}
+import { IMove, IQuickplayDataState } from "../../interfaces";
 
 const initialState: IQuickplayDataState = {
     history: [],

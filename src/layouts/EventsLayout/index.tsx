@@ -1,55 +1,43 @@
 import { RiCalendarEventFill } from "react-icons/ri";
 import { Outlet } from "react-router-dom";
-
-enum EVENT_STATUS {
-    ON_GOING = "ON GOING",
-    CLOSED = "CLOSED",
-    UP_COMING = "UP COMING",
-}
-
-interface IEventItem {
-    title: string;
-    content: string;
-    image: string;
-    status: EVENT_STATUS;
-}
+import { IEventItem } from "../../interfaces";
 
 const dummyDataA: IEventItem[] = [
     {
         title: "Championship 43",
         content: "Weekly championship week 43 of 2024",
         image: "https://picsum.photos/id/237/200/300",
-        status: EVENT_STATUS.ON_GOING,
+        status: "ON GOING",
     },
     {
         title: "Chess Master S3",
         content: "Chess Master season 3 of 2024",
         image: "https://picsum.photos/id/237/200/300",
-        status: EVENT_STATUS.ON_GOING,
+        status: "ON GOING",
     },
     {
         title: "Championship 44",
         content: "Weekly championship week 44 of 2024",
         image: "https://picsum.photos/id/237/200/300",
-        status: EVENT_STATUS.UP_COMING,
+        status: "UP COMING",
     },
     {
         title: "Championship 42",
         content: "Weekly championship week 42 of 2024",
         image: "https://picsum.photos/id/237/200/300",
-        status: EVENT_STATUS.CLOSED,
+        status: "CLOSED",
     },
     {
         title: "Example Event",
         content: "Description for Example Event",
         image: "https://picsum.photos/id/237/200/300",
-        status: EVENT_STATUS.CLOSED,
+        status: "CLOSED",
     },
     {
         title: "Example Event",
         content: "Description for Example Event",
         image: "https://picsum.photos/id/237/200/300",
-        status: EVENT_STATUS.CLOSED,
+        status: "CLOSED",
     },
 ];
 
@@ -104,13 +92,13 @@ const EventItem = ({ event }: { event: IEventItem }) => {
     return (
         <div
             className={`bg-base-200 flex-shrink-0 flex justify-between p-1 sm:p-2 ${
-                event.status === EVENT_STATUS.ON_GOING
+                event.status === "ON GOING"
                     ? "cursor-pointer duration-100 hover:brightness-90"
                     : ""
             } relative`}
         >
             {/* Overlay */}
-            {event.status !== EVENT_STATUS.ON_GOING && (
+            {event.status !== "ON GOING" && (
                 <div className="absolute w-full h-full bg-black opacity-80 top-0 left-0 grid place-content-center">
                     <p className="text-white font-bold text-xl">
                         {event.status as string}
@@ -120,9 +108,7 @@ const EventItem = ({ event }: { event: IEventItem }) => {
             <div className="flex items-center w-full">
                 <div
                     className={`avatar ${
-                        event.status !== EVENT_STATUS.ON_GOING
-                            ? "opacity-20"
-                            : ""
+                        event.status !== "ON GOING" ? "opacity-20" : ""
                     }`}
                 >
                     <div className="h-24 rounded">

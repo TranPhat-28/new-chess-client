@@ -5,15 +5,11 @@ import { useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { HashLoader } from "react-spinners";
 import { RootState } from "../../redux/store";
 import { toast } from "react-toastify";
-import { IFriendDetailFull } from "../../interfaces";
+import { IFriendDetailFull, IFriendOutletContext } from "../../interfaces";
 import { FaRegSadCry } from "react-icons/fa";
 
 const FriendDetail = () => {
-    interface IOutletContext {
-        navigateId: number;
-        setNavigateId: React.Dispatch<React.SetStateAction<number>>;
-    }
-    const { navigateId, setNavigateId } = useOutletContext<IOutletContext>();
+    const { navigateId, setNavigateId } = useOutletContext<IFriendOutletContext>();
     const { id } = useParams();
     const token = useSelector((state: RootState) => state.auth.token);
     const navigate = useNavigate();

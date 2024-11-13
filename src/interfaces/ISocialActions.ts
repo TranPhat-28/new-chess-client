@@ -3,3 +3,8 @@ export interface IFriendRequestAction {
     isSender: boolean;
     isReceiver: boolean;
 }
+
+export interface ISocialActionInternalState {
+    isFriend: boolean;
+    data: IFriendRequestAction | null;
+}

@@ -1,12 +1,8 @@
 import { BsInbox } from "react-icons/bs";
 import FriendRequestItem from "../../components/FriendRequestItem";
+import { IDummyNotification } from "../../interfaces";
 
 const NotificationPage = () => {
-    interface IDummyNotification {
-        id: number;
-        title: string;
-    }
-
     const dummyData: IDummyNotification[] = [
         { id: 1, title: "Sunrise" },
         { id: 2, title: "Moonlight" },

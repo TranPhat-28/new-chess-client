@@ -3,14 +3,9 @@ import { useState } from "react";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { IFriendRequestAction } from "../../interfaces";
+import { IFriendRequestAction, ISocialActionInternalState } from "../../interfaces";
 import { RootState } from "../../redux/store";
 import { GetAuthIdFromToken } from "../../utilities";
-
-interface IInteralState {
-    isFriend: boolean;
-    data: IFriendRequestAction | null;
-}
 
 const SocialActions = ({
     target,
@@ -26,7 +21,7 @@ const SocialActions = ({
     // Manage buttons loading state
     const [loading, setLoading] = useState<boolean>(false);
     // Internal State
-    const [internalState, setInternalState] = useState<IInteralState>({
+    const [internalState, setInternalState] = useState<ISocialActionInternalState>({
         data: data,
         isFriend: isFriend,
     });

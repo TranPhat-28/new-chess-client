@@ -1,10 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-
-interface IAuthData {
-    email: string | null;
-    token: string | null;
-}
+import { IAuthData } from "../../interfaces";
 
 const initialState: IAuthData = {
     email: null,

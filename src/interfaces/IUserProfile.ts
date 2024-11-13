@@ -1,3 +1,12 @@
+export interface IUserData {
+    name: string;
+    email: string;
+    dateJoined: string;
+    picture: string;
+    provider: string;
+    socialId: string;
+}
+
 export interface IGameStatisticData {
     ranking: number;
     practicePlayedEasy: number;

@@ -1,14 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-
-interface IUserData {
-    name: string;
-    email: string;
-    dateJoined: string;
-    picture: string;
-    provider: string;
-    socialId: string;
-}
+import { IUserData } from "../../interfaces";
 
 const initialState: { userData: IUserData | null } = {
     userData: null,
@@ -23,8 +15,6 @@ export const userDataSlice = createSlice({
         },
         setUserData: (state, action: PayloadAction<IUserData>) => {
             state.userData = action.payload;
-            // Get the good quality img
-            // state.userData.img = state.userData.img.replace("s96-c", "s192-c");
         },
     },
 });
