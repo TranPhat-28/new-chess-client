@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { HashLoader } from "react-spinners";
 import ShopItem from "../../components/ShopItem";
@@ -6,7 +6,7 @@ import ShopItemDetailModal from "../../components/ShopItemDetailModal";
 import { IPurchasableItem } from "../../interfaces";
 
 const ShopPage = () => {
-    const [loading, setLoading] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
     const mockShopItem: IPurchasableItem[] = [
         {
             id: 1,
@@ -72,6 +72,12 @@ const ShopPage = () => {
             price: 10,
         },
     ];
+
+    useEffect(() => {
+        setTimeout(() => {
+            setLoading(false);
+        }, 2000);
+    }, []);
 
     return (
         <div className="page-content-wrapper">

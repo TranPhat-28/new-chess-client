@@ -57,7 +57,9 @@ const GameDetailStatisticsModal = ({
                     </table>
                 )}
 
-                <p className="text-center italic w-full text-sm mt-4">Click outside to close</p>
+                <p className="text-center italic w-full text-sm mt-4">
+                    Click outside to close
+                </p>
             </div>
             <form
                 method="dialog"
