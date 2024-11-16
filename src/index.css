@@ -61,10 +61,6 @@
         background-color: #F5A;
     }
 
-    .btn-login {
-        @apply border border-[#DADCE0] rounded-[4px] h-[40px] w-[40px] mt-[0.5px] flex justify-center items-center;
-    }
-
     /* Handle Modal problem */
     :root:has(:is(.modal-open, .modal:target, .modal-toggle:checked + .modal, .modal[open])) {
         scrollbar-gutter: auto;

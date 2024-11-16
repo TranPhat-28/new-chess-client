@@ -47,14 +47,14 @@ const SocialPage = () => {
                             )}
                     </div>
 
-                    <div className="join w-full rounded-t-none">
+                    <div className="join w-full rounded-t-none rounded-b-[inherit]">
                         <input
                             className="input input-bordered join-item w-full"
                             placeholder="Social Id or Name"
                             onChange={(e) => setSearchValue(e.target.value)}
                             value={searchValue}
                         />
-                        <select className="select select-bordered join-item rounded-t-none">
+                        <select className="select select-bordered join-item rounded-[inherit]">
                             <option>Social ID</option>
                             <option disabled>Name</option>
                         </select>
