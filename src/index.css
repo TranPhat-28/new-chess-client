@@ -54,11 +54,6 @@
 @layer components {
     .font-logo {
         font-family: "Leckerli One", cursive;
-        color: #F5A;
-    }
-
-    .bg-logo {
-        background-color: #F5A;
     }
 
     /* Handle Modal problem */

@@ -39,8 +39,8 @@ const MainLayout = () => {
                 ></label>
                 <ul className="menu p-4 w-5/6 lg:w-72 xl:w-96 min-h-full bg-base-100 text-base-content gap-1">
                     {/* Sidebar content here */}
-                    <li className="bg-logo rounded-xl p-2">
-                        <p className="font-logo text-white text-6xl">Chess</p>
+                    <li className="bg-primary rounded-xl p-2 flex items-center">
+                        <p className="font-logo text-white text-5xl">NewChess</p>
                     </li>
                     <li>
                         <NavLink to={"/main/lobby"}>Lobby</NavLink>
