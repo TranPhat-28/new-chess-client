@@ -2,15 +2,15 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Chessboard } from "react-chessboard";
 import { confirmAlert } from "react-confirm-alert";
+import { FaRegCircleXmark } from "react-icons/fa6";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import CustomConfirmAlert from "../../components/CustomConfirmAlert";
 import MoveHistory from "../../components/MoveHistory";
-import PlayerInfoCard from "../../components/PlayerInfoCard";
+import QuickPlayInfoPanel from "../../components/QuickPlayInfoPanel";
 import useQuickplayHandler from "../../hooks/QuickplayHandler";
 import { resetQuickplayData } from "../../redux/features/quickplaySlice";
 import { hideLoading, showCustomAlert, showLoading } from "../../utilities";
-import { FaRegCircleXmark } from "react-icons/fa6";
 
 const QuickPlayPage = () => {
     // Dispatch for setting Loading Modal message
@@ -47,8 +47,8 @@ const QuickPlayPage = () => {
         moveTo,
     } = useQuickplayHandler();
 
-    // Random Player ID
-    const [playerId, setPlayerId] = useState<number | null>(null);
+    // Random Game ID
+    const [gameId, setGameId] = useState<number | null>(null);
 
     // Load new game
     useEffect(() => {
@@ -62,7 +62,7 @@ const QuickPlayPage = () => {
             .get("/api/QuickPlay/GetPlayerRandomId")
             .then((response) => {
                 // Close the loading modal
-                setPlayerId(response.data.data);
+                setGameId(response.data.data);
                 hideLoading();
             })
             .catch((e) => {
@@ -84,15 +84,9 @@ const QuickPlayPage = () => {
 
     return (
         <div className="h-full w-full flex flex-col justify-center items-center bg-subtle object-contain">
-            <div className="w-full p-2 max-w-md md:max-w-6xl flex flex-col items-center gap-2 md:grid md:grid-cols-2">
-                <div className="w-full md:h-full md:col-start-2 flex md:flex-col gap-2">
-                    {playerId && (
-                        <>
-                            <PlayerInfoCard randomId={playerId} />
-                            <PlayerInfoCard randomId={playerId} />
-                        </>
-                    )}
-                </div>
+            <div className="w-full p-2 max-w-md md:max-w-6xl flex flex-col items-center gap-2 md:grid md:grid-cols-2 md:quickplay-desktop">
+                {gameId && <QuickPlayInfoPanel gameId={gameId} />}
+
                 <div className="bg-base-200 p-2 rounded-lg shadow-md w-full max-w-sm md:max-w-full md:col-start-1 md:row-start-1 md:row-span-2">
                     <Chessboard
                         id="ClickToMove"
@@ -108,7 +102,8 @@ const QuickPlayPage = () => {
                         showPromotionDialog={showPromotionDialog}
                     />
                 </div>
-                <div className="w-full h-32 md:col-start-2 md:h-full flex flex-col gap-2">
+
+                <div className="w-full h-40 md:col-start-2 md:h-full flex flex-col gap-2">
                     <MoveHistory />
                     <button
                         className="btn btn-primary w-full"
