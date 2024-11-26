@@ -77,29 +77,6 @@ const useQuickplayHandler = () => {
             // Some error happened
             if (!aiMoveResponse.data.isSuccess) {
                 // Show alert
-                // confirmAlert({
-                //     overlayClassName: "bg-overlay-important",
-                //     customUI: ({ onClose }) => {
-                //         return (
-                //             <CustomConfirmAlert
-                //                 onClose={onClose}
-                //                 title={"Error"}
-                //                 content={
-                //                     "Oops! Something went wrong on the server."
-                //                 }
-                //                 svg={
-                //                     <FaRegCircleXmark
-                //                         size={"5rem"}
-                //                         color={"red"}
-                //                     />
-                //                 }
-                //                 confirmText={"Okkkk"}
-                //                 confirmCallback={() => navigate("/")}
-                //                 hideCancelButton={true}
-                //             />
-                //         );
-                //     },
-                // });
                 showCustomAlert(
                     "Error",
                     "Oops! Something went wrong on the server",
@@ -135,20 +112,6 @@ const useQuickplayHandler = () => {
                     setOptionSquares({});
                 }
 
-                // confirmAlert({
-                //     overlayClassName: "bg-overlay-important",
-                //     customUI: ({ onClose }) => {
-                //         return (
-                //             <CustomConfirmAlert
-                //                 onClose={onClose}
-                //                 title={"Game Over"}
-                //                 content={`${aiMoveResponse.data.data.wonSide} won with a ${aiMoveResponse.data.data.endgameType}`}
-                //                 confirmText={"Home"}
-                //                 confirmCallback={() => navigate("/")}
-                //             />
-                //         );
-                //     },
-                // });
                 showCustomAlert(
                     "Game Over",
                     `${aiMoveResponse.data.data.wonSide} won with a ${aiMoveResponse.data.data.endgameType}`,
@@ -178,26 +141,6 @@ const useQuickplayHandler = () => {
                 setOptionSquares({});
             }
         } catch (err) {
-            // confirmAlert({
-            //     overlayClassName: "bg-overlay-important",
-            //     customUI: ({ onClose }) => {
-            //         return (
-            //             <CustomConfirmAlert
-            //                 onClose={onClose}
-            //                 title={"Error"}
-            //                 content={
-            //                     "Oops! Something went wrong on the server."
-            //                 }
-            //                 svg={
-            //                     <FaRegCircleXmark size={"5rem"} color={"red"} />
-            //                 }
-            //                 confirmText={"Home"}
-            //                 confirmCallback={() => navigate("/")}
-            //                 hideCancelButton={true}
-            //             />
-            //         );
-            //     },
-            // });
             showCustomAlert(
                 "Error",
                 "Oops! Something went wrong on the server",
