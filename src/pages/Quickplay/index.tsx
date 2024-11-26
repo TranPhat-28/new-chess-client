@@ -59,7 +59,7 @@ const QuickPlayPage = () => {
 
         // Request to get Random Player Id
         axios
-            .get("/api/QuickPlay/GetPlayerRandomId")
+            .get("/api/QuickPlay/RandomId")
             .then((response) => {
                 // Close the loading modal
                 setGameId(response.data.data);

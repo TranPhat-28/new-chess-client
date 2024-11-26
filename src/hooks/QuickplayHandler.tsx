@@ -109,7 +109,7 @@ const useQuickplayHandler = () => {
                     <FaRegCircleXmark size={"5rem"} color={"red"} />,
                     true
                 );
-                console.log(aiMoveResponse.data.message);
+                console.error(aiMoveResponse.data.message);
             }
             // If gameover
             else if (aiMoveResponse.data.data.isGameOver) {

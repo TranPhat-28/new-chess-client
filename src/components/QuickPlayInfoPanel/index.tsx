@@ -11,7 +11,7 @@ const QuickPlayInfoPanel = ({ gameId }: { gameId: number }) => {
             <CarouselProvider
                 naturalSlideHeight={1}
                 naturalSlideWidth={8}
-                totalSlides={3}
+                totalSlides={4}
                 visibleSlides={1}
                 isPlaying={true}
                 interval={10000}
@@ -25,6 +25,9 @@ const QuickPlayInfoPanel = ({ gameId }: { gameId: number }) => {
                     </Slide>
                     <Slide index={2}>
                         <InfoTag text="Thank you for visiting NewChess" />
+                    </Slide>
+                    <Slide index={3}>
+                        <InfoTag text="Your opponent is the default bot" />
                     </Slide>
                 </Slider>
             </CarouselProvider>
