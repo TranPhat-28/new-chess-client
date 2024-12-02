@@ -78,6 +78,55 @@ const MoveHistory = () => {
             {/* Desktop version */}
             <div className="w-full h-1/2 bg-base-200 rounded-lg shadow-lg hidden md:block p-2">
                 {history.length === 0 && "Make a move to start"}
+                {history.length > 0 && (
+                        <div className="flex w-full h-full">
+                            <div className="flex-1 grid grid-cols-4 grid-rows-2">
+                                {history[history.length - 1] && (
+                                    <MoveHistoryItem
+                                        move={history[history.length - 1]}
+                                    />
+                                )}
+                                {history[history.length - 2] && (
+                                    <MoveHistoryItem
+                                        move={history[history.length - 2]}
+                                    />
+                                )}
+                                {history[history.length - 3] && (
+                                    <MoveHistoryItem
+                                        move={history[history.length - 3]}
+                                    />
+                                )}
+                                {history[history.length - 4] && (
+                                    <MoveHistoryItem
+                                        move={history[history.length - 4]}
+                                    />
+                                )}
+                                {history[history.length - 5] && (
+                                    <MoveHistoryItem
+                                        move={history[history.length - 5]}
+                                    />
+                                )}
+                                {history[history.length - 6] && (
+                                    <MoveHistoryItem
+                                        move={history[history.length - 6]}
+                                    />
+                                )}
+                                {history[history.length - 7] && (
+                                    <MoveHistoryItem
+                                        move={history[history.length - 7]}
+                                    />
+                                )}
+                                {history[history.length - 8] && (
+                                    <MoveHistoryItem
+                                        move={history[history.length - 8]}
+                                    />
+                                )}
+                            </div>
+                            <button className="btn btn-outline h-full">
+                                <MdHistory />
+                            </button>
+                        </div>
+                    )}
             </div>
             <div className="w-full h-1/2 bg-base-200 rounded-lg shadow-lg hidden md:block p-2">
                 No captured pieces
