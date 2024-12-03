@@ -1,9 +1,17 @@
 import { IMove } from "../../interfaces";
 
-const MoveHistoryItem = ({ move }: { move: IMove }) => {
+const MoveHistoryItem = ({
+    move,
+    largeScreen,
+}: {
+    move: IMove;
+    largeScreen?: boolean;
+}) => {
     return (
         <div
-            className={`m-1 rounded-lg flex items-center justify-center ${
+            className={`m-1 ${
+                largeScreen ? "hidden lg:flex" : ""
+            } rounded-lg flex items-center justify-center ${
                 move.side === "black"
                     ? "bg-black text-white"
                     : "bg-white text-black border border-black"
