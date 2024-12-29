@@ -11,6 +11,7 @@ const PracticeModePage = () => {
     // Game handler
     const {
         game,
+        isGameOver,
         onSquareClick,
         optionSquares,
         showPromotionDialog,
@@ -49,9 +50,15 @@ const PracticeModePage = () => {
 
                 <div className="w-full h-40 md:col-start-2 md:h-full flex flex-col gap-2">
                     <MoveHistory />
-                    <button className="btn btn-primary w-full">
-                        Save and Quit
-                    </button>
+                    {isGameOver === true ? (
+                        <button className="btn btn-primary w-full">
+                            Quit
+                        </button>
+                    ) : (
+                        <button className="btn btn-primary w-full">
+                            Save and Quit
+                        </button>
+                    )}
                 </div>
             </div>
         </div>
