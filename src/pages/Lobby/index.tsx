@@ -6,8 +6,10 @@ import { showCustomAlert } from "../../utilities";
 // import JoinOnlineRoomAlert from "../../components/JoinOnlineRoomAlert";
 import { RiRobot2Fill } from "react-icons/ri";
 import { HiUsers } from "react-icons/hi";
+import { useNavigate } from "react-router-dom";
 
 const LobbyPage = () => {
+    const navigate = useNavigate();
     const roomList: IOnlineRoomInfo[] = [
         { id: 1, host: "John", isPrivate: false, isFull: true },
         { id: 2, host: "Kate", isPrivate: false, isFull: false },
@@ -22,12 +24,16 @@ const LobbyPage = () => {
         { id: 11, host: "Josh", isPrivate: false, isFull: false },
     ];
 
-    const showTutorial = (title: string, content: string) => {
+    const showTutorial = (
+        title: string,
+        content: string,
+        navigateTo: string
+    ) => {
         showCustomAlert(
             title,
             content,
             "Play",
-            undefined,
+            () => navigate(navigateTo),
             undefined,
             <div className="mb-2">
                 <FaChess size={"5rem"} color={"violet"} />
@@ -64,10 +70,10 @@ const LobbyPage = () => {
 
                     <div className="join w-full rounded-t-none">
                         <input
-                            className="input input-bordered join-item w-full"
+                            className="input input-bordered join-item w-full rounded-t-none rounded-lg"
                             placeholder="Room ID"
                         />
-                        <button className="btn btn-primary join-item">
+                        <button className="btn btn-primary join-item rounded-t-none rounded-lg">
                             Join
                         </button>
                     </div>
@@ -75,9 +81,7 @@ const LobbyPage = () => {
 
                 {/* Actions */}
                 <div className="w-full bg-base-100 rounded-lg flex flex-col overflow-hidden">
-                    <p className="text-2xl p-4">
-                        Start a game
-                    </p>
+                    <p className="text-2xl p-4">Start a game</p>
 
                     <div className="w-full flex p-4 pt-0 gap-4">
                         <button
@@ -85,7 +89,8 @@ const LobbyPage = () => {
                             onClick={() =>
                                 showTutorial(
                                     "Practice mode",
-                                    "Practice your chess skill with the Stockfish chess bot"
+                                    "Practice your chess skill with the Stockfish chess bot",
+                                    "/practice"
                                 )
                             }
                         >
@@ -97,7 +102,8 @@ const LobbyPage = () => {
                             onClick={() =>
                                 showTutorial(
                                     "Host a room",
-                                    "Host an online room for to play with your friend"
+                                    "Host an online room for to play with your friend",
+                                    "/multiplayer/setup"
                                 )
                             }
                         >

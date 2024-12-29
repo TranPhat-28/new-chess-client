@@ -9,6 +9,7 @@ import ProfilePage from "./pages/Profile";
 import ShopPage from "./pages/Shop";
 import NotificationPage from "./pages/Notification";
 import SocialPage from "./pages/Social";
+import PracticeModePage from "./pages/PracticeMode";
 
 // Layouts
 import MainLayout from "./layouts/MainLayout";
@@ -64,6 +65,9 @@ function App() {
                         <Route path=":id" element={<FriendDetail />} />
                     </Route>
                 </Route>
+
+                <Route path="/practice" element={<PracticeModePage />} />
+
                 {/* )} */}
                 <Route path="*" element={<NotFound />} />
             </Routes>
