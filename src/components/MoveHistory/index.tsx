@@ -80,7 +80,7 @@ const MoveHistory = () => {
                 {history.length === 0 && "Make a move to start"}
                 {history.length > 0 && (
                         <div className="flex w-full h-full">
-                            <div className="flex-1 grid grid-cols-4 grid-rows-2 lg:grid-rows-3">
+                            <div className="flex-1 grid grid-cols-4 grid-rows-3 lg:grid-rows-4">
                                 {history[history.length - 1] && (
                                     <MoveHistoryItem
                                         move={history[history.length - 1]}
@@ -124,24 +124,44 @@ const MoveHistory = () => {
                                 {history[history.length - 9] && (
                                     <MoveHistoryItem
                                         move={history[history.length - 9]}
-                                        largeScreen={true}
                                     />
                                 )}
                                 {history[history.length - 10] && (
                                     <MoveHistoryItem
                                         move={history[history.length - 10]}
-                                        largeScreen={true}
                                     />
                                 )}
                                 {history[history.length - 11] && (
                                     <MoveHistoryItem
                                         move={history[history.length - 11]}
-                                        largeScreen={true}
                                     />
                                 )}
                                 {history[history.length - 12] && (
                                     <MoveHistoryItem
                                         move={history[history.length - 12]}
+                                    />
+                                )}
+                                {history[history.length - 13] && (
+                                    <MoveHistoryItem
+                                        move={history[history.length - 13]}
+                                        largeScreen={true}
+                                    />
+                                )}
+                                {history[history.length - 14] && (
+                                    <MoveHistoryItem
+                                        move={history[history.length - 14]}
+                                        largeScreen={true}
+                                    />
+                                )}
+                                {history[history.length - 15] && (
+                                    <MoveHistoryItem
+                                        move={history[history.length - 15]}
+                                        largeScreen={true}
+                                    />
+                                )}
+                                {history[history.length - 16] && (
+                                    <MoveHistoryItem
+                                        move={history[history.length - 16]}
                                         largeScreen={true}
                                     />
                                 )}
