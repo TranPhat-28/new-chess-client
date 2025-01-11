@@ -6,6 +6,7 @@ export interface IOptionSquares {
 }
 
 export interface IMove {
+    moveIndex: number;
     side: "black" | "white";
     move: string;
 }

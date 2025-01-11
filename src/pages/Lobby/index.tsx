@@ -90,7 +90,7 @@ const LobbyPage = () => {
                                 showTutorial(
                                     "Practice mode",
                                     "Practice your chess skill with the Stockfish chess bot",
-                                    "/practice"
+                                    "/practice/loading"
                                 )
                             }
                         >

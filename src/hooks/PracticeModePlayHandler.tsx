@@ -15,6 +15,7 @@ const usePracticeModePlayHandler = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const token = useSelector((state: RootState) => state.auth.token);
+    const history = useSelector((state: RootState) => state.quickplay.history);
 
     // The game
     const [game, setGame] = useState<Chess>(
@@ -112,6 +113,7 @@ const usePracticeModePlayHandler = () => {
                         setHistory({
                             side: "black",
                             move: `${move.from}${move.to}`,
+                            moveIndex: history.length
                         })
                     );
 
@@ -142,6 +144,7 @@ const usePracticeModePlayHandler = () => {
                     setHistory({
                         side: "black",
                         move: `${move.from}${move.to}`,
+                        moveIndex: history.length
                     })
                 );
 
@@ -218,6 +221,7 @@ const usePracticeModePlayHandler = () => {
                 setHistory({
                     side: "white",
                     move: `${move.from}${move.to}`,
+                    moveIndex: history.length
                 })
             );
 
@@ -252,6 +256,7 @@ const usePracticeModePlayHandler = () => {
                 setHistory({
                     side: "white",
                     move: `${move.from}${move.to}`,
+                    moveIndex: history.length
                 })
             );
 

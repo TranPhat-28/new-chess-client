@@ -3,14 +3,16 @@ import { Chess, Square } from "chess.js";
 import { useState } from "react";
 import { PromotionPieceOption } from "react-chessboard/dist/chessboard/types";
 import { FaRegCircleXmark } from "react-icons/fa6";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { IOptionSquares } from "../interfaces";
 import { setHistory } from "../redux/features/quickplaySlice";
 import { showCustomAlert } from "../utilities";
+import { RootState } from "../redux/store";
 
 const useQuickplayHandler = () => {
+    const history = useSelector((state: RootState) => state.quickplay.history);
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -103,6 +105,7 @@ const useQuickplayHandler = () => {
                         setHistory({
                             side: "black",
                             move: `${move.from}${move.to}`,
+                            moveIndex: history.length
                         })
                     );
 
@@ -132,6 +135,7 @@ const useQuickplayHandler = () => {
                     setHistory({
                         side: "black",
                         move: `${move.from}${move.to}`,
+                        moveIndex: history.length
                     })
                 );
 
@@ -208,6 +212,7 @@ const useQuickplayHandler = () => {
                 setHistory({
                     side: "white",
                     move: `${move.from}${move.to}`,
+                    moveIndex: history.length
                 })
             );
 
@@ -242,6 +247,7 @@ const useQuickplayHandler = () => {
                 setHistory({
                     side: "white",
                     move: `${move.from}${move.to}`,
+                    moveIndex: history.length
                 })
             );
 

@@ -10,6 +10,7 @@ import ShopPage from "./pages/Shop";
 import NotificationPage from "./pages/Notification";
 import SocialPage from "./pages/Social";
 import PracticeModePage from "./pages/PracticeMode";
+import PracticeModeLoadingPage from "./pages/PracticeModeLoading";
 
 // Layouts
 import MainLayout from "./layouts/MainLayout";
@@ -66,7 +67,10 @@ function App() {
                     </Route>
                 </Route>
 
-                <Route path="/practice" element={<PracticeModePage />} />
+                <Route path="/practice">
+                    <Route path="loading" element={<PracticeModeLoadingPage />} />
+                    <Route path="game" element={<PracticeModePage />} />
+                </Route>
 
                 {/* )} */}
                 <Route path="*" element={<NotFound />} />

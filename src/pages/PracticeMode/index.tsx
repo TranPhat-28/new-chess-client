@@ -2,11 +2,20 @@ import { Chessboard } from "react-chessboard";
 import MoveHistory from "../../components/MoveHistory";
 import usePracticeModePlayHandler from "../../hooks/PracticeModePlayHandler";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { resetQuickplayData } from "../../redux/features/quickplaySlice";
+import { RootState } from "../../redux/store";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { showCustomAlert } from "../../utilities";
+import { FaRegCircleXmark } from "react-icons/fa6";
 
 const PracticeModePage = () => {
     const dispatch = useDispatch();
+    const history = useSelector((state: RootState) => state.quickplay.history);
+    const token = useSelector((state: RootState) => state.auth.token);
+    const navigate = useNavigate();
 
     // Game handler
     const {
@@ -18,6 +27,42 @@ const PracticeModePage = () => {
         onPromotionPieceSelect,
         moveTo,
     } = usePracticeModePlayHandler();
+
+    // Save and Quit handler
+    const saveAndQuitHandler = () => {
+        // Dont send empty array to server
+        if (history.length === 0) {
+            navigate("/main/lobby");
+            return;
+        }
+
+        axios
+            .post(
+                "/api/PracticeMode/Saved",
+                { moves: history },
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            )
+            .then((response) => {
+                navigate("/main/lobby");
+                toast.success(response.data.message);
+            })
+            .catch((error) => {
+                toast.error(error);
+                showCustomAlert(
+                    "Error",
+                    "Something went wrong and we cannot save your game now",
+                    "Quit without saving",
+                    () => navigate("/main/lobby"),
+                    undefined,
+                    <FaRegCircleXmark size={"5rem"} color={"red"} />,
+                    false
+                );
+            });
+    };
 
     // Load new game
     useEffect(() => {
@@ -51,11 +96,12 @@ const PracticeModePage = () => {
                 <div className="w-full h-40 md:col-start-2 md:h-full flex flex-col gap-2">
                     <MoveHistory />
                     {isGameOver === true ? (
-                        <button className="btn btn-primary w-full">
-                            Quit
-                        </button>
+                        <button className="btn btn-primary w-full">Quit</button>
                     ) : (
-                        <button className="btn btn-primary w-full">
+                        <button
+                            className="btn btn-primary w-full"
+                            onClick={saveAndQuitHandler}
+                        >
                             Save and Quit
                         </button>
                     )}
