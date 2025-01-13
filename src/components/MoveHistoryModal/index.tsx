@@ -14,12 +14,11 @@ const MoveHistoryModal = () => {
                 )}
                 {history.length > 0 && (
                     <div className="bg-base-300 p-1 lg:p-2 h-48 flex flex-col gap-1 lg:gap-2 overflow-y-scroll">
-                        {history.map((item, index) => (
+                        {history.map((item) => (
                             <MoveHistoryItem
-                                key={index}
+                                key={item.moveIndex}
                                 move={item}
-                                moveNo={index + 1}
-                                responsiveItem={false}
+                                largeScreen={false}
                             />
                         ))}
                     </div>

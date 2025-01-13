@@ -7,6 +7,13 @@ const MoveHistory = () => {
     // Game history
     const history = useSelector((state: RootState) => state.quickplay.history);
 
+    // Open the history modal
+    const openHistoryModal = () => {
+        (
+            document.getElementById("history_modal") as HTMLDialogElement
+        ).showModal();
+    };
+
     return (
         <div className="p-2 rounded-lg bg-base-300 flex flex-1 md:flex-col md:gap-3">
             {/* Mobile version */}
@@ -52,7 +59,10 @@ const MoveHistory = () => {
                                     />
                                 )}
                             </div>
-                            <button className="btn btn-outline">
+                            <button
+                                className="btn btn-outline"
+                                onClick={openHistoryModal}
+                            >
                                 <MdHistory />
                             </button>
                         </div>
@@ -166,7 +176,10 @@ const MoveHistory = () => {
                                 />
                             )}
                         </div>
-                        <button className="btn btn-outline h-full">
+                        <button
+                            className="btn btn-outline h-full"
+                            onClick={openHistoryModal}
+                        >
                             <MdHistory />
                         </button>
                     </div>

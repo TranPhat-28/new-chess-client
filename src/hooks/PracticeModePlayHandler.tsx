@@ -46,9 +46,10 @@ const usePracticeModePlayHandler = () => {
                     hideLoading();
                 })
                 .catch((error) => {
+                    hideLoading();
                     navigate("/main/lobby");
                     // Show toast
-                    toast.error(error.response.statusText);
+                    toast.error(error.message);
                 });
         } else {
             setGame(game);

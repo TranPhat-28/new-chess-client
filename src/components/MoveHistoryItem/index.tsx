@@ -9,12 +9,12 @@ const MoveHistoryItem = ({
 }) => {
     return (
         <div
-            className={`m-1 ${
+            className={`m-1 p-1 ${
                 largeScreen ? "hidden lg:flex" : ""
             } rounded-lg flex items-center justify-center ${
                 move.side === "black"
                     ? "bg-black text-white"
-                    : "bg-white text-black border border-black"
+                    : "bg-white text-black"
             }`}
         >
             {move.moveIndex}: {move.move}
