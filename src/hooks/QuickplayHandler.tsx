@@ -105,7 +105,7 @@ const useQuickplayHandler = () => {
                         setHistory({
                             side: "black",
                             move: `${move.from}${move.to}`,
-                            moveIndex: history.length
+                            moveIndex: history.length + 1
                         })
                     );
 
@@ -135,7 +135,7 @@ const useQuickplayHandler = () => {
                     setHistory({
                         side: "black",
                         move: `${move.from}${move.to}`,
-                        moveIndex: history.length
+                        moveIndex: history.length + 1
                     })
                 );
 
