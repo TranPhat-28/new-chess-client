@@ -14,8 +14,12 @@ const PracticeModeLoadingPage = () => {
     const [gameLoading, setGameLoading] = useState<boolean>(true);
     const [alertPlayer, setAlertPlayer] = useState<boolean>(false);
 
+    const [btnNewGameLoading, setBtnNewGameLoading] = useState<boolean>(false);
+    const [btnResumeLoading, setBtnResumeLoading] = useState<boolean>(false);
+
     // Button handler
     const startNewGameHandler = () => {
+        setBtnNewGameLoading(true);
         // Delete old progress then start a new game
         axios
             .delete("/api/PracticeMode/Saved", {
@@ -39,11 +43,14 @@ const PracticeModeLoadingPage = () => {
                     <FaRegCircleXmark size={"5rem"} color={"red"} />,
                     true
                 );
+            }).finally(() => {
+                setBtnNewGameLoading(false);
             });
     };
 
     const resumeGameHandler = () => {
-        // Load old progress
+        setBtnResumeLoading(true);
+        navigate("/practice/game?progress=resume");
     };
 
     useEffect(() => {
@@ -103,17 +110,27 @@ const PracticeModeLoadingPage = () => {
                         new game?
                     </div>
                     <div className="flex pt-4 flex-row justify-center gap-2">
-                        <button
-                            className="btn btn-primary"
+                    <button
+                            className={`btn ${
+                                btnResumeLoading ? "btn-disabled" : ""
+                            } btn-primary`}
                             onClick={resumeGameHandler}
                         >
-                            Resume
+                            {btnResumeLoading && (
+                                <span className="loading loading-spinner"></span>
+                            )}
+                            {btnResumeLoading ? "" : "Resume"}
                         </button>
                         <button
-                            className="btn btn-primary btn-outline"
+                            className={`btn ${
+                                btnNewGameLoading ? "btn-disabled" : "btn-outline"
+                            } btn-primary`}
                             onClick={startNewGameHandler}
                         >
-                            New game
+                            {btnNewGameLoading && (
+                                <span className="loading loading-spinner"></span>
+                            )}
+                            {btnNewGameLoading ? "" : "New game"}
                         </button>
                     </div>
                 </div>

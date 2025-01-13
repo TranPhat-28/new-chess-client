@@ -1,13 +1,13 @@
 import { Chessboard } from "react-chessboard";
 import MoveHistory from "../../components/MoveHistory";
 import usePracticeModePlayHandler from "../../hooks/PracticeModePlayHandler";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { resetQuickplayData } from "../../redux/features/quickplaySlice";
 import { RootState } from "../../redux/store";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { showCustomAlert } from "../../utilities";
 import { FaRegCircleXmark } from "react-icons/fa6";
 
@@ -16,6 +16,9 @@ const PracticeModePage = () => {
     const history = useSelector((state: RootState) => state.quickplay.history);
     const token = useSelector((state: RootState) => state.auth.token);
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+
+    const [btnLoading, setBtnLoading] = useState<boolean>(false);
 
     // Game handler
     const {
@@ -30,6 +33,7 @@ const PracticeModePage = () => {
 
     // Save and Quit handler
     const saveAndQuitHandler = () => {
+        setBtnLoading(true);
         // Dont send empty array to server
         if (history.length === 0) {
             navigate("/main/lobby");
@@ -61,6 +65,9 @@ const PracticeModePage = () => {
                     <FaRegCircleXmark size={"5rem"} color={"red"} />,
                     false
                 );
+            })
+            .finally(() => {
+                setBtnLoading(false);
             });
     };
 
@@ -68,6 +75,11 @@ const PracticeModePage = () => {
     useEffect(() => {
         // Reset the quickplay data from previous (if any)
         dispatch(resetQuickplayData());
+
+        // Fetch saved game if needed
+        if (searchParams.get("progress") === "resume") {
+            alert("Load saved game");
+        }
     }, []);
 
     return (
@@ -99,10 +111,15 @@ const PracticeModePage = () => {
                         <button className="btn btn-primary w-full">Quit</button>
                     ) : (
                         <button
-                            className="btn btn-primary w-full"
+                            className={`btn ${
+                                btnLoading ? "btn-disabled" : ""
+                            } btn-primary w-full`}
                             onClick={saveAndQuitHandler}
                         >
-                            Save and Quit
+                            {btnLoading && (
+                                <span className="loading loading-spinner"></span>
+                            )}
+                            {btnLoading ? "" : "Save and Quit"}
                         </button>
                     )}
                 </div>
