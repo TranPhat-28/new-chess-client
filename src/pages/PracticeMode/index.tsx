@@ -78,7 +78,20 @@ const PracticeModePage = () => {
 
         // Fetch saved game if needed
         if (searchParams.get("progress") === "resume") {
-            alert("Load saved game");
+            axios
+                .get("/api/PracticeMode/Saved", {
+                    headers: { Authorization: `Bearer ${token}` },
+                })
+                .then((response) => {
+                    // If success
+                    toast.success("Game progress loaded");
+                    console.log(response.data);
+                })
+                .catch((error) => {
+                    navigate("/main/lobby");
+                    // Show toast
+                    toast.error(error.response.statusText);
+                });
         }
     }, []);
 
