@@ -1,14 +1,14 @@
 import axios from "axios";
 import { Chess, Square } from "chess.js";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PromotionPieceOption } from "react-chessboard/dist/chessboard/types";
 import { FaRegCircleXmark } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { IOptionSquares } from "../interfaces";
-import { setHistory } from "../redux/features/quickplaySlice";
-import { showCustomAlert } from "../utilities";
+import { IMove, IOptionSquares } from "../interfaces";
+import { resetQuickplayData, setFullHistory, setHistory } from "../redux/features/quickplaySlice";
+import { hideLoading, showCustomAlert, showLoading } from "../utilities";
 import { RootState } from "../redux/store";
 
 const usePracticeModePlayHandler = () => {
@@ -16,14 +16,49 @@ const usePracticeModePlayHandler = () => {
     const dispatch = useDispatch();
     const token = useSelector((state: RootState) => state.auth.token);
     const history = useSelector((state: RootState) => state.quickplay.history);
+    const [searchParams] = useSearchParams();
+
+    useEffect(() => {
+        // Reset the quickplay data from previous (if any)
+        dispatch(resetQuickplayData());
+
+        // Show Loading
+        showLoading(dispatch, "Loading");
+        const game = new Chess();
+
+        // Fetch saved game if needed
+        if (searchParams.get("progress") === "resume") {
+            axios
+                .get("/api/PracticeMode/Saved", {
+                    headers: { Authorization: `Bearer ${token}` },
+                })
+                .then((response) => {
+                    // If success
+                    toast.success("Game progress loaded");
+                    // Setup the board
+                    const moves: IMove[] = response.data.data;
+                    moves.sort((a, b) => a.moveIndex - b.moveIndex);
+                    moves.forEach((move) => {
+                        game.move(move.move);
+                    });
+                    setGame(game);
+                    dispatch(setFullHistory(moves));
+                    hideLoading();
+                })
+                .catch((error) => {
+                    navigate("/main/lobby");
+                    // Show toast
+                    toast.error(error.response.statusText);
+                });
+        } else {
+            setGame(game);
+            hideLoading();
+        }
+    }, []);
 
     // The game
     const [game, setGame] = useState<Chess>(
-        // White move - Black win
-        // new Chess("7r/8/8/8/8/1k6/8/1K6 w - - 0 1")
-        // White move - White win
-        // new Chess("7k/8/6K1/8/8/8/8/R7 w - - 0 1")
-        new Chess()
+        null!
     );
 
     // Game over
@@ -71,13 +106,17 @@ const usePracticeModePlayHandler = () => {
     async function fetchAiResponseMove() {
         try {
             const aiMoveResponse = await toast.promise(
-                axios.post("/api/PracticeMode/Move", {
-                    fen: game.fen(),
-                }, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
+                axios.post(
+                    "/api/PracticeMode/Move",
+                    {
+                        fen: game.fen(),
                     },
-                }),
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                ),
                 {
                     pending: "AI is thinking...",
                     error: "Something went wrong",
@@ -113,7 +152,7 @@ const usePracticeModePlayHandler = () => {
                         setHistory({
                             side: "black",
                             move: `${move.from}${move.to}`,
-                            moveIndex: history.length + 1
+                            moveIndex: history.length + 1,
                         })
                     );
 
@@ -144,7 +183,7 @@ const usePracticeModePlayHandler = () => {
                     setHistory({
                         side: "black",
                         move: `${move.from}${move.to}`,
-                        moveIndex: history.length + 1
+                        moveIndex: history.length + 1,
                     })
                 );
 
@@ -221,7 +260,7 @@ const usePracticeModePlayHandler = () => {
                 setHistory({
                     side: "white",
                     move: `${move.from}${move.to}`,
-                    moveIndex: history.length
+                    moveIndex: history.length,
                 })
             );
 
@@ -256,7 +295,7 @@ const usePracticeModePlayHandler = () => {
                 setHistory({
                     side: "white",
                     move: `${move.from}${move.to}`,
-                    moveIndex: history.length
+                    moveIndex: history.length,
                 })
             );
 

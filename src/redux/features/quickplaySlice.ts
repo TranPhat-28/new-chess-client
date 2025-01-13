@@ -17,6 +17,9 @@ export const quickplaySlice = createSlice({
         setHistory: (state, action: PayloadAction<IMove>) => {
             state.history = [...state.history, action.payload];
         },
+        setFullHistory: (state, action: PayloadAction<IMove[]>) => {
+            state.history = action.payload;
+        },
         resetQuickplayData: (state) => {
             state.history = [];
             state.winner = null;
@@ -25,7 +28,7 @@ export const quickplaySlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setEndgameResult, setHistory, resetQuickplayData } =
+export const { setEndgameResult, setHistory, setFullHistory, resetQuickplayData } =
     quickplaySlice.actions;
 
 export default quickplaySlice.reducer;

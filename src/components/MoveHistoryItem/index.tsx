@@ -17,7 +17,7 @@ const MoveHistoryItem = ({
                     : "bg-white text-black border border-black"
             }`}
         >
-            {move.move}
+            {move.moveIndex}: {move.move}
         </div>
     );
 };
