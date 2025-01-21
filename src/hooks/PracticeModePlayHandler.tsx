@@ -16,6 +16,7 @@ const usePracticeModePlayHandler = () => {
     const dispatch = useDispatch();
     const token = useSelector((state: RootState) => state.auth.token);
     const history = useSelector((state: RootState) => state.quickplay.history);
+    const [historyChanged, setHistoryChanged] = useState<boolean>(false);
     const [searchParams] = useSearchParams();
 
     useEffect(() => {
@@ -25,6 +26,9 @@ const usePracticeModePlayHandler = () => {
         // Show Loading
         showLoading(dispatch, "Loading");
         const game = new Chess();
+
+        // No changes made to history
+        setHistoryChanged(false);
 
         // Fetch saved game if needed
         if (searchParams.get("progress") === "resume") {
@@ -273,6 +277,7 @@ const usePracticeModePlayHandler = () => {
             }
 
             setGame(gameCopy);
+            setHistoryChanged(true);
 
             fetchAiResponseMove();
             setMoveFrom("");
@@ -319,6 +324,7 @@ const usePracticeModePlayHandler = () => {
         showPromotionDialog,
         onPromotionPieceSelect,
         moveTo,
+        historyChanged
     };
 };
 

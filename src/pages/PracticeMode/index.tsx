@@ -26,6 +26,7 @@ const PracticeModePage = () => {
         showPromotionDialog,
         onPromotionPieceSelect,
         moveTo,
+        historyChanged,
     } = usePracticeModePlayHandler();
 
     // Save and Quit handler
@@ -37,16 +38,34 @@ const PracticeModePage = () => {
             return;
         }
 
+        // If history was not changed, do not save
+        if (historyChanged === false) {
+            navigate("/main/lobby");
+            return;
+        }
+
+        // Delete old progress before saving new one
         axios
-            .post(
-                "/api/PracticeMode/Saved",
-                { moves: history },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
+            .delete("/api/PracticeMode/Saved", {
+                headers: { Authorization: `Bearer ${token}` },
+            })
+            .then((response) => {
+                if (response.data.isSuccess) {
+                    // If success, perform the next saving request
+                    const saveRequest = axios.post(
+                        "/api/PracticeMode/Saved",
+                        { moves: history },
+                        {
+                            headers: {
+                                Authorization: `Bearer ${token}`,
+                            },
+                        }
+                    );
+                    return saveRequest;
+                } else {
+                    throw new Error("Cannot save game progress");
                 }
-            )
+            })
             .then((response) => {
                 navigate("/main/lobby");
                 toast.success(response.data.message);
