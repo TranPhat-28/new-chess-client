@@ -7,8 +7,31 @@ import { showCustomAlert } from "../../utilities";
 import { RiRobot2Fill } from "react-icons/ri";
 import { HiUsers } from "react-icons/hi";
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { HubConnection, HubConnectionBuilder } from "@microsoft/signalr";
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
+import { toast } from "react-toastify";
 
 const LobbyPage = () => {
+    const token = useSelector((state: RootState) => state.auth.token);
+    const [hubConnection] = useState<HubConnection>(
+        new HubConnectionBuilder()
+            .withUrl("http://localhost:5275/hubs/main", {
+                accessTokenFactory: () => token!,
+            })
+            .withAutomaticReconnect()
+            .build()
+    );
+
+    hubConnection.on("PlayerIsOnline", (player) => {
+        toast.success(player + "joined");
+    });
+
+    hubConnection.on("PlayerIsOffline", (player) => {
+        toast.success(player + "left");
+    });
+
     const navigate = useNavigate();
     const roomList: IOnlineRoomInfo[] = [
         { id: 1, host: "John", isPrivate: false, isFull: true },
@@ -51,6 +74,12 @@ const LobbyPage = () => {
     //         },
     //     });
     // };
+
+    useEffect(() => {
+        hubConnection.start().catch((e) => {
+            console.log("Error starting hub", e);
+        });
+    }, []);
 
     return (
         <div className="page-content-wrapper">
