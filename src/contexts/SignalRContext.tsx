@@ -1,19 +1,27 @@
-import { createContext, useState, ReactNode } from "react";
 import {
     HubConnection,
     HubConnectionBuilder,
     HubConnectionState,
 } from "@microsoft/signalr";
+import { createContext, ReactNode, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
+// Type
 type SignalRContextType = {
     hub: HubConnection | null;
     initializeHub: (token: string) => void;
     stopHub: () => void;
+    fetchOnlineFriends: () => Promise<string[]>;
 };
 
+// Context
 const SignalRContext = createContext<SignalRContextType | undefined>(undefined);
 
+// Provider
 export const SignalRProvider = ({ children }: { children: ReactNode }) => {
+    const navigate = useNavigate();
+    // The hub
     const [hub, setHub] = useState<HubConnection | null>(null);
 
     const initializeHub = (token: string) => {
@@ -25,20 +33,47 @@ export const SignalRProvider = ({ children }: { children: ReactNode }) => {
                 .withAutomaticReconnect()
                 .build();
 
-            setHub(connection);
+            connection
+                .start()
+                .then(() => {
+                    setHub(connection);
+                })
+                .catch((err) => {
+                    navigate("/");
+                    toast.error("Cannot establish hub connection");
+                    console.log("Error trying to start hub: ", err);
+                });
         }
     };
 
     const stopHub = () => {
         if (hub?.state === HubConnectionState.Connected) {
-            hub.stop().catch((err) =>
-                console.log("Error stying to stop hub: ", err)
-            );
+            hub.stop().catch((err) => {
+                navigate("/");
+                toast.error("Cannot stop hub connection");
+                console.log("Error trying to stop hub: ", err);
+            });
+        }
+    };
+
+    // Client invoke this method on the server
+    const fetchOnlineFriends = async (): Promise<string[]> => {
+        if (!hub) {
+            throw new Error("Hub connection is lost");
+        }
+
+        try {
+            const users = await hub.invoke("GetCurrentOnlineFriends");
+            return users;
+        } catch (err) {
+            throw new Error("Cannot get hub data");
         }
     };
 
     return (
-        <SignalRContext.Provider value={{ hub, initializeHub, stopHub }}>
+        <SignalRContext.Provider
+            value={{ hub, initializeHub, stopHub, fetchOnlineFriends }}
+        >
             {children}
         </SignalRContext.Provider>
     );

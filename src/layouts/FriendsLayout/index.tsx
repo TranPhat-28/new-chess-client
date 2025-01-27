@@ -1,22 +1,39 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FaRegSadCry, FaSearch } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 import { HashLoader } from "react-spinners";
 import { IFriendDetailShort } from "../../interfaces";
 import { RootState } from "../../redux/store";
+import SignalRContext from "../../contexts/SignalRContext";
+import { toast } from "react-toastify";
 
 const FriendsLayout = () => {
+    // Access token
     const token = useSelector((state: RootState) => state.auth.token);
+
+    // SignalR
+    const signalRContext = useContext(SignalRContext);
+    const friendsHub = signalRContext?.hub;
+    const fetchOnlineFriends = signalRContext?.fetchOnlineFriends;
+
+    // Loading
     const [loading, setLoading] = useState<boolean>(true);
+
+    // List of friends - static data
     const [friendList, setFriendList] = useState<IFriendDetailShort[] | null>(
         null
     );
 
+    // Friend online statuses - live data
+    const [onlineUsers, setOnlineUsers] = useState<string[] | null>(null);
+
+    // Navigation ID for reloading
     const [navigateId, setNavigateId] = useState<number>(0);
 
     useEffect(() => {
+        // Perform static friend list fetch and initial hub fetch for latest data
         axios
             .get("/api/Friends", {
                 headers: {
@@ -25,14 +42,41 @@ const FriendsLayout = () => {
             })
             .then((response) => {
                 setFriendList(response.data.data);
+                // Check if not undefined to remove lint warning
+                if (fetchOnlineFriends !== undefined) {
+                    // Chain fetchOnlineFriends after Axios completes
+                    return fetchOnlineFriends();
+                } else {
+                    throw new Error("Operation is undefined");
+                }
+            })
+            .then((data) => {
+                setOnlineUsers(data); // Set the online users after fetching from the hub
             })
             .catch((error) => {
-                console.log(error);
+                console.error("Error:", error);
+                toast.error("Failed to fetch some data");
             })
             .finally(() => {
                 setLoading(false);
             });
-    }, [navigateId]);
+
+        // Setup hub listener
+        if (friendsHub) {
+            // Define the callback
+            const handleOnlineUsers = (playersList: string[]) => {
+                setOnlineUsers(playersList);
+            };
+
+            // Register the callback
+            friendsHub.on("GetOnlineUsers", handleOnlineUsers);
+
+            // Remove the callback
+            return () => {
+                friendsHub.off("GetOnlineUsers", handleOnlineUsers);
+            };
+        }
+    }, [navigateId, token, friendsHub, fetchOnlineFriends]);
 
     return (
         <div className="page-content-wrapper">
