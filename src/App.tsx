@@ -68,7 +68,10 @@ function App() {
                 </Route>
 
                 <Route path="/practice">
-                    <Route path="loading" element={<PracticeModeLoadingPage />} />
+                    <Route
+                        path="loading"
+                        element={<PracticeModeLoadingPage />}
+                    />
                     <Route path="game" element={<PracticeModePage />} />
                 </Route>
 

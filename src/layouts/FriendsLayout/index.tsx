@@ -1,11 +1,11 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { FaRegSadCry, FaSearch } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 import { HashLoader } from "react-spinners";
-import { RootState } from "../../redux/store";
 import { IFriendDetailShort } from "../../interfaces";
-import { FaRegSadCry, FaSearch } from "react-icons/fa";
+import { RootState } from "../../redux/store";
 
 const FriendsLayout = () => {
     const token = useSelector((state: RootState) => state.auth.token);
@@ -70,7 +70,7 @@ const FriendsLayout = () => {
                 </div>
 
                 {/* Profile */}
-                <Outlet context={{navigateId, setNavigateId}} />
+                <Outlet context={{ navigateId, setNavigateId }} />
             </div>
         </div>
     );
