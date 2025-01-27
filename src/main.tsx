@@ -13,6 +13,7 @@ import Loading from "./components/Loading/index.tsx";
 import MoveHistoryModal from "./components/MoveHistoryModal/index.tsx";
 import "./index.css";
 import { store } from "./redux/store.ts";
+import { SignalRProvider } from "./contexts/SignalRContext.tsx";
 
 axios.defaults.baseURL = "https://famous-jacquenette-my-personal-project-c6376a3e.koyeb.app/";
 // axios.defaults.baseURL = "http://localhost:5275/";
@@ -22,17 +23,19 @@ axios.defaults.headers.post["Content-Type"] = "application/json";
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
         <Provider store={store}>
-            <GoogleOAuthProvider
-                clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
-            >
-                <BrowserRouter>
-                    <App />
-                    <Loading />
-                    <InitialAlert />
-                    <ToastContainer />
-                    <MoveHistoryModal />
-                </BrowserRouter>
-            </GoogleOAuthProvider>
+            <SignalRProvider>
+                <GoogleOAuthProvider
+                    clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
+                >
+                    <BrowserRouter>
+                        <App />
+                        <Loading />
+                        <InitialAlert />
+                        <ToastContainer />
+                        <MoveHistoryModal />
+                    </BrowserRouter>
+                </GoogleOAuthProvider>
+            </SignalRProvider>
         </Provider>
     </React.StrictMode>
 );

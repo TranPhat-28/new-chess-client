@@ -1,19 +1,23 @@
 import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
-import { useEffect } from "react";
-import { FaChessKing, FaFacebookF, FaRegCircleXmark } from "react-icons/fa6";
-import { useNavigate } from "react-router-dom";
-import { hideLoading, showCustomAlert, showLoading } from "../../utilities";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
-import { setGameIsInitialized } from "../../redux/features/initGameSlice";
 import { jwtDecode } from "jwt-decode";
+import { useContext, useEffect } from "react";
+import { FaChessKing, FaFacebookF, FaRegCircleXmark } from "react-icons/fa6";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { ITokenData } from "../../interfaces";
 import { setAuth } from "../../redux/features/authSlice";
-import { toast } from "react-toastify";
+import { setGameIsInitialized } from "../../redux/features/initGameSlice";
+import { RootState } from "../../redux/store";
+import { hideLoading, showCustomAlert, showLoading } from "../../utilities";
+import SignalRContext from "../../contexts/SignalRContext";
 
 const LoginPage = () => {
     const navigate = useNavigate();
+
+    // Context Signal R
+    const signalRContext = useContext(SignalRContext);
 
     // Redux
     const dispatch = useDispatch();
@@ -116,6 +120,8 @@ const LoginPage = () => {
                             token: response.data.data,
                         })
                     );
+                    // Init SignalR
+                    signalRContext?.initializeHub(response.data.data);
                     toast.success("Login successfull");
                 } else {
                     showLoginError("Login failed", response.data.message);
