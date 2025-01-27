@@ -27,7 +27,7 @@ const FriendsLayout = () => {
     );
 
     // Friend online statuses - live data
-    const [onlineUsers, setOnlineUsers] = useState<string[] | null>(null);
+    const [onlineFriends, setOnlineFriends] = useState<string[] | null>(null);
 
     // Navigation ID for reloading
     const [navigateId, setNavigateId] = useState<number>(0);
@@ -51,7 +51,7 @@ const FriendsLayout = () => {
                 }
             })
             .then((data) => {
-                setOnlineUsers(data); // Set the online users after fetching from the hub
+                setOnlineFriends(data); // Set the online users after fetching from the hub
             })
             .catch((error) => {
                 console.error("Error:", error);
@@ -65,7 +65,7 @@ const FriendsLayout = () => {
         if (friendsHub) {
             // Define the callback
             const handleOnlineUsers = (playersList: string[]) => {
-                setOnlineUsers(playersList);
+                setOnlineFriends(playersList);
             };
 
             // Register the callback
@@ -114,7 +114,9 @@ const FriendsLayout = () => {
                 </div>
 
                 {/* Profile */}
-                <Outlet context={{ navigateId, setNavigateId }} />
+                <Outlet
+                    context={{ navigateId, setNavigateId, onlineFriends }}
+                />
             </div>
         </div>
     );

@@ -9,7 +9,8 @@ import { IFriendDetailFull, IFriendOutletContext } from "../../interfaces";
 import { FaRegSadCry } from "react-icons/fa";
 
 const FriendDetail = () => {
-    const { navigateId, setNavigateId } = useOutletContext<IFriendOutletContext>();
+    const { navigateId, setNavigateId, onlineFriends } =
+        useOutletContext<IFriendOutletContext>();
     const { id } = useParams();
     const token = useSelector((state: RootState) => state.auth.token);
     const navigate = useNavigate();
@@ -102,8 +103,36 @@ const FriendDetail = () => {
                             </p>
                             <p className="ps-1">Rank {data.rank}</p>
                             <div className="px-2 mt-2 flex gap-2 bg-base-100 shadow-lg rounded-lg items-center w-fit">
-                                <div className="h-3 w-3 bg-green-500 rounded-full"></div>
-                                <span className="text-sm">Online</span>
+                                {/* If not loaded, status should be unknown */}
+                                {onlineFriends === null && (
+                                    <span className="text-sm">Unknown</span>
+                                )}
+                                {/* Display online status badge */}
+                                {onlineFriends !== null &&
+                                    data !== null &&
+                                    onlineFriends.includes(
+                                        data.name.trim()
+                                    ) && (
+                                        <>
+                                            <div className="h-3 w-3 bg-green-500 rounded-full"></div>
+                                            <span className="text-sm">
+                                                Online
+                                            </span>
+                                        </>
+                                    )}
+                                {/* Display offline status badge */}
+                                {onlineFriends !== null &&
+                                    data !== null &&
+                                    !onlineFriends.includes(
+                                        data.name.trim()
+                                    ) && (
+                                        <>
+                                            <div className="h-3 w-3 bg-gray-500 rounded-full"></div>
+                                            <span className="text-sm">
+                                                Offline
+                                            </span>
+                                        </>
+                                    )}
                             </div>
                         </div>
                     </div>

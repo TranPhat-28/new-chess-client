@@ -4,7 +4,6 @@ import {
     HubConnectionState,
 } from "@microsoft/signalr";
 import { createContext, ReactNode, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 // Type
@@ -20,7 +19,6 @@ const SignalRContext = createContext<SignalRContextType | undefined>(undefined);
 
 // Provider
 export const SignalRProvider = ({ children }: { children: ReactNode }) => {
-    const navigate = useNavigate();
     // The hub
     const [hub, setHub] = useState<HubConnection | null>(null);
 
@@ -39,7 +37,6 @@ export const SignalRProvider = ({ children }: { children: ReactNode }) => {
                     setHub(connection);
                 })
                 .catch((err) => {
-                    navigate("/");
                     toast.error("Cannot establish hub connection");
                     console.log("Error trying to start hub: ", err);
                 });
@@ -49,7 +46,6 @@ export const SignalRProvider = ({ children }: { children: ReactNode }) => {
     const stopHub = () => {
         if (hub?.state === HubConnectionState.Connected) {
             hub.stop().catch((err) => {
-                navigate("/");
                 toast.error("Cannot stop hub connection");
                 console.log("Error trying to stop hub: ", err);
             });
@@ -66,6 +62,7 @@ export const SignalRProvider = ({ children }: { children: ReactNode }) => {
             const users = await hub.invoke("GetCurrentOnlineFriends");
             return users;
         } catch (err) {
+            console.log(err);
             throw new Error("Cannot get hub data");
         }
     };
