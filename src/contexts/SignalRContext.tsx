@@ -21,11 +21,15 @@ const SignalRContext = createContext<SignalRContextType | undefined>(undefined);
 export const SignalRProvider = ({ children }: { children: ReactNode }) => {
     // The hub
     const [hub, setHub] = useState<HubConnection | null>(null);
+    // -------CHANGE FOR DEPLOYMENT----------
+    // const localHubUrl = "http://localhost:5275";
+    const deployHubUrl =
+        "https://famous-jacquenette-my-personal-project-c6376a3e.koyeb.app";
 
     const initializeHub = (token: string) => {
         if (!hub) {
             const connection = new HubConnectionBuilder()
-                .withUrl("http://localhost:5275/hubs/main", {
+                .withUrl(deployHubUrl + "/hubs/main", {
                     accessTokenFactory: () => token,
                 })
                 .withAutomaticReconnect()

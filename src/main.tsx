@@ -15,6 +15,7 @@ import "./index.css";
 import { store } from "./redux/store.ts";
 import { SignalRProvider } from "./contexts/SignalRContext.tsx";
 
+// -------CHANGE FOR DEPLOYMENT----------
 axios.defaults.baseURL = "https://famous-jacquenette-my-personal-project-c6376a3e.koyeb.app/";
 // axios.defaults.baseURL = "http://localhost:5275/";
 
