@@ -81,3 +81,16 @@
         grid-template-rows: auto minmax(0, 1fr);
     }
 }
+
+@layer utilities {
+    @keyframes small-ping {
+        75%, 100% {
+            transform: scale(1.2); /* Smaller radius */
+            opacity: 0;
+        }
+    }
+
+    .animate-small-ping {
+        animation: small-ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+}

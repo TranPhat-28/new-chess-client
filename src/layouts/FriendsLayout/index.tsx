@@ -27,7 +27,7 @@ const FriendsLayout = () => {
     );
 
     // Friend online statuses - live data
-    const [onlineFriends, setOnlineFriends] = useState<string[] | null>(null);
+    const [onlineFriends, setOnlineFriends] = useState<number[] | null>(null);
 
     // Navigation ID for reloading
     const [navigateId, setNavigateId] = useState<number>(0);
@@ -64,7 +64,7 @@ const FriendsLayout = () => {
         // Setup hub listener
         if (friendsHub) {
             // Define the callback
-            const handleOnlineUsers = (playersList: string[]) => {
+            const handleOnlineUsers = (playersList: number[]) => {
                 setOnlineFriends(playersList);
             };
 

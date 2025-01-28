@@ -110,11 +110,9 @@ const FriendDetail = () => {
                                 {/* Display online status badge */}
                                 {onlineFriends !== null &&
                                     data !== null &&
-                                    onlineFriends.includes(
-                                        data.name.trim()
-                                    ) && (
+                                    onlineFriends.includes(data.id) && (
                                         <>
-                                            <div className="h-3 w-3 bg-green-500 animate-ping rounded-full"></div>
+                                            <div className="h-3 w-3 bg-green-500 animate-small-ping rounded-full"></div>
                                             <span className="text-sm">
                                                 Online
                                             </span>
@@ -123,9 +121,7 @@ const FriendDetail = () => {
                                 {/* Display offline status badge */}
                                 {onlineFriends !== null &&
                                     data !== null &&
-                                    !onlineFriends.includes(
-                                        data.name.trim()
-                                    ) && (
+                                    !onlineFriends.includes(data.id) && (
                                         <>
                                             <div className="h-3 w-3 bg-gray-500 rounded-full"></div>
                                             <span className="text-sm">

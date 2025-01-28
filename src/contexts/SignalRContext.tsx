@@ -11,7 +11,7 @@ type SignalRContextType = {
     hub: HubConnection | null;
     initializeHub: (token: string) => void;
     stopHub: () => void;
-    fetchOnlineFriends: () => Promise<string[]>;
+    fetchOnlineFriends: () => Promise<number[]>;
 };
 
 // Context
@@ -27,7 +27,6 @@ export const SignalRProvider = ({ children }: { children: ReactNode }) => {
     // "https://famous-jacquenette-my-personal-project-c6376a3e.koyeb.app";
 
     const initializeHub = (token: string) => {
-        console.log("Hub state ", hub);
         if (!hub) {
             const connection = new HubConnectionBuilder()
                 .withUrl(localHubUrl + "/hubs/main", {
@@ -42,7 +41,7 @@ export const SignalRProvider = ({ children }: { children: ReactNode }) => {
                     setHub(connection);
                 })
                 .catch((err) => {
-                    toast.error("Cannot establish hub connection");
+                    toast.error("[Main Connection] Cannot establish hub connection");
                     console.log("Error trying to start hub: ", err);
                 });
         }
@@ -56,14 +55,14 @@ export const SignalRProvider = ({ children }: { children: ReactNode }) => {
                     setHub(null);
                 })
                 .catch((err) => {
-                    toast.error("Cannot stop hub connection");
+                    toast.error("[Main Connection] Cannot terminate hub connection");
                     console.log("Error trying to stop hub: ", err);
                 });
         }
     };
 
     // Client invoke this method on the server
-    const fetchOnlineFriends = async (): Promise<string[]> => {
+    const fetchOnlineFriends = async (): Promise<number[]> => {
         if (!hub) {
             throw new Error("Hub connection is lost");
         }
