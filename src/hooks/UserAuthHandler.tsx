@@ -11,12 +11,18 @@ import SignalRContext from "../contexts/SignalRContext";
 const useUserAuth = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const signalRContext = useContext(SignalRContext);
+    // Context Signal R
+    const { mainConnectionHubProvider } = useContext(SignalRContext);
 
     const HandleLogout = () => {
         dispatch(removeAuth());
         dispatch(removeUserData());
-        signalRContext?.stopHub();
+        if (!mainConnectionHubProvider) {
+            toast.error("Hub is not initialized");
+            console.log("[MainConnectionHub] Hub is not initialized");
+        } else {
+            mainConnectionHubProvider.stopAndDestroy();
+        }
         navigate("/");
         toast.success("Logout successful");
     };

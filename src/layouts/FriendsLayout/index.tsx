@@ -4,19 +4,17 @@ import { FaRegSadCry, FaSearch } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { Outlet, useNavigate } from "react-router-dom";
 import { HashLoader } from "react-spinners";
+import { toast } from "react-toastify";
 import { IFriendDetailShort } from "../../interfaces";
 import { RootState } from "../../redux/store";
 import SignalRContext from "../../contexts/SignalRContext";
-import { toast } from "react-toastify";
 
 const FriendsLayout = () => {
     // Access token
     const token = useSelector((state: RootState) => state.auth.token);
 
-    // SignalR
-    const signalRContext = useContext(SignalRContext);
-    const friendsHub = signalRContext?.hub;
-    const fetchOnlineFriends = signalRContext?.fetchOnlineFriends;
+    // Context Signal R
+    const { mainConnectionHubProvider } = useContext(SignalRContext);
 
     // Loading
     const [loading, setLoading] = useState<boolean>(true);
@@ -42,12 +40,13 @@ const FriendsLayout = () => {
             })
             .then((response) => {
                 setFriendList(response.data.data);
-                // Check if not undefined to remove lint warning
-                if (fetchOnlineFriends !== undefined) {
-                    // Chain fetchOnlineFriends after Axios completes
-                    return fetchOnlineFriends();
+
+                if (!mainConnectionHubProvider) {
+                    toast.error("Hub is not initialized");
+                    console.log("[MainConnectionHub] Hub is not initialized");
+                    return Promise.resolve(null);
                 } else {
-                    throw new Error("Operation is undefined");
+                    return mainConnectionHubProvider.fetchOnlinePlayers();
                 }
             })
             .then((data) => {
@@ -62,21 +61,37 @@ const FriendsLayout = () => {
             });
 
         // Setup hub listener
-        if (friendsHub) {
-            // Define the callback
-            const handleOnlineUsers = (playersList: number[]) => {
-                setOnlineFriends(playersList);
-            };
+        if (!mainConnectionHubProvider) {
+            toast.error("Hub is not initialized");
+            console.log("[MainConnectionHub] Hub is not initialized");
+        } else {
+            if (!mainConnectionHubProvider.connection) {
+                toast.error(
+                    "Cannot establish hub connection. Some data will be unavailable"
+                );
+                console.log("[MainConnectionHub] No hub connection found ");
+            } else {
+                // Define the callback
+                const handleOnlineUsers = (playersList: number[]) => {
+                    setOnlineFriends(playersList);
+                };
 
-            // Register the callback
-            friendsHub.on("GetOnlineUsers", handleOnlineUsers);
+                // Register the callback
+                mainConnectionHubProvider.connection.on(
+                    "GetOnlineUsers",
+                    handleOnlineUsers
+                );
 
-            // Remove the callback
-            return () => {
-                friendsHub.off("GetOnlineUsers", handleOnlineUsers);
-            };
+                // Remove the callback
+                return () => {
+                    mainConnectionHubProvider.connection?.off(
+                        "GetOnlineUsers",
+                        handleOnlineUsers
+                    );
+                };
+            }
         }
-    }, [navigateId, token, friendsHub, fetchOnlineFriends]);
+    }, [navigateId, token, mainConnectionHubProvider]);
 
     return (
         <div className="page-content-wrapper">

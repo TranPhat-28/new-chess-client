@@ -10,3 +10,4 @@ export * from "./IOutletContext";
 export * from "./IEvent";
 export * from "./INotification";
 export * from "./IUserProfile";
+export * from "./ISignalRContext";

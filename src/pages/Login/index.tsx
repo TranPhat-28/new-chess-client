@@ -17,7 +17,7 @@ const LoginPage = () => {
     const navigate = useNavigate();
 
     // Context Signal R
-    const signalRContext = useContext(SignalRContext);
+    const { mainConnectionHubProvider } = useContext(SignalRContext);
 
     // Redux
     const dispatch = useDispatch();
@@ -121,7 +121,16 @@ const LoginPage = () => {
                         })
                     );
                     // Init SignalR
-                    signalRContext?.initializeHub(response.data.data);
+                    if (!mainConnectionHubProvider) {
+                        toast.error("Hub is not initialized");
+                        console.log(
+                            "[MainConnectionHub] Hub is not initialized"
+                        );
+                    } else {
+                        mainConnectionHubProvider.initializeAndStart(
+                            response.data.data
+                        );
+                    }
                     toast.success("Login successfull");
                 } else {
                     showLoginError("Login failed", response.data.message);

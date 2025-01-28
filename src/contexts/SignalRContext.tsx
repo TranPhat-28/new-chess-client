@@ -5,81 +5,91 @@ import {
 } from "@microsoft/signalr";
 import { createContext, ReactNode, useState } from "react";
 import { toast } from "react-toastify";
+import { ISignalRContext } from "../interfaces";
 
-// Type
-type SignalRContextType = {
-    hub: HubConnection | null;
-    initializeHub: (token: string) => void;
-    stopHub: () => void;
-    fetchOnlineFriends: () => Promise<number[]>;
-};
-
-// Context
-const SignalRContext = createContext<SignalRContextType | undefined>(undefined);
+// Default context value - only need for components trying to access context value from outside of the provider
+const SignalRContext = createContext<ISignalRContext>({
+    mainConnectionHubProvider: null,
+});
 
 // Provider
 export const SignalRProvider = ({ children }: { children: ReactNode }) => {
-    // The hub
-    const [hub, setHub] = useState<HubConnection | null>(null);
     // -------CHANGE FOR DEPLOYMENT----------
-    const localHubUrl = "http://localhost:5275";
-    // const deployHubUrl =
-    // "https://famous-jacquenette-my-personal-project-c6376a3e.koyeb.app";
+    // const baseHubUrl = "http://localhost:5275";
+    const baseHubUrl = "https://famous-jacquenette-my-personal-project-c6376a3e.koyeb.app";
 
-    const initializeHub = (token: string) => {
-        if (!hub) {
+    // -------- MAIN CONNECTION HUB --------
+    const [mainHubConnection, setMainHubConnection] =
+        useState<HubConnection | null>(null);
+
+    const initializeAndStartMainHub = (token: string) => {
+        if (!mainHubConnection) {
+            // Hub builder
             const connection = new HubConnectionBuilder()
-                .withUrl(localHubUrl + "/hubs/main", {
+                .withUrl(baseHubUrl + "/hubs/main", {
                     accessTokenFactory: () => token,
                 })
                 .withAutomaticReconnect()
                 .build();
 
-            connection
-                .start()
+            // Set new hub
+            setMainHubConnection(connection);
+
+            // Start hub
+            connection.start().catch((err) => {
+                toast.error(
+                    "Cannot establish hub connection. Some data will be unavailable"
+                );
+                console.log("[MainConnectionHub] ", err);
+            });
+        }
+    };
+
+    const stopAndDestroyMainHub = () => {
+        if (mainHubConnection?.state === HubConnectionState.Connected) {
+            mainHubConnection
+                .stop()
                 .then(() => {
-                    setHub(connection);
+                    setMainHubConnection(null);
                 })
                 .catch((err) => {
-                    toast.error("[Main Connection] Cannot establish hub connection");
-                    console.log("Error trying to start hub: ", err);
+                    toast.error("Cannot terminate hub connection");
+                    console.log("[MainConnectionHub] ", err);
                 });
         }
     };
 
-    const stopHub = () => {
-        if (hub?.state === HubConnectionState.Connected) {
-            hub.stop()
-                .then(() => {
-                    // Remove the hub
-                    setHub(null);
-                })
-                .catch((err) => {
-                    toast.error("[Main Connection] Cannot terminate hub connection");
-                    console.log("Error trying to stop hub: ", err);
-                });
+    // Null means connection is lost
+    const fetchOnlinePlayers = async (): Promise<number[] | null> => {
+        if (!mainHubConnection) {
+            toast.error("Hub connection is lost");
+            console.log("[MainConnectionHub] Connection is lost");
+            return null;
+        } else {
+            try {
+                const users = await mainHubConnection.invoke(
+                    "GetCurrentOnlineFriends"
+                );
+                return users;
+            } catch (err) {
+                toast.error("Cannot get live hub data");
+                console.log(
+                    "[MainConnectionHub] Cannot invoke server hub method"
+                );
+                return null;
+            }
         }
     };
 
-    // Client invoke this method on the server
-    const fetchOnlineFriends = async (): Promise<number[]> => {
-        if (!hub) {
-            throw new Error("Hub connection is lost");
-        }
-
-        try {
-            const users = await hub.invoke("GetCurrentOnlineFriends");
-            return users;
-        } catch (err) {
-            console.log(err);
-            throw new Error("Cannot get hub data");
-        }
+    const mainConnectionHubProvider = {
+        connection: mainHubConnection,
+        initializeAndStart: initializeAndStartMainHub,
+        stopAndDestroy: stopAndDestroyMainHub,
+        fetchOnlinePlayers: fetchOnlinePlayers,
     };
 
     return (
-        <SignalRContext.Provider
-            value={{ hub, initializeHub, stopHub, fetchOnlineFriends }}
-        >
+        <SignalRContext.Provider value={{ mainConnectionHubProvider }}>
             {children}
         </SignalRContext.Provider>
     );
