@@ -114,7 +114,7 @@ const FriendDetail = () => {
                                         data.name.trim()
                                     ) && (
                                         <>
-                                            <div className="h-3 w-3 bg-green-500 rounded-full"></div>
+                                            <div className="h-3 w-3 bg-green-500 animate-ping rounded-full"></div>
                                             <span className="text-sm">
                                                 Online
                                             </span>
