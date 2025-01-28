@@ -22,14 +22,15 @@ export const SignalRProvider = ({ children }: { children: ReactNode }) => {
     // The hub
     const [hub, setHub] = useState<HubConnection | null>(null);
     // -------CHANGE FOR DEPLOYMENT----------
-    // const localHubUrl = "http://localhost:5275";
-    const deployHubUrl =
-        "https://famous-jacquenette-my-personal-project-c6376a3e.koyeb.app";
+    const localHubUrl = "http://localhost:5275";
+    // const deployHubUrl =
+    // "https://famous-jacquenette-my-personal-project-c6376a3e.koyeb.app";
 
     const initializeHub = (token: string) => {
+        console.log("Hub state ", hub);
         if (!hub) {
             const connection = new HubConnectionBuilder()
-                .withUrl(deployHubUrl + "/hubs/main", {
+                .withUrl(localHubUrl + "/hubs/main", {
                     accessTokenFactory: () => token,
                 })
                 .withAutomaticReconnect()
@@ -49,10 +50,15 @@ export const SignalRProvider = ({ children }: { children: ReactNode }) => {
 
     const stopHub = () => {
         if (hub?.state === HubConnectionState.Connected) {
-            hub.stop().catch((err) => {
-                toast.error("Cannot stop hub connection");
-                console.log("Error trying to stop hub: ", err);
-            });
+            hub.stop()
+                .then(() => {
+                    // Remove the hub
+                    setHub(null);
+                })
+                .catch((err) => {
+                    toast.error("Cannot stop hub connection");
+                    console.log("Error trying to stop hub: ", err);
+                });
         }
     };
 
