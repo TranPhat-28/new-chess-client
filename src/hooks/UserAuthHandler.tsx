@@ -12,16 +12,18 @@ const useUserAuth = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     // Context Signal R
-    const { mainConnectionHubProvider } = useContext(SignalRContext);
+    const { mainConnectionHubProvider, gameLobbyConnectionHubProvider } =
+        useContext(SignalRContext);
 
     const HandleLogout = () => {
         dispatch(removeAuth());
         dispatch(removeUserData());
-        if (!mainConnectionHubProvider) {
-            toast.error("Hub is not initialized");
-            console.log("[MainConnectionHub] Hub is not initialized");
+        if (!mainConnectionHubProvider || !gameLobbyConnectionHubProvider) {
+            toast.error("Some hubs were not initialized");
+            console.log("[LogoutFunction] Some hubs were not initialized");
         } else {
             mainConnectionHubProvider.stopAndDestroy();
+            gameLobbyConnectionHubProvider.stopAndDestroy();
         }
         navigate("/");
         toast.success("Logout successful");

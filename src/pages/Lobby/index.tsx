@@ -7,24 +7,19 @@ import { showCustomAlert } from "../../utilities";
 import { HiUsers } from "react-icons/hi";
 import { RiRobot2Fill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
+import { useContext, useEffect, useState } from "react";
+import SignalRContext from "../../contexts/SignalRContext";
+import { toast } from "react-toastify";
+import { FaRegSadCry } from "react-icons/fa";
+import { TbMoodSadSquint } from "react-icons/tb";
 
 const LobbyPage = () => {
     // const token = useSelector((state: RootState) => state.auth.token);
+    const { gameLobbyConnectionHubProvider } = useContext(SignalRContext);
 
     const navigate = useNavigate();
-    const roomList: IOnlineRoomInfo[] = [
-        { id: 1, host: "John", isPrivate: false, isFull: true },
-        { id: 2, host: "Kate", isPrivate: false, isFull: false },
-        { id: 3, host: "Pete", isPrivate: false, isFull: false },
-        { id: 4, host: "John", isPrivate: false, isFull: false },
-        { id: 5, host: "Smith", isPrivate: true, isFull: true },
-        { id: 6, host: "Will", isPrivate: false, isFull: false },
-        { id: 7, host: "John", isPrivate: false, isFull: false },
-        { id: 8, host: "Kate", isPrivate: true, isFull: false },
-        { id: 9, host: "Jimmy", isPrivate: false, isFull: false },
-        { id: 10, host: "Beast", isPrivate: false, isFull: false },
-        { id: 11, host: "Josh", isPrivate: false, isFull: false },
-    ];
+    // Room list - live data
+    const [roomList, setRoomList] = useState<IOnlineRoomInfo[] | null>(null);
 
     const showTutorial = (
         title: string,
@@ -43,6 +38,24 @@ const LobbyPage = () => {
             false
         );
     };
+
+    useEffect(() => {
+        if (!gameLobbyConnectionHubProvider) {
+            toast.error("Hub is not initialized");
+            console.log("[GameLobyHub] Hub is not initialized");
+        } else {
+            gameLobbyConnectionHubProvider
+                .fetchLobbyList()
+                .then((data) => {
+                    console.log("Hey", data);
+                    setRoomList(data);
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                    toast.error("Failed to fetch some data");
+                });
+        }
+    }, [gameLobbyConnectionHubProvider]);
 
     // const showInputRoomId = () => {
     //     confirmAlert({
@@ -64,7 +77,30 @@ const LobbyPage = () => {
                     </p>
 
                     <div className="bg-base-300 w-full h-full flex flex-col overflow-y-scroll">
-                        {roomList.length > 0 &&
+                        {/* Error cannot fetch live data */}
+                        {roomList === null && (
+                            <div className="m-auto flex flex-col items-center">
+                                <FaRegSadCry size={"6rem"} color={"#9ca3af"} />
+                                <p className="text-gray-400 mt-2">
+                                    Something went wrong
+                                </p>
+                            </div>
+                        )}
+                        {/* No room */}
+                        {roomList && roomList.length === 0 && (
+                            <div className="m-auto flex flex-col items-center">
+                                <TbMoodSadSquint
+                                    size={"6rem"}
+                                    color={"#9ca3af"}
+                                />
+                                <p className="text-gray-400 mt-2">
+                                    Wow, so empty
+                                </p>
+                            </div>
+                        )}
+                        {/* Room list */}
+                        {roomList &&
+                            roomList.length > 0 &&
                             roomList.map((room) => (
                                 <LobbyRoomItem key={room.id} roomInfo={room} />
                             ))}
