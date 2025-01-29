@@ -17,7 +17,8 @@ const LoginPage = () => {
     const navigate = useNavigate();
 
     // Context Signal R
-    const { mainConnectionHubProvider } = useContext(SignalRContext);
+    const { mainConnectionHubProvider, gameLobbyConnectionHubProvider } =
+        useContext(SignalRContext);
 
     // Redux
     const dispatch = useDispatch();
@@ -113,25 +114,32 @@ const LoginPage = () => {
                 if (response.data.isSuccess) {
                     // Decode the JWT for data
                     const data: ITokenData = jwtDecode(response.data.data);
-                    // Set data to Redux
-                    dispatch(
-                        setAuth({
-                            email: data.email,
-                            token: response.data.data,
-                        })
-                    );
-                    // Init SignalR
-                    if (!mainConnectionHubProvider) {
-                        toast.error("Hub is not initialized");
+
+                    // Establish Signal R connection first then redirect
+                    if ( !mainConnectionHubProvider || !gameLobbyConnectionHubProvider) {
+                        toast.error("Some hubs were not initialized");
                         console.log(
-                            "[MainConnectionHub] Hub is not initialized"
+                            "[LoginPage] Some hubs were not initialized"
                         );
                     } else {
-                        mainConnectionHubProvider.initializeAndStart(
-                            response.data.data
-                        );
+                        Promise.all([
+                            mainConnectionHubProvider.initializeAndStart(response.data.data),
+                            gameLobbyConnectionHubProvider.initializeAndStart(response.data.data),
+                        ])
+                        .then(() => {
+                            // Set data to Redux and redirect
+                            dispatch(
+                                setAuth({
+                                    email: data.email,
+                                    token: response.data.data,
+                                })
+                            );
+                            toast.success("Login successful");
+                        })
+                        .catch(() => {
+                            toast.error("Failed to establish some hub connections. Some data will be unavalable");
+                        });
                     }
-                    toast.success("Login successfull");
                 } else {
                     showLoginError("Login failed", response.data.message);
                 }
