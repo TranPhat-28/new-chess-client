@@ -25,6 +25,7 @@ import { RootState } from "./redux/store";
 import FriendDetail from "./components/FriendDetail";
 import FriendDetailsPlaceholder from "./components/FriendDetailsPlaceholder";
 import EventDetailsPlaceholder from "./components/EventDetailsPlaceholder";
+import MultiplayerRoomSetupPage from "./pages/MultiplayerRoomSetup";
 
 function App() {
     const user = useSelector((state: RootState) => state.auth.email);
@@ -55,12 +56,12 @@ function App() {
                     <Route path="lobby" element={<LobbyPage />} />
                     <Route path="social" element={<SocialPage />} />
                     <Route path="profile" element={<ProfilePage />} />
+                    <Route path="notification" element={<NotificationPage />} />
+                    <Route path="shop" element={<ShopPage />} />
                     <Route path="event" element={<EventsLayout />}>
                         <Route index element={<EventDetailsPlaceholder />} />
                         <Route path=":id" element={<div>Event Detail</div>} />
                     </Route>
-                    <Route path="notification" element={<NotificationPage />} />
-                    <Route path="shop" element={<ShopPage />} />
                     <Route path="friends" element={<FriendsLayout />}>
                         <Route index element={<FriendDetailsPlaceholder />} />
                         <Route path=":id" element={<FriendDetail />} />
@@ -73,6 +74,14 @@ function App() {
                         element={<PracticeModeLoadingPage />}
                     />
                     <Route path="game" element={<PracticeModePage />} />
+                </Route>
+
+                <Route path="/multiplayer">
+                    <Route
+                        path="setup"
+                        element={<MultiplayerRoomSetupPage />}
+                    />
+                    {/* <Route path="game" element={<PracticeModePage />} /> */}
                 </Route>
 
                 {/* )} */}

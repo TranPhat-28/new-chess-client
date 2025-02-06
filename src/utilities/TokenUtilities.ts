@@ -9,3 +9,12 @@ export const GetAuthIdFromToken = (token: string): string => {
         return "";
     }
 };
+
+export const GetAuthNameFromToken = (token: string): string => {
+    if (token !== null) {
+        const data: ITokenData = jwtDecode(token);
+        return data.unique_name
+    } else {
+        return "";
+    }
+};

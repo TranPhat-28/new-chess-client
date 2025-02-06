@@ -14,7 +14,6 @@ import { FaRegSadCry } from "react-icons/fa";
 import { TbMoodSadSquint } from "react-icons/tb";
 
 const LobbyPage = () => {
-    // const token = useSelector((state: RootState) => state.auth.token);
     const { gameLobbyConnectionHubProvider } = useContext(SignalRContext);
 
     const navigate = useNavigate();
@@ -47,7 +46,6 @@ const LobbyPage = () => {
             gameLobbyConnectionHubProvider
                 .fetchLobbyList()
                 .then((data) => {
-                    console.log("Hey", data);
                     setRoomList(data);
                 })
                 .catch((error) => {
