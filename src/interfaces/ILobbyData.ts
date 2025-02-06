@@ -1,8 +1,12 @@
 export interface IOnlineRoomInfo {
     id: string;
-    hostName: string;
-    hostId: string;
+    host: IRoomPlayer;
+    player: IRoomPlayer | null;
     isPrivate: boolean;
     isPlaying: boolean;
-    isFull: boolean;
+}
+
+export interface IRoomPlayer {
+    id: number;
+    name: string;
 }

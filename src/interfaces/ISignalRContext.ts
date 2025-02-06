@@ -8,7 +8,11 @@ export interface ISignalRContext {
         fetchOnlinePlayers: () => Promise<number[] | null>
     };
     gameLobbyConnectionHubProvider: null | IHubContext & {
-        fetchLobbyList: () => Promise<IOnlineRoomInfo[] | null>
+        fetchLobbyList: () => Promise<IOnlineRoomInfo[] | null>,
+        createGameRoom: (
+            isPublicRoom: boolean,
+            roomPassword: string
+        ) => Promise<string | null>
     };
 }
 

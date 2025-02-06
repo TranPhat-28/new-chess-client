@@ -17,11 +17,21 @@ const MultiplayerRoomSetupPage = () => {
         if (!isPublicRoom) {
             toast.error("This feature will be implemented soon");
         } else {
-            const roomId = await gameLobbyConnectionHubProvider?.createGameRoom(
-                isPublicRoom,
-                roomPassword
-            );
-            toast.success(`Room ${roomId} created`);
+            if (!gameLobbyConnectionHubProvider) {
+                toast.error("Hub is not initialized");
+                console.log("[GameLobbyHub] Hub is not initialized");
+            } else {
+                const roomId =
+                    await gameLobbyConnectionHubProvider.createGameRoom(
+                        isPublicRoom,
+                        roomPassword
+                    );
+                if (!roomId) {
+                    toast.error("Cannot create game room at the moment");
+                } else {
+                    toast.success(`Room ${roomId} created`);
+                }
+            }
         }
     };
 

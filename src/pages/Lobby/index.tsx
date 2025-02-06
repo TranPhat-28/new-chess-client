@@ -1,9 +1,7 @@
-// import { confirmAlert } from "react-confirm-alert";
 import { FaChess } from "react-icons/fa6";
 import LobbyRoomItem from "../../components/LobbyRoomItem";
 import { IOnlineRoomInfo } from "../../interfaces";
 import { showCustomAlert } from "../../utilities";
-// import JoinOnlineRoomAlert from "../../components/JoinOnlineRoomAlert";
 import { HiUsers } from "react-icons/hi";
 import { RiRobot2Fill } from "react-icons/ri";
 import { useNavigate } from "react-router-dom";
@@ -55,15 +53,39 @@ const LobbyPage = () => {
         }
     }, [gameLobbyConnectionHubProvider]);
 
-    // const showInputRoomId = () => {
-    //     confirmAlert({
-    //         overlayClassName: "bg-overlay-important",
-    //         closeOnClickOutside: false,
-    //         customUI: ({ onClose }) => {
-    //             return <JoinOnlineRoomAlert onClose={onClose} />;
-    //         },
-    //     });
-    // };
+    useEffect(() => {
+        // Setup hub listener
+        if (!gameLobbyConnectionHubProvider) {
+            toast.error("Hub is not initialized");
+            console.log("[GameLobbyHub] Hub is not initialized");
+        } else {
+            if (!gameLobbyConnectionHubProvider.connection) {
+                toast.error(
+                    "Cannot establish hub connection. Some data will be unavailable"
+                );
+                console.log("[GameLobbyHub] No hub connection found ");
+            } else {
+                // Define the callback
+                const handleNewGameRoom = (gameList: IOnlineRoomInfo[]) => {
+                    setRoomList(gameList);
+                };
+
+                // Register the callback
+                gameLobbyConnectionHubProvider.connection.on(
+                    "NewRoomCreated",
+                    handleNewGameRoom
+                );
+
+                // Remove the callback
+                return () => {
+                    gameLobbyConnectionHubProvider.connection?.off(
+                        "GetOnlineUsers",
+                        handleNewGameRoom
+                    );
+                };
+            }
+        }
+    }, [])
 
     return (
         <div className="page-content-wrapper">

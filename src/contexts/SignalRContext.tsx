@@ -18,7 +18,7 @@ export const SignalRProvider = ({ children }: { children: ReactNode }) => {
     // -------CHANGE FOR DEPLOYMENT----------
     const baseHubUrl = "http://localhost:5275";
     // const baseHubUrl =
-        // "https://famous-jacquenette-my-personal-project-c6376a3e.koyeb.app";
+    // "https://famous-jacquenette-my-personal-project-c6376a3e.koyeb.app";
 
     // -------- MAIN CONNECTION HUB --------
     const [mainHubConnection, setMainHubConnection] =
@@ -143,7 +143,6 @@ export const SignalRProvider = ({ children }: { children: ReactNode }) => {
             return null;
         } else {
             try {
-                console.log("Invoke: ", gameLobbyHubConnection.state)
                 const roomsList = await gameLobbyHubConnection.invoke(
                     "GetCurrentLobbyGameList"
                 );
@@ -157,11 +156,36 @@ export const SignalRProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+    const createGameRoom = async (
+        isPublicRoom: boolean,
+        roomPassword: string
+    ): Promise<string | null> => {
+        if (!gameLobbyHubConnection) {
+            toast.error("Hub connection is lost");
+            console.log("[GameLobbyHub] Connection is lost");
+            return null;
+        } else {
+            try {
+                const roomsId = await gameLobbyHubConnection.invoke(
+                    "CreateGameRoom",
+                    { isPublicRoom, roomPassword }
+                );
+                return roomsId;
+            } catch (err) {
+                toast.error("Cannot create game room at the moment");
+                console.log("[GameLobbyHub] Cannot invoke server hub method");
+                console.log(err);
+                return null;
+            }
+        }
+    };
+
     const gameLobbyConnectionHubProvider = {
         connection: gameLobbyHubConnection,
         initializeAndStart: initializeAndStartGameLobbyHub,
         stopAndDestroy: stopAndDestroyGameLobbyHub,
         fetchLobbyList: fetchLobbyList,
+        createGameRoom: createGameRoom,
     };
 
     return (

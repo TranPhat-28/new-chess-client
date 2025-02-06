@@ -7,7 +7,7 @@ const LobbyRoomItem = ({ roomInfo }: { roomInfo: IOnlineRoomInfo }) => {
         <div className="bg-base-200 flex-shrink-0 flex justify-between p-4">
             <div>
                 <p className="font-bold text-xl">Room {roomInfo.id}</p>
-                <p>Host by {roomInfo.hostName}</p>
+                <p>Host by {roomInfo.host.name}</p>
                 <div className="mt-2 flex gap-2 text-gray-400">
                     {roomInfo.isPrivate === false && <FaGlobeAmericas />}
                     {roomInfo.isPrivate === true && <FaLock />}
@@ -19,7 +19,7 @@ const LobbyRoomItem = ({ roomInfo }: { roomInfo: IOnlineRoomInfo }) => {
             <div className="flex items-center">
                 <button
                     className={`btn btn-primary ${
-                        roomInfo.isFull ? "btn-disabled" : "btn-outline"
+                        (roomInfo.host && roomInfo.player) ? "btn-disabled" : "btn-outline"
                     } h-fit`}
                 >
                     Join
