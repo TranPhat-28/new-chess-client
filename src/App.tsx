@@ -11,6 +11,7 @@ import NotificationPage from "./pages/Notification";
 import SocialPage from "./pages/Social";
 import PracticeModePage from "./pages/PracticeMode";
 import PracticeModeLoadingPage from "./pages/PracticeModeLoading";
+import MultiplayerGamePage from "./pages/MultiplayerGame";
 
 // Layouts
 import MainLayout from "./layouts/MainLayout";
@@ -81,7 +82,7 @@ function App() {
                         path="setup"
                         element={<MultiplayerRoomSetupPage />}
                     />
-                    {/* <Route path="game" element={<PracticeModePage />} /> */}
+                    <Route path=":id" element={<MultiplayerGamePage />} />
                 </Route>
 
                 {/* )} */}

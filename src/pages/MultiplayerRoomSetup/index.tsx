@@ -4,8 +4,10 @@ import { GetAuthNameFromToken } from "../../utilities";
 import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import SignalRContext from "../../contexts/SignalRContext";
+import { useNavigate } from "react-router-dom";
 
 const MultiplayerRoomSetupPage = () => {
+    const navigate = useNavigate();
     const token = useSelector((state: RootState) => state.auth.token);
     const [name, setName] = useState<string>("");
     const [isPublicRoom, setIsPublicRoom] = useState<boolean>(true);
@@ -29,7 +31,7 @@ const MultiplayerRoomSetupPage = () => {
                 if (!roomId) {
                     toast.error("Cannot create game room at the moment");
                 } else {
-                    toast.success(`Room ${roomId} created`);
+                    navigate(`/multiplayer/${roomId}`);
                 }
             }
         }
@@ -52,18 +54,17 @@ const MultiplayerRoomSetupPage = () => {
 
                 <div className="join w-3/4 mt-6">
                     <button className="join-item btn w-1/4">Host</button>
-                    <select className="join-item select select-bordered w-3/4">
-                        <option selected disabled>
-                            {name}
-                        </option>
-                    </select>
+                    <input
+                        className="join-item input input-bordered w-3/4"
+                        value={name}
+                        disabled
+                    />
                 </div>
                 <div className="join w-3/4 mt-2">
                     <button className="join-item btn w-1/4">Type</button>
                     <select
                         className="join-item select select-bordered w-full"
                         value={isPublicRoom ? "Public" : "Private"}
-                        defaultValue={"Public"}
                         onChange={(e) =>
                             setIsPublicRoom(e.target.value === "Public")
                         }
