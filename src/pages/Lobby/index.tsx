@@ -1,15 +1,15 @@
+import { useContext, useEffect, useState } from "react";
+import { FaRegSadCry } from "react-icons/fa";
 import { FaChess } from "react-icons/fa6";
-import LobbyRoomItem from "../../components/LobbyRoomItem";
-import { IOnlineRoomInfo } from "../../interfaces";
-import { showCustomAlert } from "../../utilities";
 import { HiUsers } from "react-icons/hi";
 import { RiRobot2Fill } from "react-icons/ri";
-import { useNavigate } from "react-router-dom";
-import { useContext, useEffect, useState } from "react";
-import SignalRContext from "../../contexts/SignalRContext";
-import { toast } from "react-toastify";
-import { FaRegSadCry } from "react-icons/fa";
 import { TbMoodSadSquint } from "react-icons/tb";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import LobbyRoomItem from "../../components/LobbyRoomItem";
+import SignalRContext from "../../contexts/SignalRContext";
+import { IOnlineRoomInfo } from "../../interfaces";
+import { showCustomAlert } from "../../utilities";
 
 const LobbyPage = () => {
     const { gameLobbyConnectionHubProvider } = useContext(SignalRContext);
@@ -44,7 +44,11 @@ const LobbyPage = () => {
             gameLobbyConnectionHubProvider
                 .fetchLobbyList()
                 .then((data) => {
-                    setRoomList(data);
+                    if (data) {
+                        setRoomList(data);
+                    } else {
+                        throw new Error("Room list data is null");
+                    }
                 })
                 .catch((error) => {
                     console.error("Error:", error);
@@ -70,13 +74,8 @@ const LobbyPage = () => {
                     setRoomList(gameList);
                 };
 
-                const handleRemoveGameRoom = (removedRoomId: string) => {
-                    if (roomList) {
-                        const updatedRoomList = roomList.filter(
-                            (room) => room.id !== removedRoomId
-                        );
-                        setRoomList([...updatedRoomList]);
-                    }
+                const handleRemoveGameRoom = (gameList: IOnlineRoomInfo[]) => {
+                    setRoomList(gameList);
                 };
 
                 // Register the callback
@@ -93,7 +92,7 @@ const LobbyPage = () => {
                 // Remove the callback
                 return () => {
                     gameLobbyConnectionHubProvider.connection?.off(
-                        "GetOnlineUsers",
+                        "NewRoomCreated",
                         handleNewGameRoom
                     );
 
