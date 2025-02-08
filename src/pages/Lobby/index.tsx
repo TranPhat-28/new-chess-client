@@ -70,10 +70,24 @@ const LobbyPage = () => {
                     setRoomList(gameList);
                 };
 
+                const handleRemoveGameRoom = (removedRoomId: string) => {
+                    if (roomList) {
+                        const updatedRoomList = roomList.filter(
+                            (room) => room.id !== removedRoomId
+                        );
+                        setRoomList([...updatedRoomList]);
+                    }
+                };
+
                 // Register the callback
                 gameLobbyConnectionHubProvider.connection.on(
                     "NewRoomCreated",
                     handleNewGameRoom
+                );
+
+                gameLobbyConnectionHubProvider.connection.on(
+                    "RoomRemoved",
+                    handleRemoveGameRoom
                 );
 
                 // Remove the callback
@@ -82,10 +96,15 @@ const LobbyPage = () => {
                         "GetOnlineUsers",
                         handleNewGameRoom
                     );
+
+                    gameLobbyConnectionHubProvider.connection?.off(
+                        "RoomRemoved",
+                        handleRemoveGameRoom
+                    );
                 };
             }
         }
-    }, [])
+    }, []);
 
     return (
         <div className="page-content-wrapper">
