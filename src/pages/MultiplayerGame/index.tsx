@@ -6,21 +6,26 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useEffect } from "react";
 import { hideLoading, showLoading } from "../../utilities";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { IRoomInfoResponse } from "../../interfaces";
+import { RootState } from "../../redux/store";
 
 const MultiplayerGamePage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const token = useSelector((state: RootState) => state.auth.token);
 
     // To prevent entering invalid room, verify room with server first
     const { isPending, isError, data, error } = useQuery({
         queryKey: ["roomIsValid"],
         queryFn: async () => {
             const response = await axios.get<IRoomInfoResponse>(
-                `/api/Multiplayer/${id}`
+                `/api/Multiplayer/${id}`,
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
             );
             return response.data;
         },
