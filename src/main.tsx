@@ -14,6 +14,7 @@ import MoveHistoryModal from "./components/MoveHistoryModal/index.tsx";
 import "./index.css";
 import { store } from "./redux/store.ts";
 import { SignalRProvider } from "./contexts/SignalRContext.tsx";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // -------CHANGE FOR DEPLOYMENT----------
 axios.defaults.baseURL = "https://famous-jacquenette-my-personal-project-c6376a3e.koyeb.app/";
@@ -21,22 +22,26 @@ axios.defaults.baseURL = "https://famous-jacquenette-my-personal-project-c6376a3
 
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
+const queryClient = new QueryClient();
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
     <React.StrictMode>
         <Provider store={store}>
-            <SignalRProvider>
-                <GoogleOAuthProvider
-                    clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
-                >
-                    <BrowserRouter>
-                        <App />
-                        <Loading />
-                        <InitialAlert />
-                        <ToastContainer />
-                        <MoveHistoryModal />
-                    </BrowserRouter>
-                </GoogleOAuthProvider>
-            </SignalRProvider>
+            <QueryClientProvider client={queryClient}>
+                <SignalRProvider>
+                    <GoogleOAuthProvider
+                        clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
+                    >
+                        <BrowserRouter>
+                            <App />
+                            <Loading />
+                            <InitialAlert />
+                            <ToastContainer />
+                            <MoveHistoryModal />
+                        </BrowserRouter>
+                    </GoogleOAuthProvider>
+                </SignalRProvider>
+            </QueryClientProvider>
         </Provider>
     </React.StrictMode>
 );
