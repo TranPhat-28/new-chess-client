@@ -8,17 +8,21 @@ export interface ISignalRContext {
         fetchOnlinePlayers: () => Promise<number[] | null>
     };
     gameLobbyConnectionHubProvider: null | IHubContext & {
-        fetchLobbyList: () => Promise<IOnlineRoomInfo[] | null>,
-        createGameRoom: (
-            isPublicRoom: boolean,
-            roomPassword: string
-        ) => Promise<string | null>
+        fetchLobbyList: () => Promise<IOnlineRoomInfo[] | null>
     };
+    multiplayerRoomConnectionHubProvider: null | IRoomConnectionHubContext
 }
 
 // Generic Hub Context
 export interface IHubContext {
     connection: HubConnection | null;
     initializeAndStart: (token: string) => Promise<void>;
+    stopAndDestroy: () => void;
+}
+
+// Multiplayer Room Hub Context
+export interface IRoomConnectionHubContext {
+    connection: HubConnection | null;
+    initializeAndStart: (token: string, roomId: string) => Promise<void>;
     stopAndDestroy: () => void;
 }

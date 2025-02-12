@@ -11,6 +11,7 @@ import { IOnlineRoomInfo, ISignalRContext } from "../interfaces";
 const SignalRContext = createContext<ISignalRContext>({
     mainConnectionHubProvider: null,
     gameLobbyConnectionHubProvider: null,
+    multiplayerRoomConnectionHubProvider: null,
 });
 
 // Provider
@@ -156,36 +157,60 @@ export const SignalRProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    const createGameRoom = async (
-        isPublicRoom: boolean,
-        roomPassword: string
-    ): Promise<string | null> => {
-        if (!gameLobbyHubConnection) {
-            toast.error("Hub connection is lost");
-            console.log("[GameLobbyHub] Connection is lost");
-            return null;
-        } else {
-            try {
-                const roomsId = await gameLobbyHubConnection.invoke(
-                    "CreateGameRoom",
-                    { isPublicRoom, roomPassword }
-                );
-                return roomsId;
-            } catch (err) {
-                toast.error("Cannot create game room at the moment");
-                console.log("[GameLobbyHub] Cannot invoke server hub method");
-                console.log(err);
-                return null;
-            }
-        }
-    };
-
     const gameLobbyConnectionHubProvider = {
         connection: gameLobbyHubConnection,
         initializeAndStart: initializeAndStartGameLobbyHub,
         stopAndDestroy: stopAndDestroyGameLobbyHub,
         fetchLobbyList: fetchLobbyList,
-        createGameRoom: createGameRoom,
+    };
+
+    // -------- MULTIPLAYER ROOM HUB --------
+    const [multiplayerRoomHubConnection, setMultiplayerRoomHubConnection] =
+        useState<HubConnection | null>(null);
+
+        const initializeAndStartRoomConnectionHub = (token: string, roomId: string) => {
+            if (!multiplayerRoomHubConnection) {
+                // Hub builder
+                const connection = new HubConnectionBuilder()
+                    .withUrl(baseHubUrl + "/hubs/game?roomId=" + roomId, {
+                        accessTokenFactory: () => token,
+                    })
+                    .withAutomaticReconnect()
+                    .build();
+    
+                // Set new hub
+                setMultiplayerRoomHubConnection(connection);
+    
+                // Start hub
+                return connection.start().catch((err) => {
+                    toast.error(
+                        "Cannot establish hub connection. Some data will be unavailable"
+                    );
+                    console.log("[RoomConnectionHub] ", err);
+                });
+            }
+    
+            return Promise.reject();
+        };
+    
+        const stopAndDestroyRoomConnectionHub = () => {
+            if (multiplayerRoomHubConnection?.state === HubConnectionState.Connected) {
+                multiplayerRoomHubConnection
+                    .stop()
+                    .then(() => {
+                        setMultiplayerRoomHubConnection(null);
+                    })
+                    .catch((err) => {
+                        toast.error("Cannot terminate hub connection");
+                        console.log("[RoomConnectionHub] ", err);
+                    });
+            }
+        };
+
+    const multiplayerRoomConnectionHubProvider = {
+        connection: multiplayerRoomHubConnection,
+        initializeAndStart: initializeAndStartRoomConnectionHub,
+        stopAndDestroy: stopAndDestroyRoomConnectionHub,
     };
 
     return (
@@ -193,6 +218,7 @@ export const SignalRProvider = ({ children }: { children: ReactNode }) => {
             value={{
                 mainConnectionHubProvider,
                 gameLobbyConnectionHubProvider,
+                multiplayerRoomConnectionHubProvider,
             }}
         >
             {children}

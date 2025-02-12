@@ -1,10 +1,10 @@
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { RootState } from "../../redux/store";
 import { GetAuthNameFromToken } from "../../utilities";
-import { useContext, useEffect, useState } from "react";
-import { toast } from "react-toastify";
-import SignalRContext from "../../contexts/SignalRContext";
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const MultiplayerRoomSetupPage = () => {
     const navigate = useNavigate();
@@ -12,28 +12,28 @@ const MultiplayerRoomSetupPage = () => {
     const [name, setName] = useState<string>("");
     const [isPublicRoom, setIsPublicRoom] = useState<boolean>(true);
     const [roomPassword, setRoomPassword] = useState<string>("");
-
-    const { gameLobbyConnectionHubProvider } = useContext(SignalRContext);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const createRoomHandler = async () => {
         if (!isPublicRoom) {
             toast.error("This feature will be implemented soon");
         } else {
-            if (!gameLobbyConnectionHubProvider) {
-                toast.error("Hub is not initialized");
-                console.log("[GameLobbyHub] Hub is not initialized");
-            } else {
-                const roomId =
-                    await gameLobbyConnectionHubProvider.createGameRoom(
-                        isPublicRoom,
-                        roomPassword
-                    );
-                if (!roomId) {
+            setLoading(true);
+            axios
+                .get("/api/Multiplayer", {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+                .then((response) => {
+                    console.log(response.data.data);
+                    navigate(`/multiplayer/${response.data.data}`);
+                })
+                .catch((err) => {
+                    console.log("[MultiplayerRoomSetup] ", err.message);
                     toast.error("Cannot create game room at the moment");
-                } else {
-                    navigate(`/multiplayer/${roomId}`);
-                }
-            }
+                })
+                .finally(() => setLoading(false));
         }
     };
 
@@ -83,12 +83,27 @@ const MultiplayerRoomSetupPage = () => {
                     />
                 )}
 
-                <button
-                    className="btn btn-primary mt-8"
-                    onClick={createRoomHandler}
-                >
-                    Create Room
-                </button>
+                <div className="flex gap-2 mt-8">
+                    <button
+                        className={`btn ${
+                            loading ? "btn-disabled" : ""
+                        } btn-primary flex-1`}
+                        onClick={createRoomHandler}
+                    >
+                        {loading && (
+                            <span className="loading loading-spinner"></span>
+                        )}
+                        {loading ? "" : "Create"}
+                    </button>
+                    <button
+                        className="btn btn-primary btn-outline flex-1"
+                        onClick={() => {
+                            navigate("/main/lobby");
+                        }}
+                    >
+                        Home
+                    </button>
+                </div>
             </div>
         </div>
     );

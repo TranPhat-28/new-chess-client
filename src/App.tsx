@@ -11,6 +11,7 @@ import NotificationPage from "./pages/Notification";
 import SocialPage from "./pages/Social";
 import PracticeModePage from "./pages/PracticeMode";
 import PracticeModeLoadingPage from "./pages/PracticeModeLoading";
+import MultiplayerRoomSetupPage from "./pages/MultiplayerRoomSetup";
 import MultiplayerGamePage from "./pages/MultiplayerGame";
 
 // Layouts
@@ -26,7 +27,6 @@ import { RootState } from "./redux/store";
 import FriendDetail from "./components/FriendDetail";
 import FriendDetailsPlaceholder from "./components/FriendDetailsPlaceholder";
 import EventDetailsPlaceholder from "./components/EventDetailsPlaceholder";
-import MultiplayerRoomSetupPage from "./pages/MultiplayerRoomSetup";
 
 function App() {
     const user = useSelector((state: RootState) => state.auth.email);
