@@ -1,44 +1,29 @@
+import { useContext, useEffect, useState } from "react";
 import { Chessboard } from "react-chessboard";
+import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 import MoveHistory from "../../components/MoveHistory";
 import PlayerInfoCard from "../../components/PlayerInfoCard";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import { hideLoading, showLoading } from "../../utilities";
-import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import { IOnlineRoomInfo, IRoomInfoResponse } from "../../interfaces";
-import { RootState } from "../../redux/store";
 import SignalRContext from "../../contexts/SignalRContext";
+import { IOnlineRoomInfo } from "../../interfaces";
+import { RootState } from "../../redux/store";
 
 const MultiplayerGamePage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
-    const dispatch = useDispatch();
     const token = useSelector((state: RootState) => state.auth.token);
 
     const [roomInfo, setRoomInfo] = useState<IOnlineRoomInfo | null>(null);
 
     const { multiplayerRoomConnectionHubProvider } = useContext(SignalRContext);
 
-    // To prevent entering invalid room, verify room with server first
-    // const { isPending, isError, data, error } = useQuery({
-    //     queryKey: ["roomIsValid"],
-    //     queryFn: async () => {
-    //         const response = await axios.get<IRoomInfoResponse>(
-    //             `/api/Multiplayer/${id}`,
-    //             {
-    //                 headers: { Authorization: `Bearer ${token}` },
-    //             }
-    //         );
-    //         return response.data;
-    //     },
-    // });
-
     // Leave room handler
     const leaveRoomHandler = () => {
-        alert("Do you really want to leave room?");
+        // alert("Do you really want to leave room?");
+        // Perform some kind of alert here
+        multiplayerRoomConnectionHubProvider?.stopAndDestroy();
+        navigate("/main/lobby");
     };
 
     useEffect(() => {
@@ -71,6 +56,14 @@ const MultiplayerGamePage = () => {
             setRoomInfo(roomInfo);
         };
 
+        const handleRoomDisbanded = () => {
+            alert("Room was disbanded");
+        };
+
+        const handlePlayerLeft = () => {
+            alert("Player left");
+        };
+
         multiplayerRoomConnectionHubProvider
             .initializeAndStart(token, id)
             .then((connection) => {
@@ -81,11 +74,14 @@ const MultiplayerGamePage = () => {
                     return;
                 }
 
+                // Register callbacks
                 connection.on("UpdateRoomInfo", handleUpdateRoomInfo);
+                connection.on("RoomDisbanded", handleRoomDisbanded);
+                connection.on("PlayerLeft", handlePlayerLeft);
             })
             .catch((err) => {
                 console.log(err);
-                // navigate("/main/lobby");
+                navigate("/main/lobby");
                 toast.error(
                     "Failed to establish hub connections and start the game"
                 );
@@ -96,6 +92,15 @@ const MultiplayerGamePage = () => {
             multiplayerRoomConnectionHubProvider.connection?.off(
                 "UpdateRoomInfo",
                 handleUpdateRoomInfo
+            );
+
+            multiplayerRoomConnectionHubProvider.connection?.off(
+                "RoomDisbanded",
+                handleRoomDisbanded
+            );
+            multiplayerRoomConnectionHubProvider.connection?.off(
+                "PlayerLeft",
+                handlePlayerLeft
             );
 
             // Remove hub

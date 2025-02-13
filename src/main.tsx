@@ -25,7 +25,7 @@ axios.defaults.headers.post["Content-Type"] = "application/json";
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-    <React.StrictMode>
+    // <React.StrictMode>
         <Provider store={store}>
             <QueryClientProvider client={queryClient}>
                 <SignalRProvider>
@@ -43,5 +43,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                 </SignalRProvider>
             </QueryClientProvider>
         </Provider>
-    </React.StrictMode>
+    // </React.StrictMode>
 );
