@@ -168,7 +168,7 @@ export const SignalRProvider = ({ children }: { children: ReactNode }) => {
     const [multiplayerRoomHubConnection, setMultiplayerRoomHubConnection] =
         useState<HubConnection | null>(null);
 
-        const initializeAndStartRoomConnectionHub = (token: string, roomId: string) => {
+        const initializeAndStartRoomConnectionHub = async (token: string, roomId: string) => {
             if (!multiplayerRoomHubConnection) {
                 // Hub builder
                 const connection = new HubConnectionBuilder()
@@ -178,16 +178,18 @@ export const SignalRProvider = ({ children }: { children: ReactNode }) => {
                     .withAutomaticReconnect()
                     .build();
     
-                // Set new hub
-                setMultiplayerRoomHubConnection(connection);
-    
                 // Start hub
-                return connection.start().catch((err) => {
+                await connection.start().catch((err) => {
                     toast.error(
                         "Cannot establish hub connection. Some data will be unavailable"
                     );
                     console.log("[RoomConnectionHub] ", err);
+                    throw err;
                 });
+
+                // Set new hub
+                setMultiplayerRoomHubConnection(connection);
+                return connection;
             }
     
             return Promise.reject();

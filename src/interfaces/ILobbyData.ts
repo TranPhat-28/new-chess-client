@@ -9,4 +9,6 @@ export interface IOnlineRoomInfo {
 export interface IRoomPlayer {
     id: number;
     name: string;
+    socialId: string;
+    picture: string;
 }

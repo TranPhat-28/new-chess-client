@@ -23,6 +23,6 @@ export interface IHubContext {
 // Multiplayer Room Hub Context
 export interface IRoomConnectionHubContext {
     connection: HubConnection | null;
-    initializeAndStart: (token: string, roomId: string) => Promise<void>;
+    initializeAndStart: (token: string, roomId: string) => Promise<HubConnection>;
     stopAndDestroy: () => void;
 }

@@ -47,7 +47,6 @@ const PlayerInfoCard = ({
                                 display: "flex",
                             }}
                         />
-                        {/* <p className="text-sm font-normal">AAA</p> */}
                     </>
                 )}
             </div>
