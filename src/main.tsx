@@ -1,6 +1,6 @@
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios from "axios";
-import React from "react";
 import "react-confirm-alert/src/react-confirm-alert.css";
 import ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
@@ -11,10 +11,9 @@ import App from "./App.tsx";
 import InitialAlert from "./components/InitialAlert/index.tsx";
 import Loading from "./components/Loading/index.tsx";
 import MoveHistoryModal from "./components/MoveHistoryModal/index.tsx";
+import { SignalRProvider } from "./contexts/SignalRContext.tsx";
 import "./index.css";
 import { store } from "./redux/store.ts";
-import { SignalRProvider } from "./contexts/SignalRContext.tsx";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 // -------CHANGE FOR DEPLOYMENT----------
 axios.defaults.baseURL = "https://famous-jacquenette-my-personal-project-c6376a3e.koyeb.app/";
