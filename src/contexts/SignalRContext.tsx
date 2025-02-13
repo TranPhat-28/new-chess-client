@@ -17,9 +17,8 @@ const SignalRContext = createContext<ISignalRContext>({
 // Provider
 export const SignalRProvider = ({ children }: { children: ReactNode }) => {
     // -------CHANGE FOR DEPLOYMENT----------
-    const baseHubUrl = "http://localhost:5275";
-    // const baseHubUrl =
-    // "https://famous-jacquenette-my-personal-project-c6376a3e.koyeb.app";
+    // const baseHubUrl = "http://localhost:5275";
+    const baseHubUrl = "https://famous-jacquenette-my-personal-project-c6376a3e.koyeb.app";
 
     // -------- MAIN CONNECTION HUB --------
     const [mainHubConnection, setMainHubConnection] =
