@@ -1,8 +1,15 @@
 import { FaGlobeAmericas } from "react-icons/fa";
 import { IOnlineRoomInfo } from "../../interfaces";
 import { FaLock } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 const LobbyRoomItem = ({ roomInfo }: { roomInfo: IOnlineRoomInfo }) => {
+    const navigate = useNavigate();
+
+    const joinRoomHandler = () => {
+        navigate(`/multiplayer/${roomInfo.id}`);
+    };
+
     return (
         <div className="bg-base-200 flex-shrink-0 flex justify-between p-4">
             <div>
@@ -17,13 +24,23 @@ const LobbyRoomItem = ({ roomInfo }: { roomInfo: IOnlineRoomInfo }) => {
                 </div>
             </div>
             <div className="flex items-center">
-                <button
-                    className={`btn btn-primary ${
-                        (roomInfo.host && roomInfo.player) ? "btn-disabled" : "btn-outline"
-                    } h-fit`}
-                >
-                    Join
-                </button>
+                {!roomInfo.isPlaying && (
+                    <button
+                        onClick={joinRoomHandler}
+                        className={`btn btn-primary ${
+                            roomInfo.host && roomInfo.player
+                                ? "btn-disabled"
+                                : "btn-outline"
+                        } h-fit w-16`}
+                    >
+                        {roomInfo.host && roomInfo.player ? "Full" : "Join"}
+                    </button>
+                )}
+                {roomInfo.isPlaying && (
+                    <button className="btn btn-primary btn-disabled h-fit w-16">
+                        Playing
+                    </button>
+                )}
             </div>
         </div>
     );

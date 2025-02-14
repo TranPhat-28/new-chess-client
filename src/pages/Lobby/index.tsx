@@ -80,7 +80,7 @@ const LobbyPage = () => {
 
                 // Register the callback
                 gameLobbyConnectionHubProvider.connection.on(
-                    "NewRoomCreated",
+                    "LobbyListUpdated",
                     handleNewGameRoom
                 );
 
@@ -92,7 +92,7 @@ const LobbyPage = () => {
                 // Remove the callback
                 return () => {
                     gameLobbyConnectionHubProvider.connection?.off(
-                        "NewRoomCreated",
+                        "LobbyListUpdated",
                         handleNewGameRoom
                     );
 
@@ -144,7 +144,7 @@ const LobbyPage = () => {
                             ))}
                     </div>
 
-                    <div className="join w-full rounded-t-none">
+                    {/* <div className="join w-full rounded-t-none">
                         <input
                             className="input input-bordered join-item w-full rounded-t-none rounded-lg"
                             placeholder="Room ID"
@@ -152,7 +152,7 @@ const LobbyPage = () => {
                         <button className="btn btn-primary join-item rounded-t-none rounded-lg">
                             Join
                         </button>
-                    </div>
+                    </div> */}
                 </div>
 
                 {/* Actions */}

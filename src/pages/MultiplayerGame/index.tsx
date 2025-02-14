@@ -8,13 +8,19 @@ import PlayerInfoCard from "../../components/PlayerInfoCard";
 import SignalRContext from "../../contexts/SignalRContext";
 import { IOnlineRoomInfo } from "../../interfaces";
 import { RootState } from "../../redux/store";
+import { ROOM_STATUS } from "../../enums";
+import { GetAuthIdFromToken } from "../../utilities";
 
 const MultiplayerGamePage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const token = useSelector((state: RootState) => state.auth.token);
+    const [authId, setAuthId] = useState<string | null>(null);
 
     const [roomInfo, setRoomInfo] = useState<IOnlineRoomInfo | null>(null);
+    const [roomStatus, setRoomStatus] = useState<ROOM_STATUS>(
+        ROOM_STATUS.WAITING_FOR_PLAYER
+    );
 
     const { multiplayerRoomConnectionHubProvider } = useContext(SignalRContext);
 
@@ -24,6 +30,15 @@ const MultiplayerGamePage = () => {
         // Perform some kind of alert here
         multiplayerRoomConnectionHubProvider?.stopAndDestroy();
         navigate("/main/lobby");
+    };
+
+    // Set game state to start
+    const handleStartGame = async () => {
+        setRoomStatus(ROOM_STATUS.STARTED);
+        await multiplayerRoomConnectionHubProvider?.connection?.invoke(
+            "StartRoom",
+            id
+        );
     };
 
     useEffect(() => {
@@ -108,6 +123,18 @@ const MultiplayerGamePage = () => {
         };
     }, []);
 
+    useEffect(() => {
+        if (roomInfo?.player === undefined) {
+            setRoomStatus(ROOM_STATUS.WAITING_FOR_PLAYER);
+        }
+
+        if (roomInfo?.player?.id) {
+            const idFromToken = GetAuthIdFromToken(token!);
+            setAuthId(idFromToken);
+            setRoomStatus(ROOM_STATUS.READY);
+        }
+    }, [roomInfo?.player?.id]);
+
     return (
         <div className="h-full w-full flex flex-col justify-center items-center bg-subtle object-contain">
             {roomInfo && (
@@ -126,9 +153,46 @@ const MultiplayerGamePage = () => {
                         </div>
                     </div>
 
-                    <div className="bg-base-200 p-2 rounded-lg shadow-md w-full max-w-sm md:max-w-full md:col-start-1 md:row-start-1 md:row-span-2">
-                        <Chessboard />
-                    </div>
+                    {roomStatus === ROOM_STATUS.WAITING_FOR_PLAYER && (
+                        <div className="bg-base-200 p-2 rounded-lg shadow-md w-full max-w-sm md:max-w-full md:col-start-1 md:row-start-1 md:row-span-2 relative">
+                            <div className="absolute top-0 left-0 w-full h-full bg-black-rgba z-50 rounded-lg flex items-center justify-center">
+                                <button className="btn btn-primary">
+                                    <span className="loading loading-spinner"></span>
+                                    Waiting for player
+                                </button>
+                            </div>
+
+                            <Chessboard />
+                        </div>
+                    )}
+
+                    {roomStatus === ROOM_STATUS.READY && (
+                        <div className="bg-base-200 p-2 rounded-lg shadow-md w-full max-w-sm md:max-w-full md:col-start-1 md:row-start-1 md:row-span-2 relative">
+                            <div className="absolute top-0 left-0 w-full h-full bg-black-rgba z-50 rounded-lg flex items-center justify-center">
+                                {authId === roomInfo.host.id.toString() && (
+                                    <button
+                                        className="btn btn-primary"
+                                        onClick={handleStartGame}
+                                    >
+                                        Start game
+                                    </button>
+                                )}
+                                {authId === roomInfo.player!.id.toString() && (
+                                    <button className="btn btn-primary">
+                                        Waiting for host to start
+                                    </button>
+                                )}
+                            </div>
+
+                            <Chessboard />
+                        </div>
+                    )}
+
+                    {roomStatus === ROOM_STATUS.STARTED && (
+                        <div className="bg-base-200 p-2 rounded-lg shadow-md w-full max-w-sm md:max-w-full md:col-start-1 md:row-start-1 md:row-span-2">
+                            <Chessboard />
+                        </div>
+                    )}
 
                     <div className="w-full h-40 md:col-start-2 md:h-full flex flex-col gap-2">
                         <MoveHistory />

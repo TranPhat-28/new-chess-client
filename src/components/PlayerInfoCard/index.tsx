@@ -31,7 +31,7 @@ const PlayerInfoCard = ({
             <div className="flex-1">
                 {player && (
                     <>
-                        <p className="font-bold">{player.name}</p>
+                        <p className="font-bold text-sm md:text-base">{player.name}</p>
                         <p className="text-sm font-normal">{player.socialId}</p>
                     </>
                 )}
