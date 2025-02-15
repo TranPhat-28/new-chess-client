@@ -9,7 +9,7 @@ import SignalRContext from "../../contexts/SignalRContext";
 import { IOnlineRoomInfo } from "../../interfaces";
 import { RootState } from "../../redux/store";
 import { ROOM_STATUS } from "../../enums";
-import { GetAuthIdFromToken } from "../../utilities";
+import { GetAuthIdFromToken, showCustomAlert } from "../../utilities";
 
 const MultiplayerGamePage = () => {
     const { id } = useParams();
@@ -33,7 +33,7 @@ const MultiplayerGamePage = () => {
     };
 
     // Set game state to start
-    const handleStartGame = async () => {
+    const handleInvokeStartGame = async () => {
         setRoomStatus(ROOM_STATUS.STARTED);
         await multiplayerRoomConnectionHubProvider?.connection?.invoke(
             "StartRoom",
@@ -72,12 +72,25 @@ const MultiplayerGamePage = () => {
         };
 
         const handleRoomDisbanded = () => {
-            alert("Room was disbanded");
+            showCustomAlert(
+                "Room disbanded",
+                "The room was disbanded by room's host. You will be redirected to lobby.",
+                "OK",
+                () => navigate("/main/lobby"),
+                undefined,
+                undefined,
+                true
+            );
         };
 
-        const handlePlayerLeft = () => {
-            alert("Player left");
+        const handlePlayerLeft = (newRoomInfo: IOnlineRoomInfo) => {
+            setRoomStatus(ROOM_STATUS.WAITING_FOR_PLAYER);
+            setRoomInfo(newRoomInfo);
         };
+
+        const handleGameStartedEvent = () => {
+            setRoomStatus(ROOM_STATUS.STARTED);
+        }
 
         multiplayerRoomConnectionHubProvider
             .initializeAndStart(token, id)
@@ -93,6 +106,7 @@ const MultiplayerGamePage = () => {
                 connection.on("UpdateRoomInfo", handleUpdateRoomInfo);
                 connection.on("RoomDisbanded", handleRoomDisbanded);
                 connection.on("PlayerLeft", handlePlayerLeft);
+                connection.on("GameStarted", handleGameStartedEvent);
             })
             .catch((err) => {
                 console.log(err);
@@ -172,7 +186,7 @@ const MultiplayerGamePage = () => {
                                 {authId === roomInfo.host.id.toString() && (
                                     <button
                                         className="btn btn-primary"
-                                        onClick={handleStartGame}
+                                        onClick={handleInvokeStartGame}
                                     >
                                         Start game
                                     </button>

@@ -70,35 +70,21 @@ const LobbyPage = () => {
                 console.log("[GameLobbyHub] No hub connection found ");
             } else {
                 // Define the callback
-                const handleNewGameRoom = (gameList: IOnlineRoomInfo[]) => {
-                    setRoomList(gameList);
-                };
-
-                const handleRemoveGameRoom = (gameList: IOnlineRoomInfo[]) => {
+                const handleUpdateLobbyList = (gameList: IOnlineRoomInfo[]) => {
                     setRoomList(gameList);
                 };
 
                 // Register the callback
                 gameLobbyConnectionHubProvider.connection.on(
                     "LobbyListUpdated",
-                    handleNewGameRoom
-                );
-
-                gameLobbyConnectionHubProvider.connection.on(
-                    "RoomRemoved",
-                    handleRemoveGameRoom
+                    handleUpdateLobbyList
                 );
 
                 // Remove the callback
                 return () => {
                     gameLobbyConnectionHubProvider.connection?.off(
                         "LobbyListUpdated",
-                        handleNewGameRoom
-                    );
-
-                    gameLobbyConnectionHubProvider.connection?.off(
-                        "RoomRemoved",
-                        handleRemoveGameRoom
+                        handleUpdateLobbyList
                     );
                 };
             }
