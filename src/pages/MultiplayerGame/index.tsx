@@ -10,6 +10,7 @@ import { IOnlineRoomInfo } from "../../interfaces";
 import { RootState } from "../../redux/store";
 import { ROOM_STATUS } from "../../enums";
 import { GetAuthIdFromToken, showCustomAlert } from "../../utilities";
+import useMultiplayerGameHandler from "../../hooks/MultiplayerGameHandler";
 
 const MultiplayerGamePage = () => {
     const { id } = useParams();
@@ -23,6 +24,17 @@ const MultiplayerGamePage = () => {
     );
 
     const { multiplayerRoomConnectionHubProvider } = useContext(SignalRContext);
+
+    // Multiplayer game handler
+    const {
+        game,
+        onSquareClick,
+        onPromotionPieceSelect,
+        optionSquares,
+        moveTo,
+        showPromotionDialog,
+        setAllowMove,
+    } = useMultiplayerGameHandler();
 
     // Leave room handler
     const leaveRoomHandler = () => {
@@ -90,7 +102,13 @@ const MultiplayerGamePage = () => {
 
         const handleGameStartedEvent = () => {
             setRoomStatus(ROOM_STATUS.STARTED);
-        }
+        };
+
+        const handleWaitingForPlayerMove = (id: number) => {
+            if (GetAuthIdFromToken(token) === id.toString()) {
+                setAllowMove(true);
+            }
+        };
 
         multiplayerRoomConnectionHubProvider
             .initializeAndStart(token, id)
@@ -107,6 +125,10 @@ const MultiplayerGamePage = () => {
                 connection.on("RoomDisbanded", handleRoomDisbanded);
                 connection.on("PlayerLeft", handlePlayerLeft);
                 connection.on("GameStarted", handleGameStartedEvent);
+                connection.on(
+                    "WaitingForPlayerMove",
+                    handleWaitingForPlayerMove
+                );
             })
             .catch((err) => {
                 console.log(err);
@@ -130,6 +152,10 @@ const MultiplayerGamePage = () => {
             multiplayerRoomConnectionHubProvider.connection?.off(
                 "PlayerLeft",
                 handlePlayerLeft
+            );
+            multiplayerRoomConnectionHubProvider.connection?.off(
+                "WaitingForPlayerMove",
+                handleWaitingForPlayerMove
             );
 
             // Remove hub
@@ -204,7 +230,19 @@ const MultiplayerGamePage = () => {
 
                     {roomStatus === ROOM_STATUS.STARTED && (
                         <div className="bg-base-200 p-2 rounded-lg shadow-md w-full max-w-sm md:max-w-full md:col-start-1 md:row-start-1 md:row-span-2">
-                            <Chessboard />
+                            <Chessboard
+                                id="Multiplayer"
+                                animationDuration={200}
+                                arePiecesDraggable={false}
+                                position={game.fen()}
+                                onSquareClick={onSquareClick}
+                                onPromotionPieceSelect={onPromotionPieceSelect}
+                                customSquareStyles={{
+                                    ...optionSquares,
+                                }}
+                                promotionToSquare={moveTo}
+                                showPromotionDialog={showPromotionDialog}
+                            />
                         </div>
                     )}
 
