@@ -26,3 +26,16 @@ export interface IRoomInfoResponse {
         isPlaying: boolean;
     } | null;
 }
+
+export interface IPlayerMove {
+    roomid: string;
+    move: string;
+}
+
+export interface IGameUpdateData {
+    id: string;
+    hostId: number;
+    playerId: number;
+    movingPlayerId: number;
+    history: string[];
+}

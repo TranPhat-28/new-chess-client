@@ -6,11 +6,17 @@ import { toast } from "react-toastify";
 import MoveHistory from "../../components/MoveHistory";
 import PlayerInfoCard from "../../components/PlayerInfoCard";
 import SignalRContext from "../../contexts/SignalRContext";
-import { IOnlineRoomInfo } from "../../interfaces";
+import {
+    IGameUpdateData,
+    IOnlineRoomInfo,
+    IPlayerMove,
+} from "../../interfaces";
 import { RootState } from "../../redux/store";
 import { ROOM_STATUS } from "../../enums";
 import { GetAuthIdFromToken, showCustomAlert } from "../../utilities";
 import useMultiplayerGameHandler from "../../hooks/MultiplayerGameHandler";
+import { Square } from "chess.js";
+import { PromotionPieceOption } from "react-chessboard/dist/chessboard/types";
 
 const MultiplayerGamePage = () => {
     const { id } = useParams();
@@ -24,6 +30,8 @@ const MultiplayerGamePage = () => {
     );
 
     const { multiplayerRoomConnectionHubProvider } = useContext(SignalRContext);
+    // Check for your turn to allow moves
+    const [allowMove, setAllowMove] = useState<boolean>(false);
 
     // Multiplayer game handler
     const {
@@ -33,7 +41,6 @@ const MultiplayerGamePage = () => {
         optionSquares,
         moveTo,
         showPromotionDialog,
-        setAllowMove,
     } = useMultiplayerGameHandler();
 
     // Leave room handler
@@ -50,6 +57,32 @@ const MultiplayerGamePage = () => {
         await multiplayerRoomConnectionHubProvider?.connection?.invoke(
             "StartRoom",
             id
+        );
+    };
+
+    // Custom on square click to handle sending event to server
+    const onSquareClickCustom = (square: Square) => {
+        if (!allowMove) {
+            return;
+        } else {
+            onSquareClick(square, invokeSendMoveToServer);
+        }
+    };
+
+    const customOnPromotionSelect = (piece?: PromotionPieceOption) => {
+        const result = onPromotionPieceSelect(invokeSendMoveToServer, piece);
+        return result;
+    };
+
+    // Send move to server
+    const invokeSendMoveToServer = async (move: string) => {
+        const newMove: IPlayerMove = {
+            roomid: id!,
+            move: move,
+        };
+        await multiplayerRoomConnectionHubProvider?.connection?.invoke(
+            "PlayerMove",
+            newMove
         );
     };
 
@@ -104,10 +137,22 @@ const MultiplayerGamePage = () => {
             setRoomStatus(ROOM_STATUS.STARTED);
         };
 
-        const handleWaitingForPlayerMove = (id: number) => {
+        const handleWaitingForFirstPlayerMove = (id: number) => {
+            console.log("First move id: ", id);
             if (GetAuthIdFromToken(token) === id.toString()) {
                 setAllowMove(true);
+                toast.success("Make the first move to start!", {
+                    hideProgressBar: true,
+                    closeOnClick: false,
+                    pauseOnHover: false,
+                    draggable: false,
+                    progress: undefined,
+                });
             }
+        };
+
+        const handleNextMove = (data: IGameUpdateData) => {
+            console.log(data);
         };
 
         multiplayerRoomConnectionHubProvider
@@ -126,9 +171,10 @@ const MultiplayerGamePage = () => {
                 connection.on("PlayerLeft", handlePlayerLeft);
                 connection.on("GameStarted", handleGameStartedEvent);
                 connection.on(
-                    "WaitingForPlayerMove",
-                    handleWaitingForPlayerMove
+                    "WaitingForFirstPlayerMove",
+                    handleWaitingForFirstPlayerMove
                 );
+                connection.on("NextMove", handleNextMove);
             })
             .catch((err) => {
                 console.log(err);
@@ -154,8 +200,12 @@ const MultiplayerGamePage = () => {
                 handlePlayerLeft
             );
             multiplayerRoomConnectionHubProvider.connection?.off(
-                "WaitingForPlayerMove",
-                handleWaitingForPlayerMove
+                "WaitingForFirstPlayerMove",
+                handleWaitingForFirstPlayerMove
+            );
+            multiplayerRoomConnectionHubProvider.connection?.off(
+                "NextMove",
+                handleNextMove
             );
 
             // Remove hub
@@ -235,8 +285,8 @@ const MultiplayerGamePage = () => {
                                 animationDuration={200}
                                 arePiecesDraggable={false}
                                 position={game.fen()}
-                                onSquareClick={onSquareClick}
-                                onPromotionPieceSelect={onPromotionPieceSelect}
+                                onSquareClick={onSquareClickCustom}
+                                onPromotionPieceSelect={customOnPromotionSelect}
                                 customSquareStyles={{
                                     ...optionSquares,
                                 }}

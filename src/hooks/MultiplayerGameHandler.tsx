@@ -14,8 +14,6 @@ const useMultiplayerGameHandler = () => {
     // Promotion dialog
     const [showPromotionDialog, setShowPromotionDialog] = useState(false);
     const [optionSquares, setOptionSquares] = useState({});
-    // Check for your turn to allow moves
-    const [allowMove, setAllowMove] = useState<boolean>(false);
 
     // Get move options
     function moveAvailable(square: Square): boolean {
@@ -47,11 +45,7 @@ const useMultiplayerGameHandler = () => {
         return true;
     }
 
-    function onSquareClick(square: Square) {
-        if (!allowMove) {
-            return;
-        }
-
+    function onSquareClick(square: Square, invokeSendMoveToServer: (move: string) => Promise<void>) {
         // from square
         if (!moveFrom) {
             const hasMoveOptions = moveAvailable(square);
@@ -102,6 +96,8 @@ const useMultiplayerGameHandler = () => {
                 promotion: "q",
             });
 
+            invokeSendMoveToServer(`${move.from}${move.to}`);
+
             // if invalid, setMoveFrom and moveAvailable
             if (move === null) {
                 const hasMoveOptions = moveAvailable(square);
@@ -117,7 +113,7 @@ const useMultiplayerGameHandler = () => {
         }
     }
 
-    function onPromotionPieceSelect(piece?: PromotionPieceOption) {
+    function onPromotionPieceSelect(invokeSendMoveToServer: (move: string) => Promise<void>, piece?: PromotionPieceOption) {
         // if no piece passed then user has cancelled dialog, don't make move and reset
         if (piece && moveFrom && moveTo !== null) {
             const gameCopy = game;
@@ -128,6 +124,7 @@ const useMultiplayerGameHandler = () => {
             });
 
             setGame(gameCopy);
+            invokeSendMoveToServer(`${move.from}${move.to}${move.promotion}`);
         }
 
         setMoveFrom("");
@@ -145,7 +142,6 @@ const useMultiplayerGameHandler = () => {
         showPromotionDialog,
         onPromotionPieceSelect,
         moveTo,
-        setAllowMove,
     };
 };
 
