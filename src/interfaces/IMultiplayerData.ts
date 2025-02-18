@@ -30,6 +30,7 @@ export interface IRoomInfoResponse {
 export interface IPlayerMove {
     roomid: string;
     move: string;
+    playerid: string;
 }
 
 export interface IGameUpdateData {
@@ -38,4 +39,6 @@ export interface IGameUpdateData {
     playerId: number;
     movingPlayerId: number;
     history: string[];
+    isHostChecked: boolean;
+    isPlayerChecked: boolean;
 }

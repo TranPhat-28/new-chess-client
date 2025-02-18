@@ -80,6 +80,7 @@ const MultiplayerGamePage = () => {
         const newMove: IPlayerMove = {
             roomid: id!,
             move: move,
+            playerid: GetAuthIdFromToken(token!),
         };
         await multiplayerRoomConnectionHubProvider?.connection?.invoke(
             "PlayerMove",
@@ -164,14 +165,27 @@ const MultiplayerGamePage = () => {
             } else {
                 setAllowMove(false);
             }
-            // Toast your turn
-            toast.success("It's your turn", {
-                hideProgressBar: true,
-                closeOnClick: false,
-                pauseOnHover: false,
-                draggable: false,
-                progress: undefined,
-            });
+            // Toast your turn and checkmate warning
+            if (
+                (data.isHostChecked && authId === data.hostId.toString()) ||
+                (data.isPlayerChecked && authId === data.playerId.toString())
+            ) {
+                toast.warning("Your king is checked! It's your turn", {
+                    hideProgressBar: true,
+                    closeOnClick: false,
+                    pauseOnHover: false,
+                    draggable: false,
+                    progress: undefined,
+                });
+            } else {
+                toast.success("It's your turn", {
+                    hideProgressBar: true,
+                    closeOnClick: false,
+                    pauseOnHover: false,
+                    draggable: false,
+                    progress: undefined,
+                });
+            }
         };
 
         multiplayerRoomConnectionHubProvider
