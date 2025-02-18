@@ -72,6 +72,7 @@ const useQuickplayHandler = () => {
                 }),
                 {
                     pending: "AI is thinking...",
+                    success: "It's your turn",
                     error: "Something went wrong",
                 }
             );
@@ -105,7 +106,7 @@ const useQuickplayHandler = () => {
                         setHistory({
                             side: "black",
                             move: `${move.from}${move.to}`,
-                            moveIndex: history.length + 1
+                            moveIndex: history.length + 1,
                         })
                     );
 
@@ -135,7 +136,7 @@ const useQuickplayHandler = () => {
                     setHistory({
                         side: "black",
                         move: `${move.from}${move.to}`,
-                        moveIndex: history.length + 1
+                        moveIndex: history.length + 1,
                     })
                 );
 
@@ -143,6 +144,10 @@ const useQuickplayHandler = () => {
                 setMoveFrom("");
                 setMoveTo(null);
                 setOptionSquares({});
+
+                if (gameCopy.inCheck()) {
+                    toast.warning("Your king is in checked");
+                }
             }
         } catch (err) {
             showCustomAlert(
@@ -212,7 +217,7 @@ const useQuickplayHandler = () => {
                 setHistory({
                     side: "white",
                     move: `${move.from}${move.to}`,
-                    moveIndex: history.length
+                    moveIndex: history.length,
                 })
             );
 
@@ -247,7 +252,7 @@ const useQuickplayHandler = () => {
                 setHistory({
                     side: "white",
                     move: `${move.from}${move.to}`,
-                    moveIndex: history.length
+                    moveIndex: history.length,
                 })
             );
 
