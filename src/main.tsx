@@ -24,23 +24,21 @@ axios.defaults.headers.post["Content-Type"] = "application/json";
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-    // <React.StrictMode>
-        <Provider store={store}>
-            <QueryClientProvider client={queryClient}>
-                <SignalRProvider>
-                    <GoogleOAuthProvider
-                        clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
-                    >
-                        <BrowserRouter>
-                            <App />
-                            <Loading />
-                            <InitialAlert />
-                            <ToastContainer />
-                            <MoveHistoryModal />
-                        </BrowserRouter>
-                    </GoogleOAuthProvider>
-                </SignalRProvider>
-            </QueryClientProvider>
-        </Provider>
-    // </React.StrictMode>
+    <Provider store={store}>
+        <QueryClientProvider client={queryClient}>
+            <SignalRProvider>
+                <GoogleOAuthProvider
+                    clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}
+                >
+                    <BrowserRouter>
+                        <App />
+                        <Loading />
+                        <InitialAlert />
+                        <ToastContainer pauseOnHover={false} />
+                        <MoveHistoryModal />
+                    </BrowserRouter>
+                </GoogleOAuthProvider>
+            </SignalRProvider>
+        </QueryClientProvider>
+    </Provider>
 );

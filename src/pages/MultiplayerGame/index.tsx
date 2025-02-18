@@ -164,6 +164,14 @@ const MultiplayerGamePage = () => {
             } else {
                 setAllowMove(false);
             }
+            // Toast your turn
+            toast.success("It's your turn", {
+                hideProgressBar: true,
+                closeOnClick: false,
+                pauseOnHover: false,
+                draggable: false,
+                progress: undefined,
+            });
         };
 
         multiplayerRoomConnectionHubProvider
