@@ -41,6 +41,7 @@ const MultiplayerGamePage = () => {
         optionSquares,
         moveTo,
         showPromotionDialog,
+        makeMove,
     } = useMultiplayerGameHandler();
 
     // Leave room handler
@@ -152,7 +153,8 @@ const MultiplayerGamePage = () => {
         };
 
         const handleNextMove = (data: IGameUpdateData) => {
-            console.log(data);
+            const history = data.history;
+            makeMove(history[history.length - 1]);
         };
 
         multiplayerRoomConnectionHubProvider

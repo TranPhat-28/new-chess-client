@@ -15,6 +15,21 @@ const useMultiplayerGameHandler = () => {
     const [showPromotionDialog, setShowPromotionDialog] = useState(false);
     const [optionSquares, setOptionSquares] = useState({});
 
+    // Make a move
+    function makeMove(move: string) {
+        const gameCopy = game;
+        gameCopy.move({
+            from: move.substring(0, 2),
+            to: move.substring(2, 4),
+            promotion: move.substring(4, 5),
+        });
+
+        setGame(gameCopy);
+        setMoveFrom("");
+        setMoveTo(null);
+        setOptionSquares({});
+    }
+
     // Get move options
     function moveAvailable(square: Square): boolean {
         const moves = game.moves({
@@ -45,7 +60,10 @@ const useMultiplayerGameHandler = () => {
         return true;
     }
 
-    function onSquareClick(square: Square, invokeSendMoveToServer: (move: string) => Promise<void>) {
+    function onSquareClick(
+        square: Square,
+        invokeSendMoveToServer: (move: string) => Promise<void>
+    ) {
         // from square
         if (!moveFrom) {
             const hasMoveOptions = moveAvailable(square);
@@ -113,7 +131,10 @@ const useMultiplayerGameHandler = () => {
         }
     }
 
-    function onPromotionPieceSelect(invokeSendMoveToServer: (move: string) => Promise<void>, piece?: PromotionPieceOption) {
+    function onPromotionPieceSelect(
+        invokeSendMoveToServer: (move: string) => Promise<void>,
+        piece?: PromotionPieceOption
+    ) {
         // if no piece passed then user has cancelled dialog, don't make move and reset
         if (piece && moveFrom && moveTo !== null) {
             const gameCopy = game;
@@ -142,6 +163,7 @@ const useMultiplayerGameHandler = () => {
         showPromotionDialog,
         onPromotionPieceSelect,
         moveTo,
+        makeMove,
     };
 };
 
