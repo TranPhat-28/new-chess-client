@@ -85,6 +85,7 @@ const MultiplayerGamePage = () => {
             "PlayerMove",
             newMove
         );
+        setAllowMove(false);
     };
 
     useEffect(() => {
@@ -139,7 +140,6 @@ const MultiplayerGamePage = () => {
         };
 
         const handleWaitingForFirstPlayerMove = (id: number) => {
-            console.log("First move id: ", id);
             if (GetAuthIdFromToken(token) === id.toString()) {
                 setAllowMove(true);
                 toast.success("Make the first move to start!", {
@@ -153,8 +153,17 @@ const MultiplayerGamePage = () => {
         };
 
         const handleNextMove = (data: IGameUpdateData) => {
+            // Reflect the move
             const history = data.history;
             makeMove(history[history.length - 1]);
+            // Get your id
+            const authId = GetAuthIdFromToken(token);
+            // Set allow board click
+            if (authId === data.movingPlayerId.toString()) {
+                setAllowMove(true);
+            } else {
+                setAllowMove(false);
+            }
         };
 
         multiplayerRoomConnectionHubProvider

@@ -26,7 +26,6 @@ const MultiplayerRoomSetupPage = () => {
                     },
                 })
                 .then((response) => {
-                    console.log(response.data.data);
                     navigate(`/multiplayer/${response.data.data}`);
                 })
                 .catch((err) => {
