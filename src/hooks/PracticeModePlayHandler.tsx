@@ -7,7 +7,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { IMove, IOptionSquares } from "../interfaces";
-import { resetQuickplayData, setFullHistory, setHistory } from "../redux/features/quickplaySlice";
+import {
+    resetQuickplayData,
+    setFullHistory,
+    setHistory,
+} from "../redux/features/quickplaySlice";
 import { hideLoading, showCustomAlert, showLoading } from "../utilities";
 import { RootState } from "../redux/store";
 
@@ -62,9 +66,7 @@ const usePracticeModePlayHandler = () => {
     }, []);
 
     // The game
-    const [game, setGame] = useState<Chess>(
-        null!
-    );
+    const [game, setGame] = useState<Chess>(null!);
 
     // Game over
     const [isGameOver, setIsGameOver] = useState<boolean>(false);
@@ -124,6 +126,7 @@ const usePracticeModePlayHandler = () => {
                 ),
                 {
                     pending: "AI is thinking...",
+                    success: "It's your turn",
                     error: "Something went wrong",
                 }
             );
@@ -196,6 +199,10 @@ const usePracticeModePlayHandler = () => {
                 setMoveFrom("");
                 setMoveTo(null);
                 setOptionSquares({});
+
+                if (gameCopy.inCheck()) {
+                    toast.warning("Your king is in checked");
+                }
             }
         } catch (err) {
             showCustomAlert(
@@ -324,7 +331,7 @@ const usePracticeModePlayHandler = () => {
         showPromotionDialog,
         onPromotionPieceSelect,
         moveTo,
-        historyChanged
+        historyChanged,
     };
 };
 
