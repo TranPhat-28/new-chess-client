@@ -36,9 +36,14 @@ const LobbyRoomItem = ({ roomInfo }: { roomInfo: IOnlineRoomInfo }) => {
                         {roomInfo.host && roomInfo.player ? "Full" : "Join"}
                     </button>
                 )}
-                {roomInfo.isPlaying && (
+                {roomInfo.isPlaying && !roomInfo.isGameOver && (
                     <button className="btn btn-primary btn-disabled h-fit w-16">
                         Playing
+                    </button>
+                )}
+                {roomInfo.isPlaying && roomInfo.isGameOver && (
+                    <button className="btn btn-primary btn-disabled h-fit w-16">
+                        Ended
                     </button>
                 )}
             </div>
