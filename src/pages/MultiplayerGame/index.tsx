@@ -188,6 +188,26 @@ const MultiplayerGamePage = () => {
             }
         };
 
+        const handleGameOver = (data: IGameUpdateData) => {
+            // Get your id
+            const authId = GetAuthIdFromToken(token);
+
+            // Do not allow anymore click on the board
+            setAllowMove(false);
+            // Show result
+            showCustomAlert(
+                "Game Over",
+                `${
+                    data.winnerId.toString() === authId ? "You" : "Opponent"
+                } won with a ${data.winReason}`,
+                "Home",
+                () => navigate("/main/lobby"),
+                undefined,
+                undefined
+            );
+            return;
+        };
+
         multiplayerRoomConnectionHubProvider
             .initializeAndStart(token, id)
             .then((connection) => {
@@ -208,6 +228,7 @@ const MultiplayerGamePage = () => {
                     handleWaitingForFirstPlayerMove
                 );
                 connection.on("NextMove", handleNextMove);
+                connection.on("GameOver", handleGameOver);
             })
             .catch((err) => {
                 console.log(err);
@@ -239,6 +260,11 @@ const MultiplayerGamePage = () => {
             multiplayerRoomConnectionHubProvider.connection?.off(
                 "NextMove",
                 handleNextMove
+            );
+
+            multiplayerRoomConnectionHubProvider.connection?.off(
+                "GameOver",
+                handleGameOver
             );
 
             // Remove hub

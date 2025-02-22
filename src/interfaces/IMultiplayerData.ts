@@ -41,4 +41,7 @@ export interface IGameUpdateData {
     history: string[];
     isHostChecked: boolean;
     isPlayerChecked: boolean;
+    isGameOver: boolean;
+    winnerId: number;
+    winReason: string;
 }

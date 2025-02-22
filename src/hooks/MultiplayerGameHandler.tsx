@@ -6,8 +6,6 @@ import { IOptionSquares } from "../interfaces";
 const useMultiplayerGameHandler = () => {
     // The game
     const [game, setGame] = useState<Chess>(new Chess());
-    // Game over
-    // const [isGameOver, setIsGameOver] = useState<boolean>(false);
     // Highlighting the squares
     const [moveFrom, setMoveFrom] = useState<Square | "">("");
     const [moveTo, setMoveTo] = useState<Square | null>(null);
@@ -157,7 +155,6 @@ const useMultiplayerGameHandler = () => {
 
     return {
         game,
-        // isGameOver,
         onSquareClick,
         optionSquares,
         showPromotionDialog,
