@@ -17,6 +17,7 @@ import { GetAuthIdFromToken, showCustomAlert } from "../../utilities";
 import useMultiplayerGameHandler from "../../hooks/MultiplayerGameHandler";
 import { Square } from "chess.js";
 import { PromotionPieceOption } from "react-chessboard/dist/chessboard/types";
+import { IoWarningOutline } from "react-icons/io5";
 
 const MultiplayerGamePage = () => {
     const { id } = useParams();
@@ -28,6 +29,7 @@ const MultiplayerGamePage = () => {
     const [roomStatus, setRoomStatus] = useState<ROOM_STATUS>(
         ROOM_STATUS.WAITING_FOR_PLAYER
     );
+    const [gameEnded, setGameEnded] = useState<boolean>(false);
 
     const { multiplayerRoomConnectionHubProvider } = useContext(SignalRContext);
     // Check for your turn to allow moves
@@ -46,10 +48,25 @@ const MultiplayerGamePage = () => {
 
     // Leave room handler
     const leaveRoomHandler = () => {
-        // alert("Do you really want to leave room?");
-        // Perform some kind of alert here
-        multiplayerRoomConnectionHubProvider?.stopAndDestroy();
-        navigate("/main/lobby");
+        // If midgame, ask for confirmation
+        if (roomStatus === ROOM_STATUS.STARTED && !gameEnded) {
+            showCustomAlert(
+                "Warning",
+                "If you leave midgame, it will be counted as a lose. Are you sure?",
+                "Leave",
+                () => {
+                    multiplayerRoomConnectionHubProvider?.stopAndDestroy();
+                    navigate("/main/lobby");
+                },
+                undefined,
+                <IoWarningOutline size={"6rem"} />,
+                false
+            );
+        } else {
+            // Game not started or ended, perform leave room
+            multiplayerRoomConnectionHubProvider?.stopAndDestroy();
+            navigate("/main/lobby");
+        }
     };
 
     // Set game state to start
@@ -194,12 +211,14 @@ const MultiplayerGamePage = () => {
 
             // Do not allow anymore click on the board
             setAllowMove(false);
+            // Set game ended
+            setGameEnded(true);
             // Show result
             showCustomAlert(
                 "Game Over",
                 `${
                     data.winnerId.toString() === authId ? "You" : "Opponent"
-                } won with a ${data.winReason}`,
+                } won with a ${data.winReason}.`,
                 "OK",
                 undefined,
                 undefined,
@@ -207,6 +226,19 @@ const MultiplayerGamePage = () => {
                 true
             );
             return;
+        };
+
+        const handleOpponentLeft = () => {
+            showCustomAlert(
+                "Opponent left",
+                "You won this game because your opponent left midgame.",
+                "OK",
+                undefined,
+                undefined,
+                undefined,
+                true
+            );
+            setGameEnded(true);
         };
 
         multiplayerRoomConnectionHubProvider
@@ -230,6 +262,7 @@ const MultiplayerGamePage = () => {
                 );
                 connection.on("NextMove", handleNextMove);
                 connection.on("GameOver", handleGameOver);
+                connection.on("OpponentLeft", handleOpponentLeft);
             })
             .catch((err) => {
                 console.log(err);
@@ -266,6 +299,11 @@ const MultiplayerGamePage = () => {
             multiplayerRoomConnectionHubProvider.connection?.off(
                 "GameOver",
                 handleGameOver
+            );
+
+            multiplayerRoomConnectionHubProvider.connection?.off(
+                "OpponentLeft",
+                handleOpponentLeft
             );
 
             // Remove hub
