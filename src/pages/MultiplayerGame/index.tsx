@@ -200,10 +200,11 @@ const MultiplayerGamePage = () => {
                 `${
                     data.winnerId.toString() === authId ? "You" : "Opponent"
                 } won with a ${data.winReason}`,
-                "Home",
-                () => navigate("/main/lobby"),
+                "OK",
                 undefined,
-                undefined
+                undefined,
+                undefined,
+                true
             );
             return;
         };
