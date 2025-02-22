@@ -34,7 +34,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
                         <App />
                         <Loading />
                         <InitialAlert />
-                        <ToastContainer pauseOnHover={false} />
+                        <ToastContainer pauseOnHover={false} stacked={true} />
                         <MoveHistoryModal />
                     </BrowserRouter>
                 </GoogleOAuthProvider>
